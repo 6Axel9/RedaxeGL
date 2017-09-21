@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\GLComponents">
+      <UniqueIdentifier>{b6f1a332-9753-4977-9290-2086d18b1f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GLComponents">
+      <UniqueIdentifier>{bd914261-6f86-4f8a-8a4a-5ed422b80a4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameStates">
+      <UniqueIdentifier>{6a8082ed-a756-461d-ad1b-4c950b1fd514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameStates">
+      <UniqueIdentifier>{a4703aa3-dbaf-4482-8943-99d474a6bf3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{6e38e747-d474-4267-9b4c-633e2629cf71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{a65ce060-31be-4a6e-8dd1-1fba301eb303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\BaseClasses">
+      <UniqueIdentifier>{de9cf5e9-99b2-4361-8761-190f5e8191d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\BaseClasses">
+      <UniqueIdentifier>{7a4d46d0-bad6-4f31-b420-446558db2b76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Camera">
+      <UniqueIdentifier>{ff4b3fef-3f58-4a02-9a31-eab8dcaf2ac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Object">
+      <UniqueIdentifier>{b32b4e1d-6362-43d1-8534-5cf1d49b91e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Camera">
+      <UniqueIdentifier>{3ae18d62-5158-430b-b344-61e71851e4c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Object">
+      <UniqueIdentifier>{7f17f334-ecc3-4acf-a2cf-803e88677d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Light">
+      <UniqueIdentifier>{850a623c-b94b-474a-9a50-d83b63be1e6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Light">
+      <UniqueIdentifier>{afde66d9-4c20-48d3-9097-f80df45df15b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLScreen.cpp">
+      <Filter>Source Files\GLComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="GLShader.cpp">
+      <Filter>Source Files\GLComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGL.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLLoader.cpp">
+      <Filter>Source Files\GLComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="BView.cpp">
+      <Filter>Source Files\Components\BaseClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="BModel.cpp">
+      <Filter>Source Files\Components\BaseClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>Source Files\Components\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CObject.cpp">
+      <Filter>Source Files\Components\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CText.cpp">
+      <Filter>Source Files\Components\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CLight.cpp">
+      <Filter>Source Files\Components\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Serial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Listener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLScreen.h">
+      <Filter>Header Files\GLComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="GLShader.h">
+      <Filter>Header Files\GLComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Tools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLLoader.h">
+      <Filter>Header Files\GLComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="BView.h">
+      <Filter>Header Files\Components\BaseClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="BModel.h">
+      <Filter>Header Files\Components\BaseClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayState.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>Header Files\Components\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CObject.h">
+      <Filter>Header Files\Components\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CText.h">
+      <Filter>Header Files\Components\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CLight.h">
+      <Filter>Header Files\Components\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Serial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Listener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Vertex.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\Fragment.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

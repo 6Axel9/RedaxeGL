@@ -1,0 +1,5 @@
+﻿  Engine.cpp
+c:\users\erik di biase\desktop\projects\university\third year\redaxegl\redaxegl\listener.h(2): warning C4005: 'STRICT': macro redefinition
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\shared\minwindef.h(23): note: see previous definition of 'STRICT'
+  RedaxeGL.vcxproj -> C:\Users\Erik di Biase\Desktop\Projects\University\Third Year\RedaxeGL\Debug\RedaxeGL.exe
+  RedaxeGL.vcxproj -> C:\Users\Erik di Biase\Desktop\Projects\University\Third Year\RedaxeGL\Debug\RedaxeGL.pdb (Partial PDB)
