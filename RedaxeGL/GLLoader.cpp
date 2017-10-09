@@ -123,7 +123,7 @@ void GLLoader::fill3DGeometry(std::vector<std::string>& Parts)
 		//==================================================== Load Obj File
 		const aiScene* Scene = aiImportFile(Path.c_str(), aiProcess_ValidateDataStructure | aiProcess_FindInvalidData | 
 														  aiProcess_CalcTangentSpace	  | aiProcess_FlipUVs	 );
-		if (!Scene)
+		if (!Scene||Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE||!Scene->mRootNode)
 		{
 			std::cout << "Failed to load " << Path << std::endl;
 		}
@@ -171,6 +171,9 @@ void GLLoader::fill3DGeometry(std::vector<std::string>& Parts)
 					vnum[Parts[0]][Frame] = indices.size();
 				}
 			}
+			//==================================================== Release Obj File
+			aiReleaseImport(Scene);
+			
 			//==================================================== Generate VAO
 			glGenVertexArrays(1, &models[Parts[0]][Frame]);
 			//==================================================== Generate VBO
