@@ -5,8 +5,6 @@
 
 int main()
 {
-
-
 	//==================================================== Create Demo
 	Engine* Demo = new Engine("Settings\\Settings.ini");
 	//==================================================== Start Demo
@@ -17,8 +15,6 @@ int main()
 	Demo->Terminate();
 	//==================================================== Destroy Demo
 	delete Demo;
-
-	system("pause");
 
 	return 0;
 }

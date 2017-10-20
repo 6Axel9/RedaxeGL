@@ -62,6 +62,8 @@ void CCamera::Render(GLboolean Perspective)
 	glUniformMatrix4fv(locations["projIn"], 1, GL_FALSE, &proj[0][0]);
 	//==================================================== Send View Mtrix
 	glUniformMatrix4fv(locations["viewIn"], 1, GL_FALSE, &view[0][0]);
+	//==================================================== Send Camera Position
+	glUniform3fv(locations["camera.Position"], 1, &position.x);
 }
 
 void CCamera::Terminate()

@@ -1,8 +1,6 @@
 #include "Engine.h"
 #include "PlayState.h"
 #include "Tools.h"
-#include <thread>
-#include "Listener.h"
 
 Engine::Engine(std::string SetPath)
 {
@@ -62,18 +60,6 @@ void Engine::ReturnGamestate()
 
 void Engine::MainLoop()
 {
-
-
-
-	std::thread thread1(&Listener::Listen, Listener());
-
-	thread1.detach();
-
-
-
-
-
-
 	//==================================================== Create Timer
 	auto startTime = std::chrono::high_resolution_clock::now();
 	auto endTime = std::chrono::high_resolution_clock::now();
@@ -96,13 +82,6 @@ void Engine::MainLoop()
 		//==================================================== Swap Front/Back Buffer
 		screen->SwapBuffers();
 	}
-
-
-
-
-
-
-	if (thread1.joinable()) { thread1.join(); }
 }
 
 void Engine::Terminate()

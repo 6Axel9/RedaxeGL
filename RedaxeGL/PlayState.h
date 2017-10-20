@@ -21,8 +21,9 @@ public:
 private:
 
 	//============================================================= Properties
-	CText* Text;
+	CLight* Light;
 	CCamera* Camera;
 	CObject* Player;
+	CText* Text;
 };
 

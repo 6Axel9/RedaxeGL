@@ -99,12 +99,6 @@
     <ClCompile Include="CLight.cpp">
       <Filter>Source Files\Components\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Serial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Listener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -145,12 +139,6 @@
     </ClInclude>
     <ClInclude Include="CLight.h">
       <Filter>Header Files\Components\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Serial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Listener.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

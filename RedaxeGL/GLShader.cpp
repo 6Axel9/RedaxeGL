@@ -106,6 +106,8 @@ void GLShader::linkUniforms()
 	uniformsId["light.Diffuse"]  = glGetUniformLocation(programId, "light.Diffuse");
 	uniformsId["light.Specular"] = glGetUniformLocation(programId, "light.Specular");
 	uniformsId["light.Position"] = glGetUniformLocation(programId, "light.Position");
+	uniformsId["light.Direction"] = glGetUniformLocation(programId, "light.Direction");
+	uniformsId["light.Attenuation"] = glGetUniformLocation(programId, "light.Attenuation");
 	//==================================================== Materials
 	uniformsId["material.Ambient"]   = glGetUniformLocation(programId, "material.Ambient");
 	uniformsId["material.Diffuse"]   = glGetUniformLocation(programId, "material.Diffuse");
@@ -114,7 +116,7 @@ void GLShader::linkUniforms()
 	//==================================================== Textures
 	uniformsId["txtmap.Diffuse"]  = glGetUniformLocation(programId, "txtmap.Diffuse");
 	uniformsId["txtmap.Specular"] = glGetUniformLocation(programId, "txtmap.Specular");
-	uniformsId["txtmap.Normal"]   = glGetUniformLocation(programId, "txtmap.Normal");
+	uniformsId["txtmap.Normals"]   = glGetUniformLocation(programId, "txtmap.Normals");
 	//==================================================== Camera
 	uniformsId["camera.Position"] = glGetUniformLocation(programId, "camera.Position");
 }

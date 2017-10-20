@@ -1,7 +1,8 @@
 #pragma once
-#include "CText.h"
-#include "CObject.h"
+#include "CLight.h"
 #include "CCamera.h"
+#include "CObject.h"
+#include "CText.h"
 
 class GameState
 {

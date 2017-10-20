@@ -7,10 +7,10 @@ public:
 
 	//==================================================== Create Default
 	CLight();
-	//==================================================== Create 3D Object
-	CLight(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular);
 	//==================================================== Initialize Object
-	void Initialize(glm::vec3 Position, glm::vec3 Rotation, GLfloat Attenuation);
+	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed);
+	//==================================================== Initialize Object Light
+	void Enlighten(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Attenuation);
 	//==================================================== Update Object
 	virtual void Update(GLfloat DeltaTime);
 	//==================================================== Render Object
@@ -19,5 +19,16 @@ public:
 	void Terminate();
 	//==================================================== Destroy 3D Object
 	virtual~CLight();
+
+private:
+
+	//==================================================== Properties
+	GLfloat attenuation;
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
+	glm::vec3 angle;
+	glm::vec3 move;
+	glm::vec3 size;
 };
 

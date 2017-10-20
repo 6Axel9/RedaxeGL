@@ -121,9 +121,10 @@ void GLLoader::fill3DGeometry(std::vector<std::string>& Parts)
 		std::string Path = Parts[3] + Parts[0] + NumberToString(Frame) + Parts[2];
 		
 		//==================================================== Load Obj File
-		const aiScene* Scene = aiImportFile(Path.c_str(), aiProcess_ValidateDataStructure | aiProcess_FindInvalidData | 
+		const aiScene* Scene = aiImportFile(Path.c_str(), aiProcess_ValidateDataStructure | aiProcess_FindInvalidData | aiProcess_FixInfacingNormals |
 														  aiProcess_CalcTangentSpace	  | aiProcess_FlipUVs	 );
-		if (!Scene||Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE||!Scene->mRootNode)
+
+		if (!Scene || Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
 		{
 			std::cout << "Failed to load " << Path << std::endl;
 		}
@@ -173,7 +174,7 @@ void GLLoader::fill3DGeometry(std::vector<std::string>& Parts)
 			}
 			//==================================================== Release Obj File
 			aiReleaseImport(Scene);
-			
+
 			//==================================================== Generate VAO
 			glGenVertexArrays(1, &models[Parts[0]][Frame]);
 			//==================================================== Generate VBO

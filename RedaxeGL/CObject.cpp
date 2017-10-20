@@ -14,6 +14,15 @@ CObject::CObject(std::string MeshTag, std::string TextureTag, std::string Effect
 	vnum	= Engine::Loader()->VNum(MeshTag);
 }
 
+void CObject::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess)
+{
+	//==================================================== Set Object Material Data
+	ambient = Ambient;
+	diffuse = Diffuse;
+	specular = Specular;
+	shininess = Shininess;
+}
+
 void CObject::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed)
 {
 	//==================================================== Flip X
@@ -46,6 +55,11 @@ void CObject::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Texture
 	glUniform1i(locations["txtmap.Diffuse"], 0);
+	//==================================================== Send Material
+	glUniform3fv(locations["material.Ambient"], 1, &ambient.r);
+	glUniform3fv(locations["material.Diffuse"], 1, &diffuse.r);
+	glUniform3fv(locations["material.Specular"], 1, &specular.r);
+	glUniform1f(locations["material.Shininess"], shininess);
 
 	//==================================================== Bind Texture
 	glActiveTexture(GL_TEXTURE0);

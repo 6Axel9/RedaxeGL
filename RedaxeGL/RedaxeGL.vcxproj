@@ -167,10 +167,8 @@
     <ClCompile Include="GLLoader.cpp" />
     <ClCompile Include="GLScreen.cpp" />
     <ClCompile Include="GLShader.cpp" />
-    <ClCompile Include="Listener.cpp" />
     <ClCompile Include="OpenGL.c" />
     <ClCompile Include="PlayState.cpp" />
-    <ClCompile Include="Serial.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +183,7 @@
     <ClInclude Include="GLLoader.h" />
     <ClInclude Include="GLScreen.h" />
     <ClInclude Include="GLShader.h" />
-    <ClInclude Include="Listener.h" />
     <ClInclude Include="PlayState.h" />
-    <ClInclude Include="Serial.h" />
     <ClInclude Include="Tools.h" />
   </ItemGroup>
   <ItemGroup>
