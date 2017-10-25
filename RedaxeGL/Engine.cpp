@@ -27,15 +27,16 @@ void Engine::Inititialize()
 	NewGamestate(new PlayState);
 }
 
-void Engine::SwitchGamestate(GameState* Next, bool Temporary, bool Return)
+void Engine::SwitchGamestate(GameState* Next, bool Temporary)
 {
 	if (Temporary)
 	{
-		
 		//==================================================== Queue To Deletion
 		Gamestate.front()->Status() = false;
 		//==================================================== Create Next Gamestate
 		Gamestate.push_front(Next);
+		//==================================================== Activate Gamestate
+		Gamestate.front()->Status() = true;
 		//============================================================= On Enter
 		Gamestate.front()->OnEnter();
 	}
@@ -45,6 +46,8 @@ void Engine::SwitchGamestate(GameState* Next, bool Temporary, bool Return)
 		Gamestate.front()->Status() = false;
 		//==================================================== Create Next Gamestate
 		Gamestate.push_back(Next);
+		//==================================================== Activate Gamestate
+		Gamestate.back()->Status() = true;
 		//============================================================= On Enter
 		Gamestate.back()->OnEnter();
 	}
@@ -52,10 +55,10 @@ void Engine::SwitchGamestate(GameState* Next, bool Temporary, bool Return)
 
 void Engine::ReturnGamestate()
 {
-	//==================================================== Queue To Restore
-	Gamestate.back()->Status() = true;
 	//==================================================== Queue To Deletion
 	Gamestate.front()->Status() = false;
+	//==================================================== Queue To Restore
+	Gamestate.back()->Status() = true;
 }
 
 void Engine::MainLoop()
@@ -64,11 +67,8 @@ void Engine::MainLoop()
 	auto startTime = std::chrono::high_resolution_clock::now();
 	auto endTime = std::chrono::high_resolution_clock::now();
 	//============================================================= Query Exit
-	while (!screen->Exit())
+	while (!Gamestate.empty() && !screen->Exit())
 	{
-
-		//============================================================= Delete Inactive Queue
-		while (!Gamestate.front()->Status()) { DeleteGamestate(); }
 		//============================================================= End Timer
 		endTime = std::chrono::high_resolution_clock::now();
 		deltaTime = DeltaTime(startTime, endTime);
@@ -81,6 +81,8 @@ void Engine::MainLoop()
 		Gamestate.front()->Render(true);
 		//==================================================== Swap Front/Back Buffer
 		screen->SwapBuffers();
+		//============================================================= Delete Inactive Queue
+		while (!Gamestate.front()->Status()) { DeleteGamestate(); }
 	}
 }
 
@@ -143,6 +145,8 @@ void Engine::NewGamestate(GameState* New)
 {
 	//==================================================== Create Next Gamestate
 	Gamestate.push_front(New);
+	//==================================================== Activate Gamestate
+	Gamestate.front()->Status() = true;
 	//============================================================= On Enter
 	Gamestate.front()->OnEnter();
 }

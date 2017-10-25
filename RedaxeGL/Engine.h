@@ -16,7 +16,7 @@ public:
 	//==================================================== New Game State
 	static void NewGamestate(GameState* NextState);
 	//==================================================== Switch Game State
-	static void SwitchGamestate(GameState* NextState, bool Temporary, bool Return);
+	static void SwitchGamestate(GameState* NextState, bool Temporary);
 	//==================================================== Return Game State
 	static void ReturnGamestate();
 	//==================================================== Delete Gamestate
