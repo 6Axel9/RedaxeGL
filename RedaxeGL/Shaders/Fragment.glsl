@@ -1,5 +1,5 @@
 //fragment shader code 
-#version 460 core
+#version 330 core
 
 in vec3 positionOut;
 in vec3 colorOut;

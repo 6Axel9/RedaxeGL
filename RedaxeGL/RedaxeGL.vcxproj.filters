@@ -148,5 +148,14 @@
     <None Include="Shaders\Fragment.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Settings\Settings.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Models\Loader.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Images\Loader.dat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

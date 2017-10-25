@@ -187,6 +187,9 @@
     <ClInclude Include="Tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Images\Loader.dat" />
+    <None Include="Models\Loader.dat" />
+    <None Include="Settings\Settings.ini" />
     <None Include="Shaders\Fragment.glsl" />
     <None Include="Shaders\Vertex.glsl" />
   </ItemGroup>
