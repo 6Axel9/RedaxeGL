@@ -39,9 +39,10 @@ private:
 	//==================================================== Load All Sounds/Effects
 	void loadSounds(std::string SndPath);
 	//==================================================== Fill Vertex Buffers
-	void fill3DGeometry(std::vector<std::string>& Parts);
-	void fillFontGeometry();
-	void fill2DGeometry();
+	void generate3DGeometry(std::vector<std::string>& Parts);
+	void generateTerrainGeometry();
+	void generateFontGeometry();
+	void generate2DGeometry();
 	//==================================================== Fill Texture Buffers
 	void generateTextureMap(std::vector<std::string>& Parts);
 	//==================================================== Properties

@@ -8,7 +8,7 @@ PlayState::PlayState()
 	//============================================================= Create Camera
 	Camera = new CCamera;
 	//============================================================= Create Player
-	Player = new CObject("Spaceship", "Spaceship", "Spaceship");
+	Player = new CObject("Terrain", "Crate", "Spaceship");
 	//============================================================= Create Object
 	Object = new CObject("Spaceship", "Spaceship", "Spaceship");
 	//============================================================= Create Text
@@ -18,9 +18,9 @@ PlayState::PlayState()
 void PlayState::OnEnter()
 {
 	//============================================================= Initialize Light
-	Light->Initialize(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f), glm::vec3(0.0f), 100.0f);
+	Light->Initialize(glm::vec3(0.0f, 3, 0.0f), glm::vec3(0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
-	Light->Enlighten(glm::vec3(0.2f), glm::vec3(0.3f, 0.2f, 0.11f), glm::vec3(0.3f, 0.2f, 0.11f), 10.0f);
+	Light->Enlighten(glm::vec3(3), glm::vec3(0.3f, 0.2f, 0.11f), glm::vec3(0.3f, 0.2f, 0.11f), 10.0f);
 	//============================================================= Initialize Camera
 	Camera->Initialize(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Initialize Player

@@ -68,15 +68,17 @@ void GLLoader::loadModels(std::string ModPath)
 			//==================================================== Load Database Entry
 			if (!parts.empty())
 			{
-				fill3DGeometry(parts);
+				generate3DGeometry(parts);
 			}
 		}
 		file.close();
 	}
+	//==================================================== Load Terrain
+	generateTerrainGeometry();
 	//==================================================== Load Font
-	fillFontGeometry();
+	generateFontGeometry();
 	//==================================================== Load Box
-	fill2DGeometry();
+	generate2DGeometry();
 }
 
 void GLLoader::loadImages(std::string ImgPath)
@@ -110,7 +112,7 @@ void GLLoader::loadSounds(std::string SndPath)
 {
 }
 
-void GLLoader::fill3DGeometry(std::vector<std::string>& Parts)
+void GLLoader::generate3DGeometry(std::vector<std::string>& Parts)
 {
 	framesNum[Parts[0]] = StringToInteger(Parts[1]);
 
@@ -142,23 +144,23 @@ void GLLoader::fill3DGeometry(std::vector<std::string>& Parts)
 							{ glm::vec3(Scene->mMeshes[Mesh]->mVertices[Vertex].x,
 										Scene->mMeshes[Mesh]->mVertices[Vertex].y,
 										Scene->mMeshes[Mesh]->mVertices[Vertex].z) },
-										//==================================================== Colors
-										{ glm::vec3(1.0f, 1.0f, 1.0f) },
-										//==================================================== Texture Coords
-										{ glm::vec2(Scene->mMeshes[Mesh]->mTextureCoords[0][Vertex].x,
-													Scene->mMeshes[Mesh]->mTextureCoords[0][Vertex].y) },
-													//==================================================== Normals
-													{ glm::vec3(Scene->mMeshes[Mesh]->mNormals[Vertex].x,
-																Scene->mMeshes[Mesh]->mNormals[Vertex].y,
-																Scene->mMeshes[Mesh]->mNormals[Vertex].z) },
-																//==================================================== Tangents
-																{ glm::vec3(Scene->mMeshes[Mesh]->mTangents[Vertex].x,
-																			Scene->mMeshes[Mesh]->mTangents[Vertex].y,
-																			Scene->mMeshes[Mesh]->mTangents[Vertex].z) },
-																			//==================================================== Bitangents
-																			{ glm::vec3(Scene->mMeshes[Mesh]->mBitangents[Vertex].x,
-																						Scene->mMeshes[Mesh]->mBitangents[Vertex].y,
-																						Scene->mMeshes[Mesh]->mBitangents[Vertex].z) }});
+							//==================================================== Colors
+							{ glm::vec3(1.0f, 1.0f, 1.0f) },
+							//==================================================== Texture Coords
+							{ glm::vec2(Scene->mMeshes[Mesh]->mTextureCoords[0][Vertex].x,
+										Scene->mMeshes[Mesh]->mTextureCoords[0][Vertex].y) },
+							//==================================================== Normals
+							{ glm::vec3(Scene->mMeshes[Mesh]->mNormals[Vertex].x,
+										Scene->mMeshes[Mesh]->mNormals[Vertex].y,
+										Scene->mMeshes[Mesh]->mNormals[Vertex].z) },
+							//==================================================== Tangents
+							{ glm::vec3(Scene->mMeshes[Mesh]->mTangents[Vertex].x,
+										Scene->mMeshes[Mesh]->mTangents[Vertex].y,
+										Scene->mMeshes[Mesh]->mTangents[Vertex].z) },
+							//==================================================== Bitangents
+							{ glm::vec3(Scene->mMeshes[Mesh]->mBitangents[Vertex].x,
+										Scene->mMeshes[Mesh]->mBitangents[Vertex].y,
+										Scene->mMeshes[Mesh]->mBitangents[Vertex].z) }});
 					}
 					for (GLuint Face = 0; Face < Scene->mMeshes[Mesh]->mNumFaces; Face++)
 					{
@@ -220,7 +222,112 @@ void GLLoader::fill3DGeometry(std::vector<std::string>& Parts)
 	}
 }
 
-void GLLoader::fillFontGeometry()
+void GLLoader::generateTerrainGeometry()
+{
+	GLint tsize = 1;
+	GLint gsize = 2;
+	GLint vcount = 128;
+
+	for (GLint slotX = 0; slotX < gsize; slotX++)
+	{
+		for (GLint slotY = 0; slotY < gsize; slotY++)
+		{
+			std::vector<Vertex> vertices;
+			std::vector<GLuint> indices;
+
+			for (GLint posX = 0; posX < vcount; posX++)
+			{
+				for (GLint posY = 0; posY < vcount; posY++)
+				{
+					//==================================================== Terrain & Vertices Location
+					glm::vec2 SlotPos = glm::vec2(slotX - tsize / 2.0f, slotY - tsize / 2.0f);
+					glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f), posY / (vcount - 1.0f));
+
+					//==================================================== Vertices
+					vertices.push_back({ 
+						//==================================================== Positions
+						{ glm::vec3(VertPos.y + SlotPos.x, 0.0f , VertPos.x + SlotPos.y) },
+						//==================================================== Colors
+						{ glm::vec3(1.0f, 1.0f, 1.0f) },
+						//==================================================== Texture Coords
+						{ glm::vec2(VertPos.y , VertPos.x) },
+						//==================================================== Normals
+						{ glm::vec3(0.0f, 1.0f, 0.0f) },
+						//==================================================== Tangents
+						{ glm::vec3(0) },
+						//==================================================== Bitangents
+						{ glm::vec3(0) }});
+				}
+			}
+			for (GLint posX = 0; posX < vcount - 1; posX++)
+			{
+				for (GLint posY = 0; posY < vcount - 1; posY++)
+				{
+					//==================================================== Index Location
+					GLint BL = ((posX + 1) * vcount) + posY;
+					GLint TL = (posX * vcount) + posY;
+					GLint TR = TL + 1;
+					GLint BR = BL + 1;
+					//==================================================== Indices
+					indices.push_back(BL);
+					indices.push_back(TL);
+					indices.push_back(TR);
+					indices.push_back(TR);
+					indices.push_back(BR);
+					indices.push_back(BL);
+				}
+			}
+
+			GLint Slot = slotX * gsize + slotY;
+			//==================================================== Vertices Count
+			vnum["Terrain"][Slot] = indices.size();
+
+			//==================================================== Generate VAO
+			glGenVertexArrays(1, &models["Terrain"][Slot]);
+			//==================================================== Generate VBO
+			glGenBuffers(1, &vbo["Terrain"][Slot]);
+			//==================================================== Generate EBO
+			glGenBuffers(1, &ebo["Terrain"][Slot]);
+
+			//==================================================== Bind VAO
+			glBindVertexArray(models["Terrain"][Slot]);
+			//==================================================== Bind VBO
+			glBindBuffer(GL_ARRAY_BUFFER, vbo["Terrain"][Slot]);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
+			//==================================================== Bind EBO
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo["Terrain"][Slot]);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_STATIC_DRAW);
+
+			//==================================================== Attribute Location 0
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)0);
+			glEnableVertexAttribArray(0);
+			//==================================================== Attribute Location 1
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+			glEnableVertexAttribArray(1);
+			//==================================================== Attribute Location 2
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+			glEnableVertexAttribArray(2);
+			//==================================================== Attribute Location 3
+			glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(8 * sizeof(GLfloat)));
+			glEnableVertexAttribArray(3);
+			//==================================================== Attribute Location 4
+			glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(11 * sizeof(GLfloat)));
+			glEnableVertexAttribArray(4);
+			//==================================================== Attribute Location 5
+			glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(14 * sizeof(GLfloat)));
+			glEnableVertexAttribArray(5);
+
+			//==================================================== Unbind VAO
+			glBindVertexArray(0);
+			//==================================================== Unbind EBO
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			//==================================================== Unbind VBO
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+	}
+}
+
+void GLLoader::generateFontGeometry()
 {
 	framesNum["Font"] = 16 * 16;
 	GLfloat csize = 1.0f / 16.0f;
@@ -233,11 +340,11 @@ void GLLoader::fillFontGeometry()
 		//==================================================== Convert To Texture Coordinates
 		glm::vec2 SlotCoord = glm::vec2(Frame % 16, Frame / 16);
 		glm::vec2 TextCoord = glm::vec2(SlotCoord.x * csize + csize / 2, SlotCoord.y * csize + csize / 2);
-		//====================================== Vertices =========================== Colors ======================================== TextureC =============================================================================
-		vertices.push_back({ { glm::vec3(-offset, -offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(TextCoord.x - csize / 2, TextCoord.y + csize / 2) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
-		vertices.push_back({ { glm::vec3(-offset, +offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(TextCoord.x - csize / 2, TextCoord.y - csize / 2) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
-		vertices.push_back({ { glm::vec3(+offset, +offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(TextCoord.x + csize / 2, TextCoord.y - csize / 2) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
-		vertices.push_back({ { glm::vec3(+offset, -offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(TextCoord.x + csize / 2, TextCoord.y + csize / 2) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
+		//====================================== Vertices ================= Colors ==================================== TextureC ========================================================================================
+		vertices.push_back({ { glm::vec3(-offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(TextCoord.x - csize / 2, TextCoord.y + csize / 2) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+		vertices.push_back({ { glm::vec3(-offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(TextCoord.x - csize / 2, TextCoord.y - csize / 2) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+		vertices.push_back({ { glm::vec3(+offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(TextCoord.x + csize / 2, TextCoord.y - csize / 2) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+		vertices.push_back({ { glm::vec3(+offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(TextCoord.x + csize / 2, TextCoord.y + csize / 2) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
 		//====================================== Indices
 		indices.push_back(0);
 		indices.push_back(1);
@@ -292,18 +399,19 @@ void GLLoader::fillFontGeometry()
 	}
 }
 
-void GLLoader::fill2DGeometry()
+void GLLoader::generate2DGeometry()
 {
 	framesNum["Box"] = 1;
-
+	GLfloat offset = 0.5f;
+	
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
-	GLfloat offset = 0.5f;
-	//====================================== Vertices =========================== Colors ==================== TextureC ========================================================
-	vertices.push_back({ { glm::vec3(-offset, -offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
-	vertices.push_back({ { glm::vec3(-offset, +offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(0.0f, 0.0f) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
-	vertices.push_back({ { glm::vec3(+offset, +offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
-	vertices.push_back({ { glm::vec3(+offset, -offset, +offset) },{ glm::vec3(1.0f, 1.0f, 1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0) },{ glm::vec3(0) },{ glm::vec3(0) } });
+
+	//====================================== Vertices ================= Colors ============== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(-offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
 	//====================================== Indices
 	indices.push_back(0);
 	indices.push_back(1);

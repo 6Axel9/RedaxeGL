@@ -61,6 +61,8 @@ void CObject::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 	glUniform3fv(locations["material.Specular"], 1, &specular.r);
 	glUniform1f(locations["material.Shininess"], shininess);
 
+	//==================================================== WireFrame
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//==================================================== Bind Texture
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
