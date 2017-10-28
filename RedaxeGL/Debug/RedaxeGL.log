@@ -1,5 +1,18 @@
-﻿  GLLoader.cpp
+﻿  Source.cpp
+  PlayState.cpp
+  GLShader.cpp
+  GLScreen.cpp
+  GLLoader.cpp
+  GameState.cpp
+  Engine.cpp
+  CText.cpp
   CObject.cpp
+  CLight.cpp
+  CCamera.cpp
+  BView.cpp
+  BModel.cpp
   Generating Code...
+  OpenGL.c
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   RedaxeGL.vcxproj -> C:\Users\Erik di Biase\Desktop\Projects\RedaxeGL\Debug\RedaxeGL.exe
   RedaxeGL.vcxproj -> C:\Users\Erik di Biase\Desktop\Projects\RedaxeGL\Debug\RedaxeGL.pdb (Partial PDB)
