@@ -1,19 +1,17 @@
-﻿  BModel.cpp
-  BView.cpp
-  CCamera.cpp
-  CLight.cpp
-  CObject.cpp
-  CText.cpp
+﻿  CCamera.cpp
+c:\users\erik di biase\desktop\projects\redaxegl\redaxegl\Tools.h(104): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Engine.cpp
-  GameState.cpp
+c:\users\erik di biase\desktop\projects\redaxegl\redaxegl\Tools.h(104): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   GLLoader.cpp
+c:\users\erik di biase\desktop\projects\redaxegl\redaxegl\Tools.h(104): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   GLScreen.cpp
+c:\users\erik di biase\desktop\projects\redaxegl\redaxegl\Tools.h(104): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   GLShader.cpp
-  PlayState.cpp
-  Source.cpp
-  OpenGL.c
+c:\users\erik di biase\desktop\projects\redaxegl\redaxegl\Tools.h(104): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Generating code
-  All 2251 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  4 of 2262 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   RedaxeGL.vcxproj -> C:\Users\Erik di Biase\Desktop\Projects\RedaxeGL\Release\RedaxeGL.exe
   RedaxeGL.vcxproj -> C:\Users\Erik di Biase\Desktop\Projects\RedaxeGL\Release\RedaxeGL.pdb (Full PDB)

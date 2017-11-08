@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include <sstream>
 #include <fstream>
 #include <vector>
@@ -95,6 +96,16 @@ static std::string ReadShader(const std::string& filename)
 	file.close();
 
 	return finalString;
+}
+
+//--------------------------------------------------- Calculate Delta Time
+static float Noise(int X, int Y)
+{
+	srand(time(0));
+	srand(X  + Y  + rand());
+	float random = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	return random;
 }
 //--------------------------------------------------- Calcolate Delta Time
 static float DeltaTime(std::chrono::time_point<std::chrono::steady_clock> Start, std::chrono::time_point<std::chrono::steady_clock> End)

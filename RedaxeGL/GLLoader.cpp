@@ -224,7 +224,8 @@ void GLLoader::generate3DGeometry(std::vector<std::string>& Parts)
 
 void GLLoader::generateTerrainGeometry()
 {
-	GLint gsize = 10;
+	GLint tsize = 1;
+	GLint gsize = 1;
 	GLint vcount = 128;
 
 	for (GLint slotX = 0; slotX < gsize; slotX++)
@@ -239,17 +240,17 @@ void GLLoader::generateTerrainGeometry()
 				for (GLint posY = 0; posY < vcount; posY++)
 				{
 					//==================================================== Terrain & Vertices Location
-					glm::vec2 SlotPos = glm::vec2(slotX - gsize / 2.0f, slotY - gsize / 2.0f);
-					glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f), posY / (vcount - 1.0f));
-
+					glm::vec2 SlotPos = glm::vec2((slotX - gsize / 2.0f)*tsize, (slotY - gsize / 2.0f)*tsize);
+					glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f)*tsize, posY / (vcount - 1.0f)*tsize);
+					glm::vec2 TextPos = glm::vec2(VertPos.x / tsize, VertPos.y / tsize);
 					//==================================================== Vertices
 					vertices.push_back({ 
 						//==================================================== Positions
-						{ glm::vec3(VertPos.y + SlotPos.x, 0.0f , VertPos.x + SlotPos.y) },
+						{ glm::vec3(VertPos.y + SlotPos.x, Noise(posX,posY) , VertPos.x + SlotPos.y) },
 						//==================================================== Colors
 						{ glm::vec3(1.0f, 1.0f, 1.0f) },
 						//==================================================== Texture Coords
-						{ glm::vec2(VertPos.y , VertPos.x) },
+						{ glm::vec2(TextPos.y , TextPos.x) },
 						//==================================================== Normals
 						{ glm::vec3(0.0f, 1.0f, 0.0f) },
 						//==================================================== Tangents

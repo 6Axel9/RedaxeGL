@@ -100,7 +100,7 @@
       <Filter>Source Files\Components\Light</Filter>
     </ClCompile>
     <ClCompile Include="CTerrain.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -144,7 +144,7 @@
       <Filter>Header Files\Components\Light</Filter>
     </ClInclude>
     <ClInclude Include="CTerrain.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Components\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
