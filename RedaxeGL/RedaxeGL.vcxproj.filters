@@ -99,6 +99,9 @@
     <ClCompile Include="CLight.cpp">
       <Filter>Source Files\Components\Light</Filter>
     </ClCompile>
+    <ClCompile Include="CTerrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="CLight.h">
       <Filter>Header Files\Components\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="CTerrain.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

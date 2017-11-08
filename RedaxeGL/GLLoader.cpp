@@ -224,8 +224,7 @@ void GLLoader::generate3DGeometry(std::vector<std::string>& Parts)
 
 void GLLoader::generateTerrainGeometry()
 {
-	GLint tsize = 1;
-	GLint gsize = 2;
+	GLint gsize = 10;
 	GLint vcount = 128;
 
 	for (GLint slotX = 0; slotX < gsize; slotX++)
@@ -240,7 +239,7 @@ void GLLoader::generateTerrainGeometry()
 				for (GLint posY = 0; posY < vcount; posY++)
 				{
 					//==================================================== Terrain & Vertices Location
-					glm::vec2 SlotPos = glm::vec2(slotX - tsize / 2.0f, slotY - tsize / 2.0f);
+					glm::vec2 SlotPos = glm::vec2(slotX - gsize / 2.0f, slotY - gsize / 2.0f);
 					glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f), posY / (vcount - 1.0f));
 
 					//==================================================== Vertices

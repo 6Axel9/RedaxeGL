@@ -8,9 +8,9 @@ PlayState::PlayState()
 	//============================================================= Create Camera
 	Camera = new CCamera;
 	//============================================================= Create Player
-	Player = new CObject("Terrain", "Crate", "Spaceship");
+	Player = new CObject("Spaceship", "Spaceship", "Spaceship");
 	//============================================================= Create Object
-	Object = new CObject("Spaceship", "Spaceship", "Spaceship");
+	Object = new CTerrain("Terrain", "Crate", "Spaceship");
 	//============================================================= Create Text
 	Text   = new CText("Font", "Font", "Font");
 }
@@ -28,7 +28,7 @@ void PlayState::OnEnter()
 	//============================================================= Materialize Player
 	Player->Materialize(glm::vec3(0.01f), glm::vec3(0.01f), glm::vec3(0.01f), 1.0f);
 	//============================================================= Initialize Object
-	Object->Initialize(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(1.0f), 100.0f);
+	Object->Initialize(glm::vec3(0.0f), glm::vec3(90.0f, 0.0f, 0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Object
 	Object->Materialize(glm::vec3(0.01f), glm::vec3(0.01f), glm::vec3(0.01f), 1.0f);
 	//============================================================= Write Text

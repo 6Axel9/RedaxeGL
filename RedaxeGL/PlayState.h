@@ -24,7 +24,7 @@ private:
 	CLight* Light;
 	CCamera* Camera;
 	CObject* Player;
-	CObject* Object;
+	CTerrain* Object;
 	CText* Text;
 };
 

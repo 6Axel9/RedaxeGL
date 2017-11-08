@@ -161,6 +161,7 @@
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CObject.cpp" />
+    <ClCompile Include="CTerrain.cpp" />
     <ClCompile Include="CText.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="CObject.h" />
+    <ClInclude Include="CTerrain.h" />
     <ClInclude Include="CText.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameState.h" />
