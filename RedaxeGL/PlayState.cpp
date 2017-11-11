@@ -10,7 +10,7 @@ PlayState::PlayState()
 	//============================================================= Create Player
 	Player = new CObject("Spaceship", "Spaceship", "Spaceship");
 	//============================================================= Create Object
-	Object = new CTerrain("Terrain", "Crate", "Spaceship");
+	Object = new CTerrain("Terrain", "Grass", "Terrain");
 	//============================================================= Create Text
 	Text   = new CText("Font", "Font", "Font");
 }
@@ -18,13 +18,13 @@ PlayState::PlayState()
 void PlayState::OnEnter()
 {
 	//============================================================= Initialize Light
-	Light->Initialize(glm::vec3(0.0f, 3, 0.0f), glm::vec3(0.0f), glm::vec3(0.0f), 100.0f);
+	Light->Initialize(glm::vec3(0.0f, 6.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
-	Light->Enlighten(glm::vec3(3), glm::vec3(0.3f, 0.2f, 0.11f), glm::vec3(0.3f, 0.2f, 0.11f), 10.0f);
+	Light->Enlighten(glm::vec3(1.0f), glm::vec3(0.3f, 0.2f, 0.11f), glm::vec3(0.3f, 0.2f, 0.11f), 50.0f);
 	//============================================================= Initialize Camera
-	Camera->Initialize(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f), 100.0f);
+	Camera->Initialize(glm::vec3(0.0f, 1.0f, -1.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Initialize Player
-	Player->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
+	Player->Initialize(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Player
 	Player->Materialize(glm::vec3(0.01f), glm::vec3(0.01f), glm::vec3(0.01f), 1.0f);
 	//============================================================= Initialize Object

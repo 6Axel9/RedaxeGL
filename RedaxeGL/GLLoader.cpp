@@ -5,6 +5,7 @@
 #include <postprocess.h>
 #include <cimport.h>
 #include <scene.h>
+#include <time.h>
 
 
 GLLoader::GLLoader(std::string ModPath, std::string ImgPath, std::string SndPath)
@@ -224,9 +225,12 @@ void GLLoader::generate3DGeometry(std::vector<std::string>& Parts)
 
 void GLLoader::generateTerrainGeometry()
 {
-	GLint tsize = 1;
-	GLint gsize = 1;
+	GLfloat amplitude = 2.0f;
 	GLint vcount = 128;
+	GLint tsize = 10;
+	GLint gsize = 1;
+
+	GLuint seed = (unsigned int) time(NULL);	
 
 	for (GLint slotX = 0; slotX < gsize; slotX++)
 	{
@@ -242,11 +246,15 @@ void GLLoader::generateTerrainGeometry()
 					//==================================================== Terrain & Vertices Location
 					glm::vec2 SlotPos = glm::vec2((slotX - gsize / 2.0f)*tsize, (slotY - gsize / 2.0f)*tsize);
 					glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f)*tsize, posY / (vcount - 1.0f)*tsize);
-					glm::vec2 TextPos = glm::vec2(VertPos.x / tsize, VertPos.y / tsize);
+					//==================================================== Texture Multiplier
+					glm::vec2 TextPos = glm::vec2(VertPos.x, VertPos.y);
+					//==================================================== Height Multiplier
+					GLfloat Height = SmoothNoise(posX, posY, vcount, seed) * amplitude;
+
 					//==================================================== Vertices
 					vertices.push_back({ 
 						//==================================================== Positions
-						{ glm::vec3(VertPos.y + SlotPos.x, Noise(posX,posY) , VertPos.x + SlotPos.y) },
+						{ glm::vec3(VertPos.y + SlotPos.x, Height , VertPos.x + SlotPos.y) },
 						//==================================================== Colors
 						{ glm::vec3(1.0f, 1.0f, 1.0f) },
 						//==================================================== Texture Coords

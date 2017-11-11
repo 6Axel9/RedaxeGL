@@ -1,5 +1,4 @@
 #include <iostream>
-#include <time.h>
 #include <sstream>
 #include <fstream>
 #include <vector>
@@ -97,15 +96,37 @@ static std::string ReadShader(const std::string& filename)
 
 	return finalString;
 }
-
-//--------------------------------------------------- Calculate Delta Time
-static float Noise(int X, int Y)
+//--------------------------------------------------- Calculate Noise
+static float Noise(int X, int Y, int Size, unsigned int Seed)
 {
-	srand(time(0));
-	srand(X  + Y  + rand());
-	float random = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	srand(X * Size + Y + Seed);
 
-	return random;
+	float random1 = 0;
+	float random2 = 0;
+
+	int loop = 10;
+
+	for (int i = 0; i < 10; i++)
+	{
+		random1 += (float)rand() / (float)RAND_MAX;
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		random2 += (float)rand() / (float)RAND_MAX;
+	}
+
+	return ((random1 / 10.0f) - (random2 / 10.0f));
+}
+//--------------------------------------------------- Calculate Smooth Noise
+static float SmoothNoise(int X, int Y, int Size, unsigned int Seed)
+{
+	float corners = (Noise(X - 1, Y - 1, Size, Seed) + Noise(X + 1, Y - 1, Size, Seed) + Noise(X - 1, Y + 1, Size, Seed) + Noise(X + 1, Y + 1, Size, Seed)) / 16.0f;
+
+	float sides = (Noise(X - 1, Y, Size, Seed) + Noise(X + 1, Y, Size, Seed) + Noise(X, Y - 1, Size, Seed) + Noise(X, Y + 1, Size, Seed)) / 8.0f;
+
+	float center = Noise(X, Y, Size, Seed) / 4.0f;
+
+	return corners + sides + center;
 }
 //--------------------------------------------------- Calcolate Delta Time
 static float DeltaTime(std::chrono::time_point<std::chrono::steady_clock> Start, std::chrono::time_point<std::chrono::steady_clock> End)
