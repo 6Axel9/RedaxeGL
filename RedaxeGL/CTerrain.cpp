@@ -62,7 +62,7 @@ void CTerrain::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 	glUniform1f(locations["material.Shininess"], shininess);
 
 	//==================================================== WireFrame On
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	for (GLuint tile = 0; tile < mesh.size(); tile++)
 	{
 		//==================================================== Bind Texture
@@ -79,7 +79,7 @@ void CTerrain::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	//==================================================== WireFrame Off
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void CTerrain::Terminate()

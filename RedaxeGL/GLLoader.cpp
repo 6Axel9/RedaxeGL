@@ -225,9 +225,9 @@ void GLLoader::generate3DGeometry(std::vector<std::string>& Parts)
 
 void GLLoader::generateTerrainGeometry()
 {
-	GLfloat amplitude = 2.0f;
+	GLfloat amplitude = 15.0f;
 	GLint vcount = 128;
-	GLint tsize = 10;
+	GLint tsize = 256;
 	GLint gsize = 1;
 
 	GLuint seed = (unsigned int) time(NULL);	
@@ -244,12 +244,13 @@ void GLLoader::generateTerrainGeometry()
 				for (GLint posY = 0; posY < vcount; posY++)
 				{
 					//==================================================== Terrain & Vertices Location
-					glm::vec2 SlotPos = glm::vec2((slotX - gsize / 2.0f)*tsize, (slotY - gsize / 2.0f)*tsize);
-					glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f)*tsize, posY / (vcount - 1.0f)*tsize);
-					//==================================================== Texture Multiplier
-					glm::vec2 TextPos = glm::vec2(VertPos.x, VertPos.y);
+					glm::vec2 SlotPos = glm::vec2((slotX - gsize / 2.0f) * tsize, (slotY - gsize / 2.0f) * tsize);
+					glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f) * tsize, posY / (vcount - 1.0f) * tsize);
 					//==================================================== Height Multiplier
 					GLfloat Height = SmoothNoise(posX, posY, vcount, seed) * amplitude;
+					//==================================================== Texture Multiplier
+					glm::vec2 TextPos = glm::vec2(VertPos.x, VertPos.y);
+					
 
 					//==================================================== Vertices
 					vertices.push_back({ 
