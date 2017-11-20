@@ -46,6 +46,7 @@ void CText::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 {
 	//==================================================== Send Booleans
 	glUniform1i(locations["Textured"], Textured);
+	glUniform1i(locations["MultiText"], false);
 	glUniform1i(locations["Mapped"], Mapped);
 	glUniform1i(locations["Lit"], Lit);
 	//==================================================== Send Texture

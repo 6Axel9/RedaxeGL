@@ -49,23 +49,27 @@ void CObject::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 {
 	//==================================================== Send Booleans
 	glUniform1i(locations["Textured"], Textured);
+	glUniform1i(locations["MultiText"], false);
 	glUniform1i(locations["Mapped"], Mapped);
 	glUniform1i(locations["Lit"], Lit);
 	//==================================================== Send Model Matrix
 	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Texture
 	glUniform1i(locations["txtmap.Diffuse"], 0);
+	glUniform1i(locations["txtmap.Specular"], 1);
+	glUniform1i(locations["txtmap.Normals"], 2);
 	//==================================================== Send Material
 	glUniform3fv(locations["material.Ambient"], 1, &ambient.r);
 	glUniform3fv(locations["material.Diffuse"], 1, &diffuse.r);
 	glUniform3fv(locations["material.Specular"], 1, &specular.r);
 	glUniform1f(locations["material.Shininess"], shininess);
 
-	//==================================================== WireFrame
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//==================================================== Bind Texture
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	for (GLint Map = 0; Map < texture.size(); Map++)
+	{
+		glActiveTexture(GL_TEXTURE0 + Map);
+		glBindTexture(GL_TEXTURE_2D, texture[Map]);
+	}
 	//==================================================== Bind VAO
 	glBindVertexArray(mesh[0]);
 	//==================================================== Render
@@ -73,8 +77,11 @@ void CObject::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 	//==================================================== Unbind VAO
 	glBindVertexArray(0);
 	//==================================================== Unbind Texture
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	for (GLint Map = 0; Map < texture.size(); Map++)
+	{
+		glActiveTexture(GL_TEXTURE0 + Map);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
 
 void CObject::Terminate()

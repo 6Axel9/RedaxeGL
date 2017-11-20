@@ -49,12 +49,21 @@ void CTerrain::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 {
 	//==================================================== Send Booleans
 	glUniform1i(locations["Textured"], Textured);
+	glUniform1i(locations["MultiText"], true);
 	glUniform1i(locations["Mapped"], Mapped);
 	glUniform1i(locations["Lit"], Lit);
 	//==================================================== Send Model Matrix
 	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Texture
-	glUniform1i(locations["txtmap.Diffuse"], 0);
+	glUniform1i(locations["terrain.G0Diffuse"], 3);
+	glUniform1i(locations["terrain.G0Specular"], 4);
+	glUniform1i(locations["terrain.G0Normals"], 5);
+
+	glUniform1i(locations["terrain.G1Diffuse"], 6);
+	glUniform1i(locations["terrain.G1Specular"], 7);
+	glUniform1i(locations["terrain.G1Normals"], 8);
+
+	glUniform1i(locations["terrain.GNoise"], 9);
 	//==================================================== Send Material
 	glUniform3fv(locations["material.Ambient"], 1, &ambient.r);
 	glUniform3fv(locations["material.Diffuse"], 1, &diffuse.r);
@@ -63,19 +72,22 @@ void CTerrain::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 
 	//==================================================== WireFrame On
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	for (GLuint tile = 0; tile < mesh.size(); tile++)
+	//==================================================== Bind Texture
+	for (GLint Map = 0; Map < texture.size(); Map++)
 	{
-		//==================================================== Bind Texture
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
-		//==================================================== Bind VAO
-		glBindVertexArray(mesh[tile]);
-		//==================================================== Render
-		glDrawElements(GL_TRIANGLES, vnum[tile], GL_UNSIGNED_INT, 0);
-		//==================================================== Unbind VAO
-		glBindVertexArray(0);
-		//==================================================== Unbind Texture
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE3 + Map);
+		glBindTexture(GL_TEXTURE_2D, texture[Map]);
+	}
+	//==================================================== Bind VAO
+	glBindVertexArray(mesh[0]);
+	//==================================================== Render
+	glDrawElements(GL_TRIANGLES, vnum[0], GL_UNSIGNED_INT, 0);
+	//==================================================== Unbind VAO
+	glBindVertexArray(0);
+	//==================================================== Unbind Texture
+	for (GLint Map = 0; Map < texture.size(); Map++)
+	{
+		glActiveTexture(GL_TEXTURE3 + Map);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	//==================================================== WireFrame Off

@@ -4,7 +4,10 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <math.h>
 #include <map>
+
+#define PI 3.14159265359f
 
 //--------------------------------------------------- Cut String Ending
 static std::string CutPast(std::string& SubString, std::string::iterator Start)
@@ -117,6 +120,15 @@ static float Noise(int X, int Y, int Size, unsigned int Seed)
 
 	return ((random1 / 10.0f) - (random2 / 10.0f));
 }
+//--------------------------------------------------- Calculate Noise
+static float Interpolate(float A, float B, float Blend)
+{
+	double theta = Blend * PI;
+
+	float factor = (float)(1.0f - cos(theta)) * 0.5f;
+
+	return A * (1.0f - factor) + B * factor;
+}
 //--------------------------------------------------- Calculate Smooth Noise
 static float SmoothNoise(int X, int Y, int Size, unsigned int Seed)
 {
@@ -127,6 +139,25 @@ static float SmoothNoise(int X, int Y, int Size, unsigned int Seed)
 	float center = Noise(X, Y, Size, Seed) / 4.0f;
 
 	return corners + sides + center;
+}
+//--------------------------------------------------- Calculate Smooth Noise
+static float SmoothInterpolNoise(float X, float Y, int Size, unsigned int Seed)
+{
+	int tempX = (int)X;
+	int tempY = (int)Y;
+
+	float fracX = X - tempX;
+	float fracY = Y - tempY;
+
+	float v1 = SmoothNoise(tempX, tempY, Size, Seed);
+	float v2 = SmoothNoise(tempX + 1, tempY, Size, Seed);
+	float v3 = SmoothNoise(tempX, tempY + 1, Size, Seed);
+	float v4 = SmoothNoise(tempX + 1, tempY + 1, Size, Seed);
+
+	float i1 = Interpolate(v1, v2, fracX);
+	float i2 = Interpolate(v3, v4, fracX);
+
+	return Interpolate(i1, i2, fracY);
 }
 //--------------------------------------------------- Calcolate Delta Time
 static float DeltaTime(std::chrono::time_point<std::chrono::steady_clock> Start, std::chrono::time_point<std::chrono::steady_clock> End)
