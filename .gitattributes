@@ -1,3 +1,6 @@
+/.vs filter=lfs diff=lfs merge=lfs -text
+/Binaries filter=lfs diff=lfs merge=lfs -text
 /Debug filter=lfs diff=lfs merge=lfs -text
+/Libraries filter=lfs diff=lfs merge=lfs -text
 /Release filter=lfs diff=lfs merge=lfs -text
 /RedaxeGL filter=lfs diff=lfs merge=lfs -text
