@@ -68,7 +68,7 @@ void PlayState::Render(GLboolean Shader)
 	//============================================================= Render Camera 3D
 	Camera->Render(true);
 	//============================================================= Render Player
-	Player->Render(true, false, true);
+	Player->Render(true, true, true);
 	//============================================================= Render Terrain
 	Terrain->Render(true, true, true);
 	//============================================================= Render Camera 2D
