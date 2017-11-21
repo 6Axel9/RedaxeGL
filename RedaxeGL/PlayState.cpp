@@ -3,10 +3,10 @@
 
 PlayState::PlayState()
 {
-	//============================================================= Create Light
-	Light = new CLight;
 	//============================================================= Create Camera
 	Camera = new CCamera;
+	//============================================================= Create Light
+	Light = new CLight("Point");
 	//============================================================= Create Player
 	Player = new CObject("Spaceship", "Spaceship", "Spaceship");
 	//============================================================= Create Terrain
@@ -17,12 +17,13 @@ PlayState::PlayState()
 
 void PlayState::OnEnter()
 {
-	//============================================================= Initialize Light
-	Light->Initialize(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
-	//============================================================= Enlighten Light
-	Light->Enlighten(glm::vec3(0.3f), glm::vec3(0.7f, 0.65f, 0.4f), glm::vec3(0.4f, 0.3f, 0.3f), 0.0f);
 	//============================================================= Initialize Camera
 	Camera->Initialize(glm::vec3(0.0f, 3.0f, -1.0f), glm::vec3(0.0f), 100.0f);
+	//============================================================= Initialize Light
+	Light->Initialize(glm::vec3(0.0f, 3.5f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
+	//============================================================= Enlighten Light
+	//Light->Enlighten(glm::vec3(0.5f), glm::vec3(0.56f,0.28f,0.1f), glm::vec3(0.56f,0.33f,0.2f), 0.0f);
+	Light->Enlighten(glm::vec3(0.3f, 0.35f, 0.3f), glm::vec3(0.375f, 0.35f, 0.3f), glm::vec3(0.275f, 0.25f, 0.2f), 0.0f);
 	//============================================================= Initialize Player
 	Player->Initialize(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Player
@@ -49,10 +50,10 @@ void PlayState::Update(GLfloat DeltaTime)
 	{
 		Engine::ReturnGamestate();
 	}
-	//============================================================= Update Light
-	Light->Update(DeltaTime);
 	//============================================================= Update Camera
 	Camera->Update(DeltaTime);
+	//============================================================= Update Light
+	Light->Update(DeltaTime);
 	//============================================================= Update Player
 	Player->Update(DeltaTime);
 	//============================================================= Update Terrain
@@ -63,10 +64,10 @@ void PlayState::Update(GLfloat DeltaTime)
 
 void PlayState::Render(GLboolean Shader)
 {
-	//============================================================= Render Light
-	Light->Render(true, false, true);
 	//============================================================= Render Camera 3D
 	Camera->Render(true);
+	//============================================================= Render Light
+	Light->Render(false, false, true);
 	//============================================================= Render Player
 	Player->Render(true, true, true);
 	//============================================================= Render Terrain
@@ -79,10 +80,10 @@ void PlayState::Render(GLboolean Shader)
 
 void PlayState::OnExit()
 {
-	//============================================================= Terminate Light
-	Light->Terminate();
 	//============================================================= Terminate Camera
 	Camera->Terminate();
+	//============================================================= Terminate Light
+	Light->Terminate();
 	//============================================================= Terminate Player
 	Player->Terminate();
 	//============================================================= Terminate Terrain
@@ -93,10 +94,10 @@ void PlayState::OnExit()
 
 PlayState::~PlayState()
 {
-	//============================================================= Destroy Light
-	delete Light;
 	//============================================================= Destroy Camera
 	delete Camera;
+	//============================================================= Destroy Light
+	delete Light;
 	//============================================================= Destroy Player
 	delete Player;
 	//============================================================= Destroy Terrain

@@ -7,6 +7,8 @@ public:
 
 	//==================================================== Create Default
 	CLight();
+	//==================================================== Create 3D Object
+	CLight(std::string MeshTag);
 	//==================================================== Initialize Object
 	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed);
 	//==================================================== Initialize Object Light
@@ -22,8 +24,13 @@ public:
 
 private:
 
+	//==================================================== Buffer Data
+	std::map<GLint, GLuint> mesh;
+	std::map<GLint, GLuint> vnum;
 	//==================================================== Properties
+	GLfloat shininess;
 	GLfloat attenuation;
+	glm::vec3 material;
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;

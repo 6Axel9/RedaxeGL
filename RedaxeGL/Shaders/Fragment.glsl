@@ -80,8 +80,8 @@ void main(void)
 		{
 			if(MultiText)
 			{
-				vec4 G0Normals = texture(terrain.G0Normals, textureOut.st * 16.0) * (1.0 - Intensity);
-				vec4 G1Normals = texture(terrain.G1Normals, textureOut.st * 16.0) * Intensity;
+				vec4 G0Normals = texture(terrain.G0Normals, textureOut.st * 8.0) * (1.0 - Intensity);
+				vec4 G1Normals = texture(terrain.G1Normals, textureOut.st * 8.0) * Intensity;
 
 				NormalPosition = normalize(normalize(vec4(G0Normals + G1Normals).rgb * 2.0 - 1.0) * TBN);
 			}
@@ -123,17 +123,17 @@ void main(void)
 			{
 				if(MultiText)
 				{
-					vec4 G0Diffuse  = texture(terrain.G0Diffuse,  textureOut.st * 16.0) * (1.0 - Intensity);
-					vec4 G0Specular = texture(terrain.G0Specular, textureOut.st * 16.0) * (1.0 - Intensity);
+					vec4 G0Diffuse  = texture(terrain.G0Diffuse,  textureOut.st * 8.0) * (1.0 - Intensity);
+					vec4 G0Specular = texture(terrain.G0Specular, textureOut.st * 8.0) * (1.0 - Intensity);
 
-					vec4 G1Diffuse  = texture(terrain.G1Diffuse,  textureOut.st * 16.0) * Intensity;
-					vec4 G1Specular = texture(terrain.G1Specular, textureOut.st * 16.0) * Intensity;
+					vec4 G1Diffuse  = texture(terrain.G1Diffuse,  textureOut.st * 8.0) * Intensity;
+					vec4 G1Specular = texture(terrain.G1Specular, textureOut.st * 8.0) * Intensity;
 
 					pixelColor = (	vec4(AmbientColor,  1.0) * (G0Diffuse  + G1Diffuse ) +
 									vec4(DiffuseColor,  1.0) * (G0Diffuse  + G1Diffuse ) +
 									vec4(SpecularColor, 1.0) * (G0Specular + G1Specular));
 
-					pixelColor = vec4(pixelColor.rgb * clamp((VertexPosition.y + 3) / 6.0, 0.2, 2.0), 1.0);				
+					pixelColor = vec4(pixelColor.rgb * clamp((VertexPosition.y + 3) / 6.0, 0.2, 1.0), 1.0);				
 				}
 				else
 				{
@@ -153,8 +153,8 @@ void main(void)
 			{
 				if(MultiText)
 				{
-					vec4 G0Normals = texture(terrain.G0Normals, textureOut.st * 16.0) * (1.0 - Intensity);
-					vec4 G1Normals = texture(terrain.G1Normals, textureOut.st * 16.0) * Intensity;
+					vec4 G0Normals = texture(terrain.G0Normals, textureOut.st * 8.0) * (1.0 - Intensity);
+					vec4 G1Normals = texture(terrain.G1Normals, textureOut.st * 8.0) * Intensity;
 
 					pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 1.0) * (G0Normals + G1Normals);
 				}
@@ -165,7 +165,7 @@ void main(void)
 			}
 			else
 			{
-				pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 1.0);
+				pixelColor = vec4(light.Diffuse, 1.0);
 			}
 		}
 		if(light.Attenuation > 0)

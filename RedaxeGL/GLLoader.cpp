@@ -77,7 +77,7 @@ void GLLoader::loadModels(std::string ModPath)
 	//==================================================== Load Terrain
 	generateTerrainGeometry();
 	//==================================================== Load Water
-	//generateWaterGeometry();
+	generatePointGeometry();
 	//==================================================== Load Font
 	generateFontGeometry();
 	//==================================================== Load Box
@@ -335,6 +335,61 @@ void GLLoader::generateTerrainGeometry()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
 	//==================================================== Bind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo["Terrain"][0]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_STATIC_DRAW);
+
+	//==================================================== Attribute Location 0
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+	//==================================================== Attribute Location 1
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	//==================================================== Attribute Location 2
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+	//==================================================== Attribute Location 3
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(8 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(3);
+	//==================================================== Attribute Location 4
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(11 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(4);
+	//==================================================== Attribute Location 5
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(14 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(5);
+
+	//==================================================== Unbind VAO
+	glBindVertexArray(0);
+	//==================================================== Unbind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//==================================================== Unbind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void GLLoader::generatePointGeometry()
+{
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+
+	//======================== Vertices =========== Colors =========== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(0.0f) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f,0.0f,-1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	//====================================== Indices
+	indices.push_back(0);
+	//==================================================== Vertices Count
+	vnum["Point"][0] = indices.size();
+
+	//==================================================== Generate VAO
+	glGenVertexArrays(1, &models["Point"][0]);
+	//==================================================== Generate VBO
+	glGenBuffers(1, &vbo["Point"][0]);
+	//==================================================== Generate EBO
+	glGenBuffers(1, &ebo["Point"][0]);
+
+	//==================================================== Bind VAO
+	glBindVertexArray(models["Point"][0]);
+	//==================================================== Bind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, vbo["Point"][0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
+	//==================================================== Bind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo["Point"][0]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_STATIC_DRAW);
 
 	//==================================================== Attribute Location 0
