@@ -2,9 +2,12 @@
 #include "Engine.h"
 #include "Tools.h"
 #include <gtc\matrix_transform.hpp>
+#include <thread>
+#include <future>
 
 CCamera::CCamera()
 {
+	microbit = new MyExtension("serial_micro_values");
 }
 
 void CCamera::Initialize(glm::vec3 Position, glm::vec3 Rotation, GLfloat Speed)
@@ -17,10 +20,14 @@ void CCamera::Initialize(glm::vec3 Position, glm::vec3 Rotation, GLfloat Speed)
 	angle = -Rotation;
 	//==================================================== Initialize Speed
 	speed = Speed;
+	//==================================================== Controller Init
+	microbit->Connect();
 }
 
 void CCamera::Update(GLfloat DeltaTime)
 {
+	//==================================================== Update Controller Input
+	//microbit->IntialiseVarTuple();
 	//==================================================== Move Camera
 	if (Engine::Screen()->Key(GLFW_KEY_W))
 	{
@@ -39,8 +46,8 @@ void CCamera::Update(GLfloat DeltaTime)
 		move += directionRight * DeltaTime;
 	}
 	//==================================================== Rotate Camera
-	angle += glm::vec3(-Engine::Screen()->Mouse().w, 
-					   -Engine::Screen()->Mouse().z, 0.0f) * DeltaTime * speed;
+	angle += glm::vec3(-Engine::Screen()->Mouse().w - microbit->GetPitch() / 1000.0f,
+					   -Engine::Screen()->Mouse().z + microbit->GetRoll() / 1000.0f, 0.0f) * DeltaTime * speed;
 	//==================================================== Limit Movements
 	if (angle.x >  70) { angle.x =  70; }
 	if (angle.x < -70) { angle.x = -70; }
@@ -50,6 +57,7 @@ void CCamera::Update(GLfloat DeltaTime)
 	//==================================================== Update Transformations
 	transform();
 }
+
 
 void CCamera::Render(GLboolean Perspective)
 {

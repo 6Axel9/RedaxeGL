@@ -1,5 +1,6 @@
 #pragma once
 #include "BView.h"
+#include "MyExtension.h"
 
 class CCamera : public BView
 {
@@ -20,6 +21,7 @@ public:
 
 private:
 
+	MyExtension* microbit;
 	//==================================================== Properties
 	glm::vec3 angle;
 	glm::vec3 move;

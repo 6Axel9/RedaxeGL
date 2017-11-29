@@ -102,6 +102,9 @@
     <ClCompile Include="CTerrain.cpp">
       <Filter>Source Files\Components\Object</Filter>
     </ClCompile>
+    <ClCompile Include="MyExtension.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="CTerrain.h">
       <Filter>Header Files\Components\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="MyExtension.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

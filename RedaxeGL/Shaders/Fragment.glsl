@@ -149,24 +149,7 @@ void main(void)
 		}
 		else
 		{
-			if(Mapped)
-			{
-				if(MultiText)
-				{
-					vec4 G0Normals = texture(terrain.G0Normals, textureOut.st * 8.0) * (1.0 - Intensity);
-					vec4 G1Normals = texture(terrain.G1Normals, textureOut.st * 8.0) * Intensity;
-
-					pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 1.0) * (G0Normals + G1Normals);
-				}
-				else
-				{
-					pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 1.0) * texture(txtmap.Normals,  textureOut.st);
-				}
-			}
-			else
-			{
-				pixelColor = vec4(light.Diffuse, 1.0);
-			}
+			pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 1.0);
 		}
 		if(light.Attenuation > 0)
 		{
@@ -177,25 +160,11 @@ void main(void)
 	{
 		if(Textured)
 		{
-			if(Mapped)
-			{
-				pixelColor = vec4(colorOut, 1.0) * texture(txtmap.Specular, textureOut.st);
-			}
-			else
-			{
-				pixelColor = vec4(colorOut, 1.0) * texture(txtmap.Diffuse, textureOut.st);
-			}
+			pixelColor = vec4(colorOut, 1.0) * texture(txtmap.Diffuse, textureOut.st);
 		}
 		else
 		{
-			if(Mapped)
-			{
-				pixelColor = vec4(colorOut, 1.0);
-			}
-			else
-			{
-				pixelColor = vec4(colorOut, 1.0);
-			}	
+			pixelColor = vec4(colorOut, 1.0);
 		}
 	}
 }
