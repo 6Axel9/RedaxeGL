@@ -2,8 +2,6 @@
 #include "Engine.h"
 #include "Tools.h"
 #include <gtc\matrix_transform.hpp>
-#include <thread>
-#include <future>
 
 CCamera::CCamera()
 {
