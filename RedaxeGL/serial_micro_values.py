@@ -1,5 +1,6 @@
 import sys
 import glob
+sys.path.append("../Libraries/PYTHON/serial")
 import serial
 import time
 
