@@ -70,6 +70,7 @@ def Serial_connect(_br):
 
     try:
         print(f_port[0])
+        print("connected to: " + ser.getName())
 
     except IndexError:
         print("no ports available")
@@ -77,15 +78,19 @@ def Serial_connect(_br):
 
     ser.SetPort(f_port[0])
 
-    print("connected to: " + ser.getName())
+    ser.open()
+
 
 
     return "ALL GOOD"
 
+def Release():
+    ser = MySerializer()
+    ser.close()
+    print("Serial closed")
 
 def GetVars():
     ser = MySerializer()
-    ser.open()
 
     checking = 1
     line = []
@@ -102,11 +107,12 @@ def GetVars():
         for value in range(0, 3):
             line.append(ser.recv())
 
-
             if line[0] == "SHUTDOWN\n":
                 ProgramOn = 0
 
-    ser.close()
+            if line[0] == "STOP\n":
+                ProgramOn = 0
+
 
     #print(line)
 

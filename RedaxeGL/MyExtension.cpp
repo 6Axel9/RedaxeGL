@@ -4,14 +4,14 @@
 #include <sstream>
 #include <thread>
 
-MyExtension::MyExtension(std::string path)
+MyExtension::MyExtension(const std::string& path):_path(path)
 {
 
 	// Initialize the Python interpreter.
 	Py_Initialize();
 
 	// Convert the file name to a Python string.
-	pName = PyString_FromString(path.c_str());
+	pName = PyString_FromString(_path.c_str());
 
 	// Import the file as a Python module.
 	pModule = PyImport_Import(pName);
@@ -23,7 +23,7 @@ MyExtension::MyExtension(std::string path)
 
 }
 
-void MyExtension::SetBaud(int _baud)
+void MyExtension::SetBaud(long _baud)
 {
 	baud = _baud;
 }
@@ -45,7 +45,15 @@ bool MyExtension::Connect()
 
 	PyObject* pResult = PyObject_CallObject(pFunc, pArgs);
 
-	return true;
+	if (pResult == NULL)
+	{
+		return false;
+
+	}
+	else
+	{
+		return true;
+	}
 }
 
 
@@ -59,8 +67,6 @@ void MyExtension::IntialiseVarTuple()
 
 	PyObject* pResult = PyObject_CallObject(pFunc, pArgs);
 
-
-	// Call the function with the arguments.
 	std::string result;
 	std::string v1, v2, v3;
 
@@ -95,15 +101,14 @@ void MyExtension::IntialiseVarTuple()
 		std::cout << "Pin 0: " << analog_r_pin0 << std::endl << "Pitch: " << pitch << std::endl << "Roll : " << roll << std::endl << std::endl;
 	}
 
-	//std::cin.ignore();
 }
 
-int MyExtension::StringToNumber(std::string s)
+float MyExtension::StringToNumber(std::string s)
 {
 	int Numb;
 	std::stringstream str(s);
 	str >> Numb;
-	return Numb;
+	return float(Numb);
 }
 
 void MyExtension::Reset()
@@ -112,25 +117,37 @@ void MyExtension::Reset()
 
 float MyExtension::GetRoll()
 {
-	
 	return roll;
 }
 
 float MyExtension::GetPitch()
 {
-
 	return pitch;
 }
 
 float MyExtension::GetYaw()
 {
-	
+
 	return yaw;
 }
 
 
 MyExtension::~MyExtension()
 {
+	// Get the choosen method from the dictionary.
+	pFunc = PyDict_GetItemString(pDict, "Release");
+
+	// Create a Python tuple to hold the arguments to the method.
+	pArgs = NULL;
+
+	PyObject* pResult = PyObject_CallObject(pFunc, pArgs);
+	
+	// Print a message if calling the method failed.
+	if (pResult == NULL)
+	{
+		std::cout << "Did not shotdown properly\n";
+	}
+
 	// Destroy the Python interpreter.
 	Py_Finalize();
 }

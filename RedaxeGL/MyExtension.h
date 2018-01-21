@@ -1,17 +1,26 @@
 #pragma once
+#ifdef _DEBUG
+#undef _DEBUG
 #include <Python.h>
+#define _DEBUG
+#else
+#include <Python.h>
+#endif
+
 #include <iostream>
 #include <string>
 #include <vector>
 
 
 
+
+
 class MyExtension
 {
 public:
-	MyExtension(std::string path);
+	MyExtension(const std::string& path);
 
-	void SetBaud(int _baud);
+	void SetBaud(long _baud);
 
 	bool Connect();
 
@@ -28,15 +37,16 @@ public:
 
 private: 
 	
+	std::string _path;
 
-	int StringToNumber(std::string s);
+	float StringToNumber(std::string s);
 
 	float yaw, pitch, roll, analog_r_pin0;
 
 	// Create some Python objects that will later be assigned values.
 	PyObject *pName, *pModule, *pDict, *pFunc, *pArgs, *pValue;
 
-	float baud;
+	long baud;
 
 };
 

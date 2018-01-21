@@ -19,9 +19,11 @@ public:
 	//==================================================== Destroy 3D Camera
 	virtual~CCamera();
 
+	MyExtension* microbit;
+
 private:
 
-	MyExtension* microbit;
+	
 	//==================================================== Properties
 	glm::vec3 angle;
 	glm::vec3 move;

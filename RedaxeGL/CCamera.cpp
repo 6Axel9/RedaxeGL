@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "Tools.h"
 #include <gtc\matrix_transform.hpp>
+#include <thread>
+#include <future>
 
 CCamera::CCamera()
 {
@@ -19,13 +21,14 @@ void CCamera::Initialize(glm::vec3 Position, glm::vec3 Rotation, GLfloat Speed)
 	//==================================================== Initialize Speed
 	speed = Speed;
 	//==================================================== Controller Init
-	microbit->Connect();
+	!microbit->Connect() ? std::cout<< "Connection failed" <<std::endl : std::cout << "Connection succeded" << std::endl;
 }
 
 void CCamera::Update(GLfloat DeltaTime)
 {
+	//std::thread t1(&MyExtension::IntialiseVarTuple, microbit);
 	//==================================================== Update Controller Input
-	//microbit->IntialiseVarTuple();
+	microbit->IntialiseVarTuple();
 	//==================================================== Move Camera
 	if (Engine::Screen()->Key(GLFW_KEY_W))
 	{
@@ -43,6 +46,9 @@ void CCamera::Update(GLfloat DeltaTime)
 	{
 		move += directionRight * DeltaTime;
 	}
+
+	
+	//t1.join();
 	//==================================================== Rotate Camera
 	angle += glm::vec3(-Engine::Screen()->Mouse().w - microbit->GetPitch() / 1000.0f,
 					   -Engine::Screen()->Mouse().z + microbit->GetRoll() / 1000.0f, 0.0f) * DeltaTime * speed;
@@ -75,8 +81,11 @@ void CCamera::Render(GLboolean Perspective)
 void CCamera::Terminate()
 {
 	//==================================================== Terminate
+	delete microbit;
+
 }
 
 CCamera::~CCamera()
 {
+
 }
