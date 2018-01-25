@@ -41,6 +41,7 @@ private:
 	//==================================================== Fill Vertex Buffers
 	void generate3DGeometry(std::vector<std::string>& Parts);
 	void generateTerrainGeometry();
+	void generateWaterGeometry();
 	void generatePointGeometry();
 	void generateFontGeometry();
 	void generate2DGeometry();

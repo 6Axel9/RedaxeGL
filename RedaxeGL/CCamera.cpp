@@ -21,14 +21,14 @@ void CCamera::Initialize(glm::vec3 Position, glm::vec3 Rotation, GLfloat Speed)
 	//==================================================== Initialize Speed
 	speed = Speed;
 	//==================================================== Controller Init
-	!microbit->Connect() ? std::cout<< "Connection failed" <<std::endl : std::cout << "Connection succeded" << std::endl;
+	//!microbit->Connect() ? std::cout<< "Connection failed" <<std::endl : std::cout << "Connection succeded" << std::endl;
 }
 
 void CCamera::Update(GLfloat DeltaTime)
 {
 	//std::thread t1(&MyExtension::IntialiseVarTuple, microbit);
 	//==================================================== Update Controller Input
-	microbit->IntialiseVarTuple();
+	//microbit->IntialiseVarTuple();
 	//==================================================== Move Camera
 	if (Engine::Screen()->Key(GLFW_KEY_W))
 	{
@@ -50,8 +50,8 @@ void CCamera::Update(GLfloat DeltaTime)
 	
 	//t1.join();
 	//==================================================== Rotate Camera
-	angle += glm::vec3(-Engine::Screen()->Mouse().w - microbit->GetPitch() / 1000.0f,
-					   -Engine::Screen()->Mouse().z + microbit->GetRoll() / 1000.0f, 0.0f) * DeltaTime * speed;
+	angle += glm::vec3(-Engine::Screen()->Mouse().w /*- microbit->GetPitch() / 1000.0f*/,
+					   -Engine::Screen()->Mouse().z /*+ microbit->GetRoll() / 1000.0f*/, 0.0f) * DeltaTime * speed;
 	//==================================================== Limit Movements
 	if (angle.x >  70) { angle.x =  70; }
 	if (angle.x < -70) { angle.x = -70; }
@@ -81,8 +81,7 @@ void CCamera::Render(GLboolean Perspective)
 void CCamera::Terminate()
 {
 	//==================================================== Terminate
-	delete microbit;
-
+	//delete microbit;
 }
 
 CCamera::~CCamera()

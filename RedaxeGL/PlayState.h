@@ -25,6 +25,7 @@ private:
 	CCamera* Camera;
 	CObject* Player;
 	CTerrain* Terrain;
+	CWater* Water;
 	CText* Text;
 };
 

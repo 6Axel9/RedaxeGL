@@ -3,19 +3,19 @@
 
 layout (location = 0) in vec3 positionIn;
 layout (location = 1) in vec3 colorIn;
-layout (location = 3) in vec2 textureIn;
-layout (location = 2) in vec3 normalIn;
+layout (location = 2) in vec2 textureIn;
+layout (location = 3) in vec3 normalIn;
 layout (location = 4) in vec3 tangentIn;
 layout (location = 5) in vec3 bitangentIn;
 
 uniform mat4 modelIn;
 uniform mat4 viewIn;
-uniform mat4 worldIn;
+uniform mat4 projIn;
 
 out vec3 positionOut;
 out vec3 colorOut;
-out vec3 normalOut;
 out vec2 textureOut;
+out vec3 normalOut;
 
 out mat3 TBN;
 
@@ -23,8 +23,9 @@ void main(void)
 {
 	positionOut	= positionIn;
 	colorOut	= colorIn;
-	normalOut	= normalIn;
 	textureOut	= textureIn;
+	normalOut	= normalIn;
+
 
 	vec3 T = normalize(vec3(modelIn * vec4(tangentIn,   0.0)));
 	vec3 B = normalize(vec3(modelIn * vec4(bitangentIn, 0.0)));
@@ -32,5 +33,5 @@ void main(void)
 
 	TBN = transpose(mat3(T, B, N));
 
-	gl_Position =/* worldIn * viewIn * modelIn **/ vec4(positionIn, 1.0);
+	gl_Position = projIn * viewIn * modelIn * vec4(positionIn, 1.0);
 }

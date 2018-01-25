@@ -11,6 +11,8 @@ PlayState::PlayState()
 	Player = new CObject("Spaceship", "Spaceship", "Spaceship");
 	//============================================================= Create Terrain
 	Terrain = new CTerrain("Terrain", "Terrain", "Terrain");
+	//============================================================= Create Water
+	Water = new CWater("Water", "Water", "Water");
 	//============================================================= Create Text
 	Text   = new CText("Font", "Font", "Font");
 }
@@ -32,6 +34,10 @@ void PlayState::OnEnter()
 	Terrain->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Terrain
 	Terrain->Materialize(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f), 1.0f);
+	//============================================================= Initialize Water
+	Water->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
+	//============================================================= Materialize Water
+	Water->Materialize(glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(1.0f), glm::vec3(1.0f), 1.0f);
 	//============================================================= Write Text
 	Text->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Yohooo");
 }
@@ -58,6 +64,8 @@ void PlayState::Update(GLfloat DeltaTime)
 	Player->Update(DeltaTime);
 	//============================================================= Update Terrain
 	Terrain->Update(DeltaTime);
+	//============================================================= Update Water
+	Water->Update(DeltaTime);
 	//============================================================= Update Text
 	Text->Update(DeltaTime);
 }
@@ -72,6 +80,8 @@ void PlayState::Render(GLboolean Shader)
 	Player->Render(true, true, true);
 	//============================================================= Render Terrain
 	Terrain->Render(true, true, true);
+	//============================================================= Render Water
+	Water->Render(false, false, true);
 	//============================================================= Render Camera 2D
 	Camera->Render(false);
 	//============================================================= Render Text
@@ -88,6 +98,8 @@ void PlayState::OnExit()
 	Player->Terminate();
 	//============================================================= Terminate Terrain
 	Terrain->Terminate();
+	//============================================================= Terminate Water
+	Water->Terminate();
 	//============================================================= Terminate Text
 	Text->Terminate();
 }
@@ -102,6 +114,8 @@ PlayState::~PlayState()
 	delete Player;
 	//============================================================= Destroy Terrain
 	delete Terrain;
+	//============================================================= Destroy Water
+	delete Water;
 	//============================================================= Destroy Text
 	delete Text;
 }

@@ -149,7 +149,7 @@ void main(void)
 		}
 		else
 		{
-			pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 1.0);
+			pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 0.3);
 		}
 		if(light.Attenuation > 0)
 		{
@@ -164,7 +164,7 @@ void main(void)
 		}
 		else
 		{
-			pixelColor = vec4(colorOut, 1.0);
+			pixelColor = vec4(colorOut, 0.3);
 		}
 	}
 }

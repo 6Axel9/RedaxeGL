@@ -2,7 +2,9 @@ REDAXE OPENGL ENGINE
 =============================================
 
 ============ Import Database ================
-Tag = Spaceship;	Types = 2;		Extention = .jpg;	Path = Images\;
+Tag = Font;	        Types = 1;		Extention = .png;	Path = Images\;
+Tag = Terrain;	    Types = 7;		Extention = .bmp;	Path = Images\;
+Tag = Spaceship;	Types = 3;		Extention = .bmp;	Path = Images\;
 =============================================
 
 =============================================

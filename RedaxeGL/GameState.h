@@ -1,6 +1,7 @@
 #pragma once
 #include "CLight.h"
 #include "CCamera.h"
+#include "CWater.h"
 #include "CTerrain.h"
 #include "CObject.h"
 #include "CText.h"

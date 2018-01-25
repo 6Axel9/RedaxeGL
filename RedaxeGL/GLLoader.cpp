@@ -1,6 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "GLLoader.h"
+#include "Engine.h"
 #include "Tools.h"
 #include <postprocess.h>
 #include <cimport.h>
@@ -76,6 +77,8 @@ void GLLoader::loadModels(std::string ModPath)
 	}
 	//==================================================== Load Terrain
 	generateTerrainGeometry();
+	//==================================================== Load Terrain
+	generateWaterGeometry();
 	//==================================================== Load Water
 	generatePointGeometry();
 	//==================================================== Load Font
@@ -336,6 +339,145 @@ void GLLoader::generateTerrainGeometry()
 	//==================================================== Bind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo["Terrain"][0]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_STATIC_DRAW);
+
+	//==================================================== Attribute Location 0
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+	//==================================================== Attribute Location 1
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	//==================================================== Attribute Location 2
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+	//==================================================== Attribute Location 3
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(8 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(3);
+	//==================================================== Attribute Location 4
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(11 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(4);
+	//==================================================== Attribute Location 5
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(14 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(5);
+
+	//==================================================== Unbind VAO
+	glBindVertexArray(0);
+	//==================================================== Unbind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//==================================================== Unbind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void GLLoader::generateWaterGeometry()
+{
+	GLfloat amplitude = 32.0f;
+	GLfloat roughness = 0.45f;
+	GLint octaves = 0;
+	GLint vcount = 64;
+	GLint tsize = 64;
+
+	GLuint seed = (unsigned int)time(NULL);
+
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+
+	for (GLint posX = 0; posX < vcount; posX++)
+	{
+		for (GLint posY = 0; posY < vcount; posY++)
+		{
+			GLfloat Height = 0;
+			GLfloat HeightL = 0;
+			GLfloat HeightR = 0;
+			GLfloat HeightU = 0;
+			GLfloat HeightD = 0;
+
+			GLfloat Value = (float)pow(2, octaves - 1);
+			//==================================================== Terrain & Vertices Location
+			glm::vec2 SlotPos = glm::vec2(-tsize / 2, -tsize / 2);
+			glm::vec2 VertPos = glm::vec2(posX / (vcount - 1.0f) * tsize, posY / (vcount - 1.0f) * tsize);
+			//==================================================== Height Location
+			for (GLint FreqN = 0; FreqN < octaves; FreqN++)
+			{
+				float freq = (float)(pow(2, FreqN) / Value);
+				float ampl = (float)pow(roughness, FreqN) * amplitude;
+				Height += SmoothInterpolNoise(posX * freq, posY * freq, vcount, seed) * ampl;
+				HeightL += SmoothInterpolNoise((posX - 1) * freq, posY * freq, vcount, seed) * ampl;
+				HeightR += SmoothInterpolNoise((posX + 1) * freq, posY * freq, vcount, seed) * ampl;
+				HeightD += SmoothInterpolNoise(posX * freq, (posY - 1) * freq, vcount, seed) * ampl;
+				HeightU += SmoothInterpolNoise(posX * freq, (posY + 1) * freq, vcount, seed) * ampl;
+			}
+			//==================================================== Texture Location
+			glm::vec2 TextPos = glm::vec2(posX / (vcount - 1.0f), posY / (vcount - 1.0f));
+			//==================================================== Normal Location
+			glm::vec3 Normal = glm::normalize(glm::vec3(HeightL - HeightR, 2.0f, HeightD - HeightU));
+			//==================================================== Tangent & Bitangent Location
+			glm::vec3 Tang1 = glm::cross(Normal, glm::vec3(0.0f, 0.0f, 1.0f));
+			glm::vec3 Tang2 = glm::cross(Normal, glm::vec3(0.0f, 1.0f, 0.0f));
+
+			glm::vec3 Tangent;
+			glm::vec3 Bitangent;
+
+			if (glm::length(Tang1) > glm::length(Tang2))
+			{
+				Tangent = glm::normalize(Tang1);
+				Bitangent = glm::cross(Tangent, Normal);
+			}
+			else
+			{
+				Tangent = glm::normalize(Tang2);
+				Bitangent = glm::cross(Tangent, Normal);
+			}
+			//==================================================== Vertices
+			vertices.push_back({
+				//==================================================== Positions
+				{ glm::vec3(VertPos.x + SlotPos.x, Height , VertPos.y + SlotPos.y) },
+				//==================================================== Colors
+				{ glm::vec3(1.0f, 1.0f, 1.0f) },
+				//==================================================== Texture Coords
+				{ glm::vec2(TextPos.x, TextPos.y) },
+				//==================================================== Normals
+				{ Normal },
+				//==================================================== Tangents
+				{ Tangent },
+				//==================================================== Bitangents
+				{ Bitangent } });
+		}
+	}
+	for (GLint posX = 0; posX < vcount - 1; posX++)
+	{
+		for (GLint posY = 0; posY < vcount - 1; posY++)
+		{
+			//==================================================== Index Location
+			GLint BL = ((posX + 1) * vcount) + posY;
+			GLint TL = (posX * vcount) + posY;
+			GLint TR = TL + 1;
+			GLint BR = BL + 1;
+			//==================================================== Indices
+			indices.push_back(BL);
+			indices.push_back(TL);
+			indices.push_back(TR);
+			indices.push_back(TR);
+			indices.push_back(BR);
+			indices.push_back(BL);
+		}
+	}
+	//==================================================== Vertices Count
+	vnum["Water"][0] = indices.size();
+
+	//==================================================== Generate VAO
+	glGenVertexArrays(1, &models["Water"][0]);
+	//==================================================== Generate VBO
+	glGenBuffers(1, &vbo["Water"][0]);
+	//==================================================== Generate EBO
+	glGenBuffers(1, &ebo["Water"][0]);
+
+	//==================================================== Bind VAO
+	glBindVertexArray(models["Water"][0]);
+	//==================================================== Bind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, vbo["Water"][0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_DYNAMIC_DRAW);
+	//==================================================== Bind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo["Water"][0]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_DYNAMIC_DRAW);
 
 	//==================================================== Attribute Location 0
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)0);
