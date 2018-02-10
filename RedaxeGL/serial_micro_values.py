@@ -1,6 +1,5 @@
 import sys
 import glob
-sys.path.append("../Libraries/PYTHON/serial")
 import serial
 import time
 
@@ -14,32 +13,33 @@ def singleton(cls, *args, **kw):
 
 @singleton
 class MySerializer:
-    def __init__(self, baudrate=9600, timeout=5):
-        self.port = serial.Serial()
-        self.port.baudrate = baudrate
+    def __init__(self, _baudrate=9600, _timeout=100):
+        self._ser = serial.Serial()
+        self._ser.baudrate = _baudrate
+        self._ser.timeout = _timeout
 
     def open(self):
         ''' Open the serial port.'''
-        self.port.open()
+        self._ser.open()
 
     def close(self):
         ''' Close the serial port.'''
-        self.port.close()
+        self._ser.close()
 
     def send(self, msg):
-        self.port.write(msg)
+        self._ser.write(msg)
 
     def recv(self):
-        return self.port.readline()
+        return self._ser.readline()
 
     def getName(self):
-        return str(self.port.name)
+        return str(self._ser.name)
 
     def connectionAvailable(self):
-        return self.port.isOpen()
+        return self._ser.isOpen()
 
     def SetPort(self, value):
-        self.port.port = value
+        self._ser.port = value
 
 
 def checkSystemPorts():
@@ -59,31 +59,18 @@ def Serial_connect(_br):
 
     ser = MySerializer()
 
-    f_port = []
-
     for port in checkSystemPorts():
         try:
-            s = serial.Serial(port)
-            s.close()
-            f_port.append(port)
+            ser.SetPort(port)
+            ser.open()
+            break
         except (OSError, serial.SerialException):
             pass
-
-    try:
-        print(f_port[0])
-        print("connected to: " + ser.getName())
-
-    except IndexError:
-        print("no ports available")
-        pass
-
-    ser.SetPort(f_port[0])
-
-    ser.open()
-
-
-
-    return "ALL GOOD"
+    
+           
+    if not ser.connectionAvailable():   
+        print("No ports available, retrying...")
+        return False
 
 def Release():
     ser = MySerializer()
@@ -92,30 +79,25 @@ def Release():
 
 def GetVars():
     ser = MySerializer()
-
     checking = 1
     line = []
 
-    if ser.connectionAvailable():
-
-        while checking:
-            line.append(ser.recv())
-            if line[0] == "START \n":
-                checking = 0
-            line = []
+    while checking:
+        line.append(ser.recv())
+        if line[0] == "START \n":
+            checking = 0
+        line = []
 
 
-        for value in range(0, 3):
-            line.append(ser.recv())
+    for value in range(0, 3):
+        line.append(ser.recv())
 
-            if line[0] == "SHUTDOWN\n":
-                ProgramOn = 0
+        if line[0] == "SHUTDOWN\n":
+            ProgramOn = 0
 
-            if line[0] == "STOP\n":
-                ProgramOn = 0
+        if line[0] == "STOP\n":
+            ProgramOn = 0
 
-
-    #print(line)
 
     return str(line).strip('[]')
 

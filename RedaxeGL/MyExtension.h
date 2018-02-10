@@ -10,30 +10,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <thread>
+#include <future>
 
 
 
 
 class MyExtension
 {
-public:
-	MyExtension(const std::string& path);
-
-	void SetBaud(long _baud);
-
-	bool Connect();
-
-
-	void Reset();
-
-	float GetRoll();
-	float GetPitch();
-	float GetYaw();
-
-	~MyExtension();
-	
-	void IntialiseVarTuple();
 
 private: 
 	
@@ -46,7 +30,48 @@ private:
 	// Create some Python objects that will later be assigned values.
 	PyObject *pName, *pModule, *pDict, *pFunc, *pArgs, *pValue;
 
+	float scale;
+
+	bool connected;
 	long baud;
 
+	std::thread * Connecting_thread;
+
+
+	void SerialClose();
+
+	void Connect();
+
+
+public:
+	MyExtension(const std::string& path);
+
+	void SetBaud(long _baud);
+
+
+	void Reset();
+	
+/**********************************************************************/
+
+	inline bool isConnected() { return connected; };
+
+	inline float GetRoll() { return roll / scale; };
+
+	inline float GetPitch() { return pitch / scale; };
+
+	inline float GetYaw() { return yaw / scale; };
+
+	inline void SetScale(float s) {scale = s;	};
+
+	inline float GetScale() { return scale; };
+
+/**********************************************************************/
+
+	~MyExtension();
+
+	
+	void IntialiseVarTuple();
+
+	enum errors { INITIALISATION_ERROR };
 };
 

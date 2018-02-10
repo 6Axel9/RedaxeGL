@@ -21,6 +21,14 @@ MyExtension::MyExtension(const std::string& path):_path(path)
 
 	baud = 9600;
 
+	scale = 1000.f;
+
+	connected = false;
+
+	yaw = 0, pitch = 0, roll = 0, analog_r_pin0 = 0;
+
+	Connecting_thread = new std::thread(&MyExtension::Connect, this);
+	Connecting_thread->detach();
 }
 
 void MyExtension::SetBaud(long _baud)
@@ -29,7 +37,7 @@ void MyExtension::SetBaud(long _baud)
 }
 
 
-bool MyExtension::Connect()
+void MyExtension::Connect()
 {
 	// Get the choosen method from the dictionary.
 	pFunc = PyDict_GetItemString(pDict, "Serial_connect");
@@ -45,15 +53,15 @@ bool MyExtension::Connect()
 
 	PyObject* pResult = PyObject_CallObject(pFunc, pArgs);
 
-	if (pResult == NULL)
-	{
-		return false;
+	pResult == NULL ? connected = false: connected = true;
 
-	}
-	else
+	if (connected && Connecting_thread->joinable())
 	{
-		return true;
+		std::cout << "Connected \n";
+		Connecting_thread->join();
+		delete Connecting_thread;
 	}
+
 }
 
 
@@ -74,33 +82,40 @@ void MyExtension::IntialiseVarTuple()
 	if (pResult == NULL)
 	{
 		std::cout << "Method failed\n";
-	}
 
-	else
-	{
-		result = PyString_AsString(pResult);
+		connected = false;
 
+		Connecting_thread = new std::thread(&MyExtension::Connect, this);
+		Connecting_thread->detach();
 
-		v1 = result.substr(result.find("b") + 1, result.find("e") - 1);
-		analog_r_pin0 = StringToNumber(v1);
-		result.erase(0, result.find("e") + 1);
+		yaw = 0, pitch = 0, roll = 0, analog_r_pin0 = 0;
 		
 
-		v2 = result.substr(result.find("b") + 1, result.find("e") - 1);
-		roll = StringToNumber(v2);
-		result.erase(0 , result.find("e") + 1);
-
-
-		v3 = result.substr(result.find("b") + 1, result.find("e") - 1);
-		pitch = StringToNumber(v3);
-		result.erase(0 , result.find("e") + 1);
-
-
-		result.erase();
-
-		std::cout << "Pin 0: " << analog_r_pin0 << std::endl << "Pitch: " << pitch << std::endl << "Roll : " << roll << std::endl << std::endl;
+		return;
 	}
 
+
+	result = PyString_AsString(pResult);
+
+
+	v1 = result.substr(result.find("b") + 1, result.find("e") - 1);
+	analog_r_pin0 = StringToNumber(v1);
+	result.erase(0, result.find("e") + 1);
+		
+
+	v2 = result.substr(result.find("b") + 1, result.find("e") - 1);
+	roll = StringToNumber(v2);
+	result.erase(0 , result.find("e") + 1);
+
+
+	v3 = result.substr(result.find("b") + 1, result.find("e") - 1);
+	pitch = StringToNumber(v3);
+	result.erase(0 , result.find("e") + 1);
+
+
+	result.erase();
+
+	std::cout << "Pin 0: " << analog_r_pin0 << std::endl << "Pitch: " << pitch << std::endl << "Roll : " << roll << std::endl << std::endl;
 }
 
 float MyExtension::StringToNumber(std::string s)
@@ -115,24 +130,20 @@ void MyExtension::Reset()
 {
 }
 
-float MyExtension::GetRoll()
-{
-	return roll;
-}
-
-float MyExtension::GetPitch()
-{
-	return pitch;
-}
-
-float MyExtension::GetYaw()
-{
-
-	return yaw;
-}
-
-
 MyExtension::~MyExtension()
+{
+	if (connected)
+	{
+		SerialClose();
+		delete Connecting_thread;
+	}
+
+
+	// Destroy the Python interpreter.
+	Py_Finalize();
+}
+
+void MyExtension::SerialClose()
 {
 	// Get the choosen method from the dictionary.
 	pFunc = PyDict_GetItemString(pDict, "Release");
@@ -141,13 +152,11 @@ MyExtension::~MyExtension()
 	pArgs = NULL;
 
 	PyObject* pResult = PyObject_CallObject(pFunc, pArgs);
-	
+
 	// Print a message if calling the method failed.
 	if (pResult == NULL)
 	{
 		std::cout << "Did not shotdown properly\n";
 	}
 
-	// Destroy the Python interpreter.
-	Py_Finalize();
 }
