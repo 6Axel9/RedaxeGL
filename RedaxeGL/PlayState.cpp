@@ -8,13 +8,15 @@ PlayState::PlayState()
 	//============================================================= Create Light
 	Light = new CLight("Point");
 	//============================================================= Create Player
-	Player = new CObject("Spaceship", "Spaceship", "Spaceship");
+	Player = new CObject("Spaceship", "Spaceship", "None");
 	//============================================================= Create Terrain
-	Terrain = new CTerrain("Terrain", "Terrain", "Terrain");
+	Terrain = new CTerrain("Terrain", "Terrain", "None");
 	//============================================================= Create Water
-	Water = new CWater("Water", "Water", "Water");
+	Water = new CWater("Water", "None", "None");
+	//============================================================= Create GUI
+	GUI = new CInterface("Box", "Water", "None");
 	//============================================================= Create Text
-	Text   = new CText("Font", "Font", "Font");
+	Text = new CText("Font", "Font", "None");
 }
 
 void PlayState::OnEnter()
@@ -24,8 +26,7 @@ void PlayState::OnEnter()
 	//============================================================= Initialize Light
 	Light->Initialize(glm::vec3(0.0f, 3.5f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
-	//Light->Enlighten(glm::vec3(0.5f), glm::vec3(0.56f,0.28f,0.1f), glm::vec3(0.56f,0.33f,0.2f), 0.0f);
-	Light->Enlighten(glm::vec3(0.3f, 0.35f, 0.3f), glm::vec3(0.375f, 0.35f, 0.3f), glm::vec3(0.275f, 0.25f, 0.2f), 0.0f);
+	Light->Enlighten(glm::vec3(0.5f, 0.4f, 0.3f), glm::vec3(0.4f, 0.5f, 0.3f), glm::vec3(0.3f, 0.2f, 0.2f), 0.0f);
 	//============================================================= Initialize Player
 	Player->Initialize(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Player
@@ -38,6 +39,8 @@ void PlayState::OnEnter()
 	Water->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Water
 	Water->Materialize(glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(1.0f), glm::vec3(1.0f), 1.0f);
+	//============================================================= Write GUI
+	GUI->Initialize(glm::vec3(280.0f,210.0f,0.0f), glm::vec3(0.0f), glm::vec3(240.0f,180.0f,1.0f));
 	//============================================================= Write Text
 	Text->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Yohooo");
 }
@@ -66,26 +69,54 @@ void PlayState::Update(GLfloat DeltaTime)
 	Terrain->Update(DeltaTime);
 	//============================================================= Update Water
 	Water->Update(DeltaTime);
+	//============================================================= Update GUI
+	GUI->Update(DeltaTime);
 	//============================================================= Update Text
 	Text->Update(DeltaTime);
 }
 
-void PlayState::Render(GLboolean Shader)
+void PlayState::Render(GLboolean WaterShader)
 {
-	//============================================================= Render Camera 3D
-	Camera->Render(true);
-	//============================================================= Render Light
-	Light->Render(false, false, true);
-	//============================================================= Render Player
-	Player->Render(true, true, true);
-	//============================================================= Render Terrain
-	Terrain->Render(true, true, true);
-	//============================================================= Render Water
-	Water->Render(false, false, true);
-	//============================================================= Render Camera 2D
-	Camera->Render(false);
-	//============================================================= Render Text
-	Text->Render(true, false, false);
+	if (WaterShader)
+	{
+		//==================================================== Bind Water Reflection
+		glBindFramebuffer(GL_FRAMEBUFFER, Engine::Loader()->FrameBuffers("Water")[0]);
+		//==================================================== Clear Current Buffer
+		Engine::Screen()->ClearScreen();
+		//============================================================= Render Camera 3D
+		Camera->Render(true);
+		//============================================================= Render Light
+		Light->Render(false, false, true);
+		//============================================================= Render Player
+		Player->Render(true, true, true);
+		//============================================================= Render Terrain
+		Terrain->Render(true, true, true);
+	}
+	else
+	{
+		//==================================================== Unbind Water Reflection
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//==================================================== Clear Current Buffer
+		Engine::Screen()->ClearScreen();
+		//============================================================= Render Camera 3D
+		Camera->Render(true);
+		//============================================================= Render Light
+		Light->Render(false, false, true);
+		//============================================================= Render Player
+		Player->Render(true, true, true);
+		//============================================================= Render Terrain
+		Terrain->Render(true, true, true);
+		//============================================================= Render Water
+		Water->Render(false, false, true);
+		//============================================================= Render Camera 2D
+		Camera->Render(false);
+		//============================================================= Render GUI
+		GUI->Render(true, false, false);
+		//============================================================= Render Text
+		Text->Render(true, false, false);
+		//==================================================== Swap Front/Back Buffer
+		Engine::Screen()->SwapBuffers();
+	}
 }
 
 void PlayState::OnExit()
@@ -100,6 +131,8 @@ void PlayState::OnExit()
 	Terrain->Terminate();
 	//============================================================= Terminate Water
 	Water->Terminate();
+	//============================================================= Terminate GUI
+	GUI->Terminate();
 	//============================================================= Terminate Text
 	Text->Terminate();
 }
@@ -116,6 +149,8 @@ PlayState::~PlayState()
 	delete Terrain;
 	//============================================================= Destroy Water
 	delete Water;
+	//============================================================= Destroy GUI
+	delete GUI;
 	//============================================================= Destroy Text
 	delete Text;
 }

@@ -74,13 +74,11 @@ void Engine::MainLoop()
 		deltaTime = DeltaTime(startTime, endTime);
 		//============================================================= Start Timer
 		startTime = std::chrono::high_resolution_clock::now();
-		//==================================================== Clear Current Buffer
-		screen->ClearScreen();
-		//==================================================== Render
+		//==================================================== Update
 		Gamestate.front()->Update(deltaTime);
+		//==================================================== Render
 		Gamestate.front()->Render(true);
-		//==================================================== Swap Front/Back Buffer
-		screen->SwapBuffers();
+		Gamestate.front()->Render(false);
 		//============================================================= Delete Inactive Queue
 		while (!Gamestate.front()->Status()) { DeleteGamestate(); }
 	}

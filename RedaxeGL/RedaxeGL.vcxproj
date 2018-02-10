@@ -28,13 +28,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -159,6 +159,7 @@
     <ClCompile Include="BModel.cpp" />
     <ClCompile Include="BView.cpp" />
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CInterface.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CObject.cpp" />
     <ClCompile Include="CTerrain.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="BModel.h" />
     <ClInclude Include="BView.h" />
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CInterface.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="CObject.h" />
     <ClInclude Include="CTerrain.h" />

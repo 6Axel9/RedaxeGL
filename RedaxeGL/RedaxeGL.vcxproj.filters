@@ -108,6 +108,9 @@
     <ClCompile Include="CWater.cpp">
       <Filter>Source Files\Components\Object</Filter>
     </ClCompile>
+    <ClCompile Include="CInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="CWater.h">
       <Filter>Header Files\Components\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CInterface.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

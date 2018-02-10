@@ -3,6 +3,8 @@ REDAXE OPENGL ENGINE
 
 ============ Import Database ================
 Tag = Spaceship;	Frames = 1;		Extention = .obj;	Path = Models\;
+Tag = TreeDebris;	Frames = 1;		Extention = .fbx;	Path = Models\;
+Tag = TreeStump;	Frames = 1;		Extention = .fbx;	Path = Models\;
 =============================================
 
 =============================================

@@ -3,6 +3,7 @@
 #include "CCamera.h"
 #include "CWater.h"
 #include "CTerrain.h"
+#include "CInterface.h"
 #include "CObject.h"
 #include "CText.h"
 

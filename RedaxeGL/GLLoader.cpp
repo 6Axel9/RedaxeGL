@@ -11,6 +11,7 @@
 
 GLLoader::GLLoader(std::string ModPath, std::string ImgPath, std::string SndPath)
 {
+	loadFrameBuffers();
 	//==================================================== Load Model Assets
 	loadModels(ModPath);
 	//==================================================== Load Image Assets
@@ -19,6 +20,30 @@ GLLoader::GLLoader(std::string ModPath, std::string ImgPath, std::string SndPath
 
 GLLoader::~GLLoader()
 {
+	//==================================================== Delete FBO
+	for (auto const &Tag : frameBuffers)
+	{
+		for (auto const &Frame : Tag.second)
+		{
+			glDeleteFramebuffers(1, &Frame.second);
+		}
+	}
+	//==================================================== Delete Depth Attachment
+	for (auto const &Tag : depthBuffers)
+	{
+		for (auto const &Frame : Tag.second)
+		{
+			glDeleteTextures(1, &Frame.second);
+		}
+	}
+	//==================================================== Delete Render Buffer
+	for (auto const &Tag : renderBuffers)
+	{
+		for (auto const &Frame : Tag.second)
+		{
+			glDeleteRenderbuffers(1, &Frame.second);
+		}
+	}
 	//==================================================== Delete VAO
 	for(auto const &Tag : models) 
 	{	for(auto const &Frame : Tag.second) 
@@ -50,6 +75,12 @@ GLLoader::~GLLoader()
 	}
 }
 
+void GLLoader::loadFrameBuffers()
+{
+	generateWaterReflection();
+	generateWaterRefraction();
+}
+
 void GLLoader::loadModels(std::string ModPath)
 {
 	std::string last;
@@ -77,9 +108,9 @@ void GLLoader::loadModels(std::string ModPath)
 	}
 	//==================================================== Load Terrain
 	generateTerrainGeometry();
-	//==================================================== Load Terrain
-	generateWaterGeometry();
 	//==================================================== Load Water
+	generateWaterGeometry();
+	//==================================================== Load Point
 	generatePointGeometry();
 	//==================================================== Load Font
 	generateFontGeometry();
@@ -369,7 +400,7 @@ void GLLoader::generateTerrainGeometry()
 
 void GLLoader::generateWaterGeometry()
 {
-	GLfloat amplitude = 32.0f;
+	GLfloat amplitude = 1;
 	GLfloat roughness = 0.45f;
 	GLint octaves = 0;
 	GLint vcount = 64;
@@ -717,7 +748,7 @@ void GLLoader::generateTextureMap(std::vector<std::string>& Parts)
 		}
 		else
 		{
-			//==================================================== Set OpenGL Profile		
+			//==================================================== Generate Texture		
 			glGenTextures(1, &images[Parts[0]][Frame]);
 			//==================================================== Bind Texture
 			glBindTexture(GL_TEXTURE_2D, images[Parts[0]][Frame]);
@@ -738,4 +769,88 @@ void GLLoader::generateTextureMap(std::vector<std::string>& Parts)
 			stbi_image_free(txt[Parts[0]][Frame]);
 		}
 	}
+}
+
+void GLLoader::generateWaterReflection()
+{
+	//==================================================== Generate Frame Buffer
+	glGenFramebuffers(1, &frameBuffers["Water"][0]);
+	//==================================================== Bind Frame Buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffers["Water"][0]);
+	//==================================================== Define Draw Locations
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
+	//==================================================== Generate Texture
+	glGenTextures(1, &images["Water"][0]);
+	//==================================================== Bind Texture
+	glBindTexture(GL_TEXTURE_2D, images["Water"][0]);
+	//==================================================== Sampler Filter
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//==================================================== Store Image Data
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Engine::Screen()->Size().x, Engine::Screen()->Size().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	//==================================================== Unbind Texture
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//==================================================== Generate Render Buffer
+	glGenRenderbuffers(1, &renderBuffers["Water"][0]);
+	//==================================================== Bind Render Buffer
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffers["Water"][0]);
+	//==================================================== Define Storage Type
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, Engine::Screen()->Size().x, Engine::Screen()->Size().y);
+	//==================================================== Unbind Render Buffer
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	//==================================================== Attach Color Buffer
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, images["Water"][0], 0);
+	//==================================================== Attach Render Buffer
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffers["Water"][0]);
+
+	//==================================================== Bind Frame Buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GLLoader::generateWaterRefraction()
+{
+	//==================================================== Generate Frame Buffer
+	glGenFramebuffers(1, &frameBuffers["Water"][1]);
+	//==================================================== Bind Frame Buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffers["Water"][1]);
+	//==================================================== Define Draw Locations
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
+	//==================================================== Generate Texture
+	glGenTextures(1, &images["Water"][1]);
+	//==================================================== Bind Texture
+	glBindTexture(GL_TEXTURE_2D, images["Water"][1]);
+	//==================================================== Sampler Filter
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//==================================================== Store Image Data
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Engine::Screen()->Size().x, Engine::Screen()->Size().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	//==================================================== Unbind Texture
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//==================================================== Generate Texture
+	glGenTextures(1, &depthBuffers["Water"][1]);
+	//==================================================== Bind Texture
+	glBindTexture(GL_TEXTURE_2D, depthBuffers["Water"][1]);
+	//==================================================== Sampler Filter
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//==================================================== Store Image Data
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, Engine::Screen()->Size().x, Engine::Screen()->Size().y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	//==================================================== Unbind Texture
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//==================================================== Attach Color Buffer
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, images["Water"][1], 0);
+	//==================================================== Attach Depth Buffer
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthBuffers["Water"][1], 0);
+
+	//==================================================== Bind Frame Buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

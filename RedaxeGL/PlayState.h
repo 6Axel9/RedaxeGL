@@ -12,7 +12,7 @@ public:
 	//============================================================= Update Stage
 	virtual void Update(GLfloat DeltaTime);
 	//============================================================= Render Stage
-	virtual void Render(GLboolean Shader);
+	virtual void Render(GLboolean WaterShader);
 	//============================================================= On Exit Stage
 	virtual void OnExit();
 	//============================================================= Terminate PlayState
@@ -24,6 +24,7 @@ private:
 	CLight* Light;
 	CCamera* Camera;
 	CObject* Player;
+	CInterface* GUI;
 	CTerrain* Terrain;
 	CWater* Water;
 	CText* Text;

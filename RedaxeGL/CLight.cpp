@@ -19,7 +19,7 @@ void CLight::Enlighten(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular,
 	diffuse = Diffuse;
 	specular = Specular;
 	attenuation = Attenuation;
-	material = glm::vec3(0.1);
+	material = diffuse * 10.0f;
 	shininess = 1.0f;
 }
 

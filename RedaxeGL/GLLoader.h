@@ -25,6 +25,9 @@ public:
 	~GLLoader();
 
 	//==================================================== Handlers
+	std::map<GLint, GLuint>& FrameBuffers(std::string Tag) { return frameBuffers[Tag]; }
+	std::map<GLint, GLuint>& DepthBuffers(std::string Tag) { return depthBuffers[Tag]; }
+	std::map<GLint, GLuint>& RenderBuffers(std::string Tag) { return renderBuffers[Tag]; }
 	std::map<GLint, GLuint>& Models(std::string Tag) { return models[Tag]; }
 	std::map<GLint, GLuint>& Images(std::string Tag) { return images[Tag]; }
 	std::map<GLint, GLuint>& Sounds(std::string Tag) { return sounds[Tag]; }
@@ -32,6 +35,8 @@ public:
 
 private:
 
+	//==================================================== Load All Frame Buffers
+	void loadFrameBuffers();
 	//==================================================== Load All Models/Animations
 	void loadModels(std::string ModPath);
 	//==================================================== Load All Textures/Fonts
@@ -47,7 +52,13 @@ private:
 	void generate2DGeometry();
 	//==================================================== Fill Texture Buffers
 	void generateTextureMap(std::vector<std::string>& Parts);
+	//==================================================== Fill Frame Buffers
+	void generateWaterReflection();
+	void generateWaterRefraction();
 	//==================================================== Properties
+	std::map<std::string, std::map<GLint, GLuint>> frameBuffers;
+	std::map<std::string, std::map<GLint, GLuint>> depthBuffers;
+	std::map<std::string, std::map<GLint, GLuint>> renderBuffers;
 	std::map<std::string, std::map<GLint, GLuint>> models;
 	std::map<std::string, std::map<GLint, GLuint>> images;
 	std::map<std::string, std::map<GLint, GLuint>> sounds;
