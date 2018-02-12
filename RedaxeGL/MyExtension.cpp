@@ -60,6 +60,7 @@ void MyExtension::Connect()
 		std::cout << "Connected \n";
 		Connecting_thread->join();
 		delete Connecting_thread;
+		//delete Connecting_thread;
 	}
 
 }
@@ -87,6 +88,8 @@ void MyExtension::IntialiseVarTuple()
 
 		Connecting_thread = new std::thread(&MyExtension::Connect, this);
 		Connecting_thread->detach();
+		//Connecting_thread = new std::thread(&MyExtension::Connect, this);
+		//Connecting_thread->detach();
 
 		yaw = 0, pitch = 0, roll = 0, analog_r_pin0 = 0;
 		
@@ -118,6 +121,12 @@ void MyExtension::IntialiseVarTuple()
 	std::cout << "Pin 0: " << analog_r_pin0 << std::endl << "Pitch: " << pitch << std::endl << "Roll : " << roll << std::endl << std::endl;
 }
 
+
+float MyExtension::GetFlex(fingers f)
+{
+	return *fingers_value[f];
+}
+
 float MyExtension::StringToNumber(std::string s)
 {
 	int Numb;
@@ -137,6 +146,10 @@ MyExtension::~MyExtension()
 		SerialClose();
 		delete Connecting_thread;
 	}
+
+	SerialClose();
+	delete Connecting_thread;
+
 
 
 	// Destroy the Python interpreter.

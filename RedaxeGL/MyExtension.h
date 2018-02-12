@@ -3,8 +3,12 @@
 #undef _DEBUG
 #include <Python.h>
 #define _DEBUG
+	#undef _DEBUG
+	#include <Python.h>
+	#define _DEBUG
 #else
 #include <Python.h>
+	#include <Python.h>
 #endif
 
 #include <iostream>
@@ -14,6 +18,7 @@
 #include <future>
 
 
+#define MAX_FINGERS 5
 
 
 class MyExtension
@@ -72,6 +77,12 @@ public:
 	
 	void IntialiseVarTuple();
 
+	float* fingers_value[MAX_FINGERS];
+
 	enum errors { INITIALISATION_ERROR };
+	enum fingers { F_THUMB, F_INDEX, F_MIDDLE, F_RING, F_PINKY };
+
+
+	float GetFlex(fingers f);
 };
 

@@ -97,6 +97,7 @@ void CCamera::Terminate()
 {
 	//==================================================== Terminate
 	//delete microbit;
+	delete microbit;
 }
 
 CCamera::~CCamera()

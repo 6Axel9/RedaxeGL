@@ -58,6 +58,15 @@ def checkSystemPorts():
 def Serial_connect(_br):
 
     ser = MySerializer()
+    while not ser.connectionAvailable():
+        for port in checkSystemPorts():
+            try:
+                ser.SetPort(port)
+                ser.open()
+                return
+            except (OSError, serial.SerialException):
+                print("Listening for connection.")
+                pass
 
     for port in checkSystemPorts():
         try:
