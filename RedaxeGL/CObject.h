@@ -16,7 +16,7 @@ public:
 	//==================================================== Update Object
 	virtual void Update(GLfloat DeltaTime);
 	//==================================================== Render Object
-	virtual void Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit);
+	virtual void Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded);
 	//==================================================== Terminate Object
 	void Terminate();
 	//==================================================== Destroy 3D Object

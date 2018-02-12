@@ -78,7 +78,6 @@ void Engine::MainLoop()
 		Gamestate.front()->Update(deltaTime);
 		//==================================================== Render
 		Gamestate.front()->Render(true);
-		Gamestate.front()->Render(false);
 		//============================================================= Delete Inactive Queue
 		while (!Gamestate.front()->Status()) { DeleteGamestate(); }
 	}

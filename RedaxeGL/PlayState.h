@@ -12,7 +12,13 @@ public:
 	//============================================================= Update Stage
 	virtual void Update(GLfloat DeltaTime);
 	//============================================================= Render Stage
-	virtual void Render(GLboolean WaterShader);
+	virtual void Render(GLboolean Shaded);
+	//============================================================= Reflection
+	virtual void RenderReflection(GLboolean Shaded);
+	//============================================================= Refraction
+	virtual void RenderRefraction(GLboolean Shaded);
+	//============================================================= Shadows
+	virtual void RenderShadows(GLboolean Shaded);
 	//============================================================= On Exit Stage
 	virtual void OnExit();
 	//============================================================= Terminate PlayState
@@ -29,4 +35,3 @@ private:
 	CWater* Water;
 	CText* Text;
 };
-

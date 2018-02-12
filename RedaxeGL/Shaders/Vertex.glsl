@@ -12,6 +12,9 @@ uniform mat4 modelIn;
 uniform mat4 viewIn;
 uniform mat4 projIn;
 
+uniform vec4 clipPlane;
+
+out vec4 clipSpace;
 out vec3 positionOut;
 out vec3 colorOut;
 out vec2 textureOut;
@@ -26,12 +29,15 @@ void main(void)
 	textureOut	= textureIn;
 	normalOut	= normalIn;
 
-
 	vec3 T = normalize(vec3(modelIn * vec4(tangentIn,   0.0)));
 	vec3 B = normalize(vec3(modelIn * vec4(bitangentIn, 0.0)));
 	vec3 N = normalize(vec3(modelIn * vec4(normalIn,    0.0)));
 
 	TBN = transpose(mat3(T, B, N));
 
-	gl_Position = projIn * viewIn * modelIn * vec4(positionIn, 1.0);
+	gl_ClipDistance[0] = dot(modelIn * vec4(positionIn, 1.0), clipPlane);
+
+	clipSpace = projIn * viewIn * modelIn * vec4(positionIn, 1.0);
+
+	gl_Position = clipSpace;
 }

@@ -109,7 +109,7 @@
       <Filter>Source Files\Components\Object</Filter>
     </ClCompile>
     <ClCompile Include="CInterface.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,7 +162,7 @@
       <Filter>Header Files\Components\Object</Filter>
     </ClInclude>
     <ClInclude Include="CInterface.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Components\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

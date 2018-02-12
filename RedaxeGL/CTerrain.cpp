@@ -27,6 +27,8 @@ void CTerrain::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scal
 {
 	//==================================================== Flip X
 	Position.x = -Position.x;
+	//==================================================== CounterBalance Height
+	Position.y = Position.y - Engine::Loader()->TerrainData().z;
 	//==================================================== Initialize Position
 	move = Position;
 	//==================================================== Initialize Rotation
@@ -45,24 +47,26 @@ void CTerrain::Update(GLfloat DeltaTime)
 	transform();
 }
 
-void CTerrain::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
+void CTerrain::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded)
 {
 	//==================================================== Send Booleans
-	glUniform1i(locations["Textured"], Textured);
-	glUniform1i(locations["MultiText"], true);
-	glUniform1i(locations["Mapped"], Mapped);
-	glUniform1i(locations["Lit"], Lit);
+	glUniform1i(locations["DiffuseMap"], Diffuse);
+	glUniform1i(locations["SpecularMap"], Specular);
+	glUniform1i(locations["NormalMap"], Normals);
+	glUniform1i(locations["Shaded"], Shaded);
+	//==================================================== Send Type
+	glUniform1i(locations["TerrainShader"], true);
+	glUniform1i(locations["WaterShader"], false);
+	glUniform1i(locations["ShadowShader"], false);
 	//==================================================== Send Model Matrix
 	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Texture
 	glUniform1i(locations["terrain.G0Diffuse"], 3);
 	glUniform1i(locations["terrain.G0Specular"], 4);
 	glUniform1i(locations["terrain.G0Normals"], 5);
-
 	glUniform1i(locations["terrain.G1Diffuse"], 6);
 	glUniform1i(locations["terrain.G1Specular"], 7);
 	glUniform1i(locations["terrain.G1Normals"], 8);
-
 	glUniform1i(locations["terrain.GNoise"], 9);
 	//==================================================== Send Material
 	glUniform3fv(locations["material.Ambient"], 1, &ambient.r);

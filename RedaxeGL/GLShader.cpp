@@ -97,11 +97,17 @@ void GLShader::linkUniforms()
 	uniformsId["modelIn"] = glGetUniformLocation(programId, "modelIn");
 	uniformsId["viewIn"]  = glGetUniformLocation(programId, "viewIn");
 	uniformsId["projIn"]  = glGetUniformLocation(programId, "projIn");
+	//==================================================== ClipPlanes
+	uniformsId["clipPlane"] = glGetUniformLocation(programId, "clipPlane");
 	//==================================================== Bools
-	uniformsId["Textured"]  = glGetUniformLocation(programId, "Textured");
-	uniformsId["MultiText"] = glGetUniformLocation(programId, "MultiText");
-	uniformsId["Mapped"]    = glGetUniformLocation(programId, "Mapped");
-	uniformsId["Lit"]       = glGetUniformLocation(programId, "Lit");
+	uniformsId["DiffuseMap"]  = glGetUniformLocation(programId, "DiffuseMap");
+	uniformsId["SpecularMap"] = glGetUniformLocation(programId, "SpecularMap");
+	uniformsId["NormalMap"] = glGetUniformLocation(programId, "NormalMap");
+	uniformsId["Shaded"] = glGetUniformLocation(programId, "Shaded");
+	//==================================================== Types
+	uniformsId["TerrainShader"] = glGetUniformLocation(programId, "TerrainShader");
+	uniformsId["WaterShader"] = glGetUniformLocation(programId, "WaterShader");
+	uniformsId["ShadowShader"] = glGetUniformLocation(programId, "ShadowShader");
 	//==================================================== Light
 	uniformsId["light.Ambient"]  = glGetUniformLocation(programId, "light.Ambient");
 	uniformsId["light.Diffuse"]  = glGetUniformLocation(programId, "light.Diffuse");
@@ -122,12 +128,13 @@ void GLShader::linkUniforms()
 	uniformsId["terrain.G0Diffuse"]  = glGetUniformLocation(programId, "terrain.G0Diffuse");
 	uniformsId["terrain.G0Specular"] = glGetUniformLocation(programId, "terrain.G0Specular");
 	uniformsId["terrain.G0Normals"]  = glGetUniformLocation(programId, "terrain.G0Normals");
-
 	uniformsId["terrain.G1Diffuse"]  = glGetUniformLocation(programId, "terrain.G1Diffuse");
 	uniformsId["terrain.G1Specular"] = glGetUniformLocation(programId, "terrain.G1Specular");
 	uniformsId["terrain.G1Normals"]  = glGetUniformLocation(programId, "terrain.G1Normals");
-
 	uniformsId["terrain.GNoise"] = glGetUniformLocation(programId, "terrain.GNoise");
+	//==================================================== Water Textures
+	uniformsId["water.Reflection"] = glGetUniformLocation(programId, "water.Reflection");
+	uniformsId["water.Refraction"] = glGetUniformLocation(programId, "water.Refraction");
 	//==================================================== Camera
 	uniformsId["camera.Position"] = glGetUniformLocation(programId, "camera.Position");
 }

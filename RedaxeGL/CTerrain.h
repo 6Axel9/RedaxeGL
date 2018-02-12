@@ -14,9 +14,9 @@ public:
 	//==================================================== Initialize Object Transformations
 	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed);
 	//==================================================== Update Object
-	virtual void Update(GLfloat DeltaTime);
+	void Update(GLfloat DeltaTime);
 	//==================================================== Render Object
-	virtual void Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit);
+	void Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded);
 	//==================================================== Terminate Object
 	void Terminate();
 	//==================================================== Destroy 3D Object

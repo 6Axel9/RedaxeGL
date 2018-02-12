@@ -45,13 +45,17 @@ void CObject::Update(GLfloat DeltaTime)
 	transform();
 }
 
-void CObject::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
+void CObject::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded)
 {
 	//==================================================== Send Booleans
-	glUniform1i(locations["Textured"], Textured);
-	glUniform1i(locations["MultiText"], false);
-	glUniform1i(locations["Mapped"], Mapped);
-	glUniform1i(locations["Lit"], Lit);
+	glUniform1i(locations["DiffuseMap"], Diffuse);
+	glUniform1i(locations["SpecularMap"], Specular);
+	glUniform1i(locations["NormalMap"], Normals);
+	glUniform1i(locations["Shaded"], Shaded);
+	//==================================================== Send Type
+	glUniform1i(locations["TerrainShader"], false);
+	glUniform1i(locations["WaterShader"], false);
+	glUniform1i(locations["ShadowShader"], false);
 	//==================================================== Send Model Matrix
 	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Texture

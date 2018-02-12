@@ -11,13 +11,25 @@ public:
 	
 	//==================================================== Initialize OpenGL Screen
 	GLScreen(std::string Title, GLint Width, GLint Height, GLint Mode, GLint VersionX, GLint VersionXX);
+	//==================================================== Enable Alpha Blend
+	void EnableBlending();
+	//==================================================== Enable Clip Distance
+	void EnableClipping();
+	//==================================================== Enable Face Culling
+	void EnableFaceCulling();
+	//==================================================== Disable Alpha Blend
+	void DisableBlending();
+	//==================================================== Disable Clip Distance
+	void DisableClipping();
+	//==================================================== Disable Face Culling
+	void DisableFaceCulling();
 	//==================================================== Clear Current Buffer
 	void ClearScreen();
 	//==================================================== Swap Front/Back Buffer
 	void SwapBuffers();
 	//==================================================== Terminate OpenGL Screen
 	~GLScreen();
-
+	
 	//==================================================== Handlers
 	static GLint Exit() { return glfwWindowShouldClose(window); }
 	static GLint Key(GLint KeyCode) { return key[KeyCode]; }
@@ -32,9 +44,6 @@ private:
 	void assignCallbacks();
 	//==================================================== Load Functions
 	void loadExtensions();
-	//==================================================== Enable Alpha Blend
-	void enableblending();
-
 	//==================================================== On Resize
 	static void onWindowResize(GLFWwindow* Window, GLint Width, GLint Height);
 	//==================================================== On Mouse Key Handle

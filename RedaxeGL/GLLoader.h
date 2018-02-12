@@ -32,6 +32,7 @@ public:
 	std::map<GLint, GLuint>& Images(std::string Tag) { return images[Tag]; }
 	std::map<GLint, GLuint>& Sounds(std::string Tag) { return sounds[Tag]; }
 	std::map<GLint, GLuint>& VNum(std::string Tag)   { return vnum[Tag]; }
+	glm::vec3& TerrainData() { return terrainData; }
 
 private:
 
@@ -70,4 +71,5 @@ private:
 	std::map<std::string, std::map<GLint, GLuint>> vnum;
 	std::map<std::string, GLint> framesNum;
 	std::map<std::string, GLint> typesNum;
+	glm::vec3 terrainData;
 };

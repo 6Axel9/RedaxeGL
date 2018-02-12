@@ -16,6 +16,8 @@ BView::~BView()
 
 void BView::translate(glm::vec3 Target)
 {
+	//==================================================== Reflect View Matrix
+	refPosition = glm::vec3(Target.x, -Target.y, Target.z);
 	//==================================================== Translate Position
 	position = Target;
 }
@@ -28,8 +30,10 @@ void BView::rotate(glm::vec3 Target)
 	GLfloat roll    = glm::radians(Target.z);
 	GLfloat rad90	= glm::radians(90.0f);
 	//==================================================== Rotate Direction
+	refDirectionFront = glm::vec3(cos(-pitch) * sin(yaw), sin(-pitch), cos(-pitch) * cos(yaw));
 	directionFront = glm::vec3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw));
 	directionRight = glm::vec3(sin(yaw - rad90), 0, cos(yaw - rad90));
+	refDirectionUp = glm::cross(directionRight, refDirectionFront);
 	directionUp    = glm::cross(directionRight, directionFront);
 }
 
@@ -37,6 +41,8 @@ void BView::transform()
 {
 	//==================================================== View Matrix
 	view = glm::lookAt(position, position + directionFront, directionUp);
+	//==================================================== Reflected View Matrix
+	refView = glm::lookAt(refPosition, refPosition + refDirectionFront, refDirectionUp);
 }
 
 void BView::perspective()

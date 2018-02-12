@@ -261,11 +261,14 @@ void GLLoader::generate3DGeometry(std::vector<std::string>& Parts)
 
 void GLLoader::generateTerrainGeometry()
 {
-	GLfloat amplitude = 32.0f;
-	GLfloat roughness = 0.45f;
+	GLfloat lowest = 0.0f;
+	GLfloat highest = 0.0f;
+	GLfloat average = 0.0f;
+	GLfloat amplitude = 64.0f;
+	GLfloat roughness = 0.5f;
 	GLint octaves = 4;
-	GLint vcount = 64;
-	GLint tsize = 64;
+	GLint vcount = 128;
+	GLint tsize = 128;
 
 	GLuint seed = (unsigned int) time(NULL);	
 
@@ -297,6 +300,10 @@ void GLLoader::generateTerrainGeometry()
 				HeightD += SmoothInterpolNoise(posX * freq, (posY - 1) * freq, vcount, seed) * ampl; 
 				HeightU += SmoothInterpolNoise(posX * freq, (posY + 1) * freq, vcount, seed) * ampl;
 			}
+			//==================================================== Store Terrain Top/Bottom Picks & Average
+			if (lowest > Height) { lowest = Height; }
+			if (highest < Height) { highest = Height; }
+			average += Height;
 			//==================================================== Texture Location
 			glm::vec2 TextPos = glm::vec2(posX / (vcount - 1.0f), posY / (vcount - 1.0f));
 			//==================================================== Normal Location
@@ -332,26 +339,27 @@ void GLLoader::generateTerrainGeometry()
 				{ Tangent },
 				//==================================================== Bitangents
 				{ Bitangent }});
-		}
-	}
-	for (GLint posX = 0; posX < vcount - 1; posX++)
-	{
-		for (GLint posY = 0; posY < vcount - 1; posY++)
-		{
-			//==================================================== Index Location
-			GLint BL = ((posX + 1) * vcount) + posY;
-			GLint TL = (posX * vcount) + posY;
-			GLint TR = TL + 1;
-			GLint BR = BL + 1;
+
 			//==================================================== Indices
-			indices.push_back(BL);
-			indices.push_back(TL);
-			indices.push_back(TR);
-			indices.push_back(TR);
-			indices.push_back(BR);
-			indices.push_back(BL);
+			if (posX < vcount - 1 && posY < vcount - 1)
+			{
+				//==================================================== Index Location
+				GLint BL = ((posX + 1) * vcount) + posY;
+				GLint TL = (posX * vcount) + posY;
+				GLint TR = TL + 1;
+				GLint BR = BL + 1;
+				//==================================================== Indices
+				indices.push_back(BL);
+				indices.push_back(TL);
+				indices.push_back(TR);
+				indices.push_back(TR);
+				indices.push_back(BR);
+				indices.push_back(BL);
+			}
 		}
 	}
+	//==================================================== Store Captured Data
+	terrainData = glm::vec3(lowest, highest, average / (vcount * vcount));
 	//==================================================== Vertices Count
 	vnum["Terrain"][0] = indices.size();
 
@@ -401,10 +409,10 @@ void GLLoader::generateTerrainGeometry()
 void GLLoader::generateWaterGeometry()
 {
 	GLfloat amplitude = 1;
-	GLfloat roughness = 0.45f;
+	GLfloat roughness = 0;
 	GLint octaves = 0;
-	GLint vcount = 64;
-	GLint tsize = 64;
+	GLint vcount = 128;
+	GLint tsize = 128;
 
 	GLuint seed = (unsigned int)time(NULL);
 

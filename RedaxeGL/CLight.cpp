@@ -14,13 +14,14 @@ CLight::CLight(std::string MeshTag)
 
 void CLight::Enlighten(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Attenuation)
 {
+	//==================================================== Set Debug Material
+	shininess = 1.0f;
+	material = (Ambient + Diffuse + Specular) * 10.0f;
 	//==================================================== Set Light Data
 	ambient = Ambient;
 	diffuse = Diffuse;
 	specular = Specular;
 	attenuation = Attenuation;
-	material = diffuse * 10.0f;
-	shininess = 1.0f;
 }
 
 void CLight::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed)
@@ -45,13 +46,17 @@ void CLight::Update(GLfloat DeltaTime)
 	transform();
 }
 
-void CLight::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
+void CLight::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded)
 {
 	//==================================================== Send Booleans
-	glUniform1i(locations["Textured"], Textured);
-	glUniform1i(locations["MultiText"], false);
-	glUniform1i(locations["Mapped"], Mapped);
-	glUniform1i(locations["Lit"], Lit);
+	glUniform1i(locations["DiffuseMap"], Diffuse);
+	glUniform1i(locations["SpecularMap"], Specular);
+	glUniform1i(locations["NormalMap"], Normals);
+	glUniform1i(locations["Shaded"], Shaded);
+	//==================================================== Send Type
+	glUniform1i(locations["TerrainShader"], false);
+	glUniform1i(locations["WaterShader"], false);
+	glUniform1i(locations["ShadowShader"], false);
 	//==================================================== Send Model Matrix
 	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Light Material
@@ -67,14 +72,17 @@ void CLight::Render(GLboolean Textured, GLboolean Mapped, GLboolean Lit)
 	glUniform3fv(locations["material.Specular"], 1, &material.r);
 	glUniform1f(locations["material.Shininess"], material.r);
 
-	//==================================================== Set Point Size
-	glPointSize(25.0f);
-	//==================================================== Bind VAO
-	glBindVertexArray(mesh[0]);
-	//==================================================== Render
-	glDrawElements(GL_POINTS, vnum[0], GL_UNSIGNED_INT, 0);
-	//==================================================== Unbind VAO
-	glBindVertexArray(0);
+	if (Shaded)
+	{
+		//==================================================== Set Point Size
+		glPointSize(25.0f);
+		//==================================================== Bind VAO
+		glBindVertexArray(mesh[0]);
+		//==================================================== Render
+		glDrawElements(GL_POINTS, vnum[0], GL_UNSIGNED_INT, 0);
+		//==================================================== Unbind VAO
+		glBindVertexArray(0);
+	}
 }
 
 void CLight::Terminate()

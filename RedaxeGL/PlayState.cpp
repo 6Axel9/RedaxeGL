@@ -3,6 +3,11 @@
 
 PlayState::PlayState()
 {
+	//==================================================== Enable Alpha Blend
+	Engine::Screen()->EnableBlending();
+	//==================================================== Disable Clip Distance
+	Engine::Screen()->DisableClipping();
+
 	//============================================================= Create Camera
 	Camera = new CCamera;
 	//============================================================= Create Light
@@ -12,9 +17,9 @@ PlayState::PlayState()
 	//============================================================= Create Terrain
 	Terrain = new CTerrain("Terrain", "Terrain", "None");
 	//============================================================= Create Water
-	Water = new CWater("Water", "None", "None");
+	Water = new CWater("Water", "Water", "None");
 	//============================================================= Create GUI
-	GUI = new CInterface("Box", "Water", "None");
+	GUI = new CInterface("Box", "Interface", "None");
 	//============================================================= Create Text
 	Text = new CText("Font", "Font", "None");
 }
@@ -22,27 +27,33 @@ PlayState::PlayState()
 void PlayState::OnEnter()
 {
 	//============================================================= Initialize Camera
-	Camera->Initialize(glm::vec3(0.0f, 3.0f, -1.0f), glm::vec3(0.0f), 100.0f);
+	Camera->Initialize(glm::vec3(0.0f, 5.0f, -1.0f), glm::vec3(0.0f), 100.0f);
+
 	//============================================================= Initialize Light
 	Light->Initialize(glm::vec3(0.0f, 3.5f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
-	Light->Enlighten(glm::vec3(0.5f, 0.4f, 0.3f), glm::vec3(0.4f, 0.5f, 0.3f), glm::vec3(0.3f, 0.2f, 0.2f), 0.0f);
+	Light->Enlighten(glm::vec3(0.5f, 0.4f, 0.3f)*0.85f, glm::vec3(0.45f, 0.5f, 0.35f)*0.85f, glm::vec3(0.3f, 0.2f, 0.2f)*0.8f, 0.0f);
+
 	//============================================================= Initialize Player
-	Player->Initialize(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
+	Player->Initialize(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Player
 	Player->Materialize(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f), 1.0f);
+
 	//============================================================= Initialize Terrain
 	Terrain->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Terrain
 	Terrain->Materialize(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f), 1.0f);
+
 	//============================================================= Initialize Water
 	Water->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Water
-	Water->Materialize(glm::vec3(0.0f, 1.0f, 1.0f), glm::vec3(1.0f), glm::vec3(1.0f), 1.0f);
+	Water->Materialize(glm::vec3(0.8f), glm::vec3(0.8f), glm::vec3(0.8f), 1.0f);
+
 	//============================================================= Write GUI
-	GUI->Initialize(glm::vec3(280.0f,210.0f,0.0f), glm::vec3(0.0f), glm::vec3(240.0f,180.0f,1.0f));
+	GUI->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(250.0f, 100.0f, 1.0f));
+
 	//============================================================= Write Text
-	Text->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Yohooo");
+	Text->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Credits to ME :P");
 }
 
 void PlayState::Update(GLfloat DeltaTime)
@@ -75,48 +86,92 @@ void PlayState::Update(GLfloat DeltaTime)
 	Text->Update(DeltaTime);
 }
 
-void PlayState::Render(GLboolean WaterShader)
+void PlayState::Render(GLboolean Shaded)
 {
-	if (WaterShader)
-	{
-		//==================================================== Bind Water Reflection
-		glBindFramebuffer(GL_FRAMEBUFFER, Engine::Loader()->FrameBuffers("Water")[0]);
-		//==================================================== Clear Current Buffer
-		Engine::Screen()->ClearScreen();
-		//============================================================= Render Camera 3D
-		Camera->Render(true);
-		//============================================================= Render Light
-		Light->Render(false, false, true);
-		//============================================================= Render Player
-		Player->Render(true, true, true);
-		//============================================================= Render Terrain
-		Terrain->Render(true, true, true);
-	}
-	else
-	{
-		//==================================================== Unbind Water Reflection
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//==================================================== Clear Current Buffer
-		Engine::Screen()->ClearScreen();
-		//============================================================= Render Camera 3D
-		Camera->Render(true);
-		//============================================================= Render Light
-		Light->Render(false, false, true);
-		//============================================================= Render Player
-		Player->Render(true, true, true);
-		//============================================================= Render Terrain
-		Terrain->Render(true, true, true);
-		//============================================================= Render Water
-		Water->Render(false, false, true);
-		//============================================================= Render Camera 2D
-		Camera->Render(false);
-		//============================================================= Render GUI
-		GUI->Render(true, false, false);
-		//============================================================= Render Text
-		Text->Render(true, false, false);
-		//==================================================== Swap Front/Back Buffer
-		Engine::Screen()->SwapBuffers();
-	}
+	//==================================================== Reflection
+	RenderReflection(Shaded);
+	//==================================================== Refraction
+	RenderRefraction(Shaded);
+	//==================================================== Shadows
+	RenderShadows(Shaded);
+
+	//==================================================== Restore Frame Buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//==================================================== Enable Alpha Blend
+	Engine::Screen()->EnableBlending();
+	//==================================================== Disable Clip Distance
+	Engine::Screen()->DisableClipping();
+	//==================================================== Disable FaceCulling
+	Engine::Screen()->DisableFaceCulling();
+	//==================================================== Clear Current Buffer
+	Engine::Screen()->ClearScreen();
+
+	//============================================================= Render Camera 3D
+	Camera->Render(true, false);
+	//============================================================= Update Light
+	Light->Render(false, false, false, false);
+	//============================================================= Render Player
+	Player->Render(true, true, true, Shaded);
+	//============================================================= Render Terrain
+	Terrain->Render(true, true, true, Shaded);
+	//============================================================= Render Water
+	Water->Render(false, false, false, Shaded);
+	
+	//============================================================= Render Camera 2D
+	Camera->Render(false, false);
+	//============================================================= Render GUI
+	GUI->Render(Shaded, false, false, false);
+	//============================================================= Render Text
+	Text->Render(Shaded, false, false, false);
+
+	//==================================================== Swap Front/Back Buffer
+	Engine::Screen()->SwapBuffers();
+}
+
+void PlayState::RenderReflection(GLboolean Shaded)
+{
+	//==================================================== Bind Water Reflection
+	glBindFramebuffer(GL_FRAMEBUFFER, Water->Reflection());
+	//==================================================== Enable Clip Distance
+	Engine::Screen()->EnableClipping();
+	//==================================================== Enable FaceCulling
+	Engine::Screen()->EnableFaceCulling();
+	//==================================================== Clear Current Buffer
+	Engine::Screen()->ClearScreen();
+
+	//============================================================= Render Camera 3D
+	Camera->Render(true, true);
+	//============================================================= Update Light
+	Light->Render(false, false, false, Shaded);
+	//============================================================= Render Player
+	Player->Render(true, true, true, Shaded);
+	//============================================================= Render Terrain
+	Terrain->Render(true, true, true, Shaded);
+}
+
+void PlayState::RenderRefraction(GLboolean Shaded)
+{
+	//==================================================== Bind Water Refraction
+	glBindFramebuffer(GL_FRAMEBUFFER, Water->Refraction());
+	//==================================================== Enable Clip Distance
+	Engine::Screen()->EnableClipping();
+	//==================================================== Enable FaceCulling
+	Engine::Screen()->EnableFaceCulling();
+	//==================================================== Clear Current Buffer
+	Engine::Screen()->ClearScreen();
+
+	//============================================================= Render Camera 3D
+	Camera->Render(true, false);
+	//============================================================= Update Light
+	Light->Render(false, false, false, Shaded);
+	//============================================================= Render Player
+	Player->Render(true, true, true, Shaded);
+	//============================================================= Render Terrain
+	Terrain->Render(true, true, true, Shaded);
+}
+
+void PlayState::RenderShadows(GLboolean Shaded)
+{
 }
 
 void PlayState::OnExit()

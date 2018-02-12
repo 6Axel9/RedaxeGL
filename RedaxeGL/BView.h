@@ -21,18 +21,21 @@ protected:
 	void rotate(glm::vec3 Target);
 	//==================================================== Transform
 	void transform();
-	//==================================================== Orthographic
-	void perspective();
 	//==================================================== Perspective
+	void perspective();
+	//==================================================== Orthographic
 	void orthographic();
 	//==================================================== Properties
 	static std::map<std::string, std::string> setup;
 	static std::map<std::string, GLuint> locations;
+	glm::vec3 refDirectionFront;
 	glm::vec3 directionFront;
 	glm::vec3 directionRight;
+	glm::vec3 refDirectionUp;
 	glm::vec3 directionUp;
+	glm::vec3 refPosition;
 	glm::vec3 position;
-	glm::mat4 proj;
+	glm::mat4 refView;
 	glm::mat4 view;
+	glm::mat4 proj;
 };
-

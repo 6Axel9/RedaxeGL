@@ -9,14 +9,49 @@ GLScreen::GLScreen(std::string Title, GLint Width, GLint Height, GLint Mode, GLi
 	assignCallbacks();
 	//==================================================== Load OpenGL Extensions
 	loadExtensions();
-	//==================================================== Enable Alpha Blend
-	enableblending();
+}
+
+void GLScreen::EnableBlending()
+{
+	glEnable(GL_BLEND);
+	//==================================================== Enable Alpha Channel Blend
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void GLScreen::EnableClipping()
+{
+	//==================================================== Enable Clipping Planes
+	glEnable(GL_CLIP_DISTANCE0);
+}
+
+void GLScreen::EnableFaceCulling()
+{
+	//==================================================== Enable Face Culling
+	glEnable(GL_CULL_FACE);
+}
+
+void GLScreen::DisableBlending()
+{
+	//==================================================== Disable Alpha Channel Blend
+	glEnable(GL_BLEND);
+}
+
+void GLScreen::DisableClipping()
+{
+	//==================================================== Disable Clipping Planes
+	glDisable(GL_CLIP_DISTANCE0);
+}
+
+void GLScreen::DisableFaceCulling()
+{
+	//==================================================== Disable Face Culling
+	glDisable(GL_CULL_FACE);
 }
 
 void GLScreen::ClearScreen()
 {
 	//==================================================== Clear Screen
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.917f, 1.0f, 0.907f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -61,7 +96,6 @@ void GLScreen::createWindow(std::string Title, GLint Width, GLint Height, GLint 
 		glfwTerminate();
 	}
 
-
 	//==================================================== Disable Cursore
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	//==================================================== Set Mouse Initial Position
@@ -93,13 +127,6 @@ void GLScreen::loadExtensions()
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 	}    
-}
-
-void GLScreen::enableblending()
-{
-	glEnable(GL_BLEND);
-	//==================================================== Enable Alpha Channel Blend
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GLScreen::onWindowResize(GLFWwindow* window, GLint width, GLint height)

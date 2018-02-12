@@ -19,6 +19,12 @@ public:
 	virtual void Update(GLfloat DeltaTime) = 0;
 	//============================================================= Render Stage
 	virtual void Render(GLboolean Shader) = 0;
+	//============================================================= Reflection
+	virtual void RenderReflection(GLboolean Shaded) = 0;
+	//============================================================= Refraction
+	virtual void RenderRefraction(GLboolean Shaded) = 0;
+	//============================================================= Shadows
+	virtual void RenderShadows(GLboolean Shaded) = 0;
 	//============================================================= On Exit Stage
 	virtual void OnExit() = 0;
 	//==================================================== Terminate Game State

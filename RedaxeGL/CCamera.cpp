@@ -36,19 +36,19 @@ void CCamera::Update(GLfloat DeltaTime)
 	//==================================================== Move Camera
 	if (Engine::Screen()->Key(GLFW_KEY_W))
 	{
-		move += directionFront * DeltaTime;
+		move += directionFront * DeltaTime * 5.0f;
 	}
 	if (Engine::Screen()->Key(GLFW_KEY_A))
 	{
-		move -= directionRight * DeltaTime;
+		move -= directionRight * DeltaTime * 5.0f;
 	}
 	if (Engine::Screen()->Key(GLFW_KEY_S))
 	{
-		move -= directionFront * DeltaTime;
+		move -= directionFront * DeltaTime * 5.0f;
 	}
 	if (Engine::Screen()->Key(GLFW_KEY_D))
 	{
-		move += directionRight * DeltaTime;
+		move += directionRight * DeltaTime * 5.0f;
 	}
 
 
@@ -67,7 +67,7 @@ void CCamera::Update(GLfloat DeltaTime)
 }
 
 
-void CCamera::Render(GLboolean Perspective)
+void CCamera::Render(GLboolean Perspective, GLboolean Reflective)
 {
 	//==================================================== Perspective Mode
 	if (Perspective) { perspective(); }
@@ -76,10 +76,21 @@ void CCamera::Render(GLboolean Perspective)
 
 	//==================================================== Send Projection Matrix
 	glUniformMatrix4fv(locations["projIn"], 1, GL_FALSE, &proj[0][0]);
-	//==================================================== Send View Mtrix
-	glUniformMatrix4fv(locations["viewIn"], 1, GL_FALSE, &view[0][0]);
-	//==================================================== Send Camera Position
-	glUniform3fv(locations["camera.Position"], 1, &position.x);
+
+	if (Reflective)
+	{
+		//==================================================== Send View Mtrix
+		glUniformMatrix4fv(locations["viewIn"], 1, GL_FALSE, &refView[0][0]);
+		//==================================================== Send Camera Position
+		glUniform3fv(locations["camera.Position"], 1, &refPosition.x);
+	}
+	else
+	{
+		//==================================================== Send View Mtrix
+		glUniformMatrix4fv(locations["viewIn"], 1, GL_FALSE, &view[0][0]);
+		//==================================================== Send Camera Position
+		glUniform3fv(locations["camera.Position"], 1, &position.x);
+	}
 }
 
 void CCamera::Terminate()
