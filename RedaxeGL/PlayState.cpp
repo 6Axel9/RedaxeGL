@@ -30,9 +30,9 @@ void PlayState::OnEnter()
 	Camera->Initialize(glm::vec3(0.0f, 5.0f, -1.0f), glm::vec3(0.0f), 100.0f);
 
 	//============================================================= Initialize Light
-	Light->Initialize(glm::vec3(0.0f, 3.5f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
+	Light->Initialize(glm::vec3(0.0f, 80.0f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
-	Light->Enlighten(glm::vec3(0.5f, 0.4f, 0.3f)*0.85f, glm::vec3(0.45f, 0.5f, 0.35f)*0.85f, glm::vec3(0.3f, 0.2f, 0.2f)*0.8f, 0.0f);
+	Light->Enlighten(glm::vec3(0.5f, 0.4f, 0.3f)*0.85f, glm::vec3(0.45f, 0.5f, 0.35f)*0.85f, glm::vec3(0.3f, 0.2f, 0.2f)*0.8f, 100.0f);
 
 	//============================================================= Initialize Player
 	Player->Initialize(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
@@ -109,13 +109,13 @@ void PlayState::Render(GLboolean Shaded)
 	//============================================================= Render Camera 3D
 	Camera->Render(true, false);
 	//============================================================= Update Light
-	Light->Render(false, false, false, false);
+	Light->Render(false, false, false, Shaded);
 	//============================================================= Render Player
 	Player->Render(true, true, true, Shaded);
 	//============================================================= Render Terrain
 	Terrain->Render(true, true, true, Shaded);
 	//============================================================= Render Water
-	Water->Render(false, false, false, Shaded);
+	Water->Render(true, true, true, Shaded);
 	
 	//============================================================= Render Camera 2D
 	Camera->Render(false, false);
