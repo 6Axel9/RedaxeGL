@@ -265,7 +265,7 @@ void GLLoader::generateTerrainGeometry()
 	GLfloat highest = 0.0f;
 	GLfloat average = 0.0f;
 	GLfloat amplitude = 64.0f;
-	GLfloat roughness = 0.5f;
+	GLfloat roughness = 0.3f;
 	GLint octaves = 4;
 	GLint vcount = 128;
 	GLint tsize = 128;

@@ -6,7 +6,7 @@
 
 CCamera::CCamera()
 {
-	microbit = new MyExtension("serial_micro_values");
+	//microbit = new MyExtension("serial_micro_values");
 }
 
 void CCamera::Initialize(glm::vec3 Position, glm::vec3 Rotation, GLfloat Speed)
@@ -28,10 +28,10 @@ void CCamera::Update(GLfloat DeltaTime)
 	//std::thread Connecting_thread(&MyExtension::IntialiseVarTuple, microbit);
 	//==================================================== Update Controller Input
 
-	if (microbit->isConnected())
-	{
-		microbit->IntialiseVarTuple();
-	}
+	//if (microbit->isConnected())
+	//{
+	//	microbit->IntialiseVarTuple();
+	//}
 
 	//==================================================== Move Camera
 	if (Engine::Screen()->Key(GLFW_KEY_W))
@@ -54,8 +54,8 @@ void CCamera::Update(GLfloat DeltaTime)
 
 	//Connecting_thread.join();
 	//==================================================== Rotate Camera
-	angle += glm::vec3(-Engine::Screen()->Mouse().w - microbit->GetPitch(),
-					   -Engine::Screen()->Mouse().z + microbit->GetRoll(), 0.0f) * DeltaTime * speed;
+	angle += glm::vec3(-Engine::Screen()->Mouse().w /*- microbit->GetPitch()*/,
+					   -Engine::Screen()->Mouse().z /*+ microbit->GetRoll()*/ , 0.0f) * DeltaTime * speed;
 	//==================================================== Limit Movements
 	if (angle.x >  70) { angle.x =  70; }
 	if (angle.x < -70) { angle.x = -70; }
@@ -97,7 +97,6 @@ void CCamera::Terminate()
 {
 	//==================================================== Terminate
 	//delete microbit;
-	delete microbit;
 }
 
 CCamera::~CCamera()

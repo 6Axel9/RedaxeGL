@@ -62,6 +62,8 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 	//==================================================== Send Texture
 	glUniform1i(locations["water.Reflection"], 10);
 	glUniform1i(locations["water.Refraction"], 11);
+	glUniform1i(locations["water.Distortion"], 12);
+	glUniform1i(locations["water.Normals"],	   13);
 	//==================================================== Send Material
 	glUniform3fv(locations["material.Ambient"], 1, &ambient.r);
 	glUniform3fv(locations["material.Diffuse"], 1, &diffuse.r);

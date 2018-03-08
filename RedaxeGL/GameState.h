@@ -36,6 +36,7 @@ public:
 protected:
 
 	//==================================================== Properties
+	GLfloat activeTime;
 	GLboolean status;
 };
 

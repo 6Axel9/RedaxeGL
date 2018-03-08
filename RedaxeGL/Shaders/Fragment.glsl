@@ -22,6 +22,9 @@ uniform bool TerrainShader;
 uniform bool WaterShader;
 uniform bool ShadowShader;
 
+uniform float ElapsedTime;
+uniform float DeltaTime;
+
 struct Light
 {
 	vec3 Ambient;
@@ -62,6 +65,8 @@ struct WaterMap
 {
 	sampler2D Reflection;
 	sampler2D Refraction;
+	sampler2D Distortion;
+	sampler2D Normals;
 };
 
 struct Camera
@@ -93,8 +98,8 @@ void main(void)
 		//==================================================== Sample Noise Texture
 		if(TerrainShader)
 		{
-			vec4 MapBlender = texture(terrain.GNoise, textureOut.st);
-			TerrainIntensity = 1.0 - clamp((MapBlender.r + MapBlender.g + MapBlender.b), 0.0, 1.0);
+			vec4 MapBlender = normalize(texture(terrain.GNoise, textureOut.st));
+			TerrainIntensity = 1.0 - (MapBlender.r + MapBlender.g + MapBlender.b);
 		}
 		//==================================================== Convert Normal Maps To Normal Directions
 		if(NormalMap)
@@ -102,14 +107,16 @@ void main(void)
 			//==================================================== Terrain Multiple Normal Maps Blending
 			if(TerrainShader)
 			{
-				vec4 G0Normals = texture(terrain.G0Normals, textureOut.st * 8.0);
-				vec4 G1Normals = texture(terrain.G1Normals, textureOut.st * 8.0);
+				float Tiling = 24.0;
+
+				vec4 G0Normals = texture(terrain.G0Normals, textureOut.st * Tiling);
+				vec4 G1Normals = texture(terrain.G1Normals, textureOut.st * Tiling);
 				
 				vec3 TerrainNormalsG0 = vec4(G0Normals).rgb * 2.0 - 1.0;
 				vec3 TerrainNormalsG1 = vec4(G1Normals).rgb * 2.0 - 1.0;
 
-				vec3 TerrainNormals = vec3(	TerrainNormalsG0.xy * TerrainNormalsG1.z + 
-											TerrainNormalsG1.xy * TerrainNormalsG0.z, TerrainNormalsG0.z * TerrainNormalsG1.z); 
+				vec3 TerrainNormals = vec3(TerrainNormalsG0.xy * TerrainNormalsG1.z + 
+										   TerrainNormalsG1.xy * TerrainNormalsG0.z, TerrainNormalsG0.z * TerrainNormalsG1.z); 
 
 				NormalPosition = normalize(normalize(TerrainNormals) * TBN);
 			}
@@ -152,8 +159,24 @@ void main(void)
 			//==================================================== Sample Reflection & Refraction Map
 			if(WaterShader)
 			{
-				vec4 ReflectionColor = texture(water.Reflection, vec2(DeviceSpace.x, -DeviceSpace.y));
-				vec4 RefractionColor = texture(water.Refraction, vec2(DeviceSpace.x, DeviceSpace.y));
+				float OffSet = ElapsedTime / 1000.0;
+				float WaveIntensity = 0.01;
+				float Tiling = 24.0;
+
+				vec2 DistortionBlend0 = texture(water.Distortion, vec2(textureOut.x + OffSet, -textureOut.y + OffSet) * Tiling).rg * 2.0 - 1.0;
+				vec2 DistortionBlend1 = texture(water.Distortion, vec2(-textureOut.x + OffSet, textureOut.y + OffSet) * Tiling).rg * 2.0 - 1.0;
+
+				vec2 DistortionFactor = DistortionBlend0 + DistortionBlend1;
+			
+				vec2 ReflectionCoords = vec2(DeviceSpace.x, -DeviceSpace.y) + DistortionFactor * WaveIntensity;
+				vec2 RefractionCoords = vec2(DeviceSpace.x, DeviceSpace.y)  + DistortionFactor * WaveIntensity;
+
+				ReflectionCoords.x = clamp(ReflectionCoords.x, 0.001, 0.999);
+				ReflectionCoords.y = clamp(ReflectionCoords.y, -0.999, -0.001);
+				RefractionCoords   = clamp(RefractionCoords, 0.001, 0.999);
+
+				vec4 ReflectionColor = texture(water.Reflection, ReflectionCoords);
+				vec4 RefractionColor = texture(water.Refraction, RefractionCoords);
 				vec4 WaterDiffuse = mix(ReflectionColor, RefractionColor, 0.5);
 
 				pixelColor = vec4(AmbientColor + DiffuseColor + SpecularColor, 1.0) * WaterDiffuse;
@@ -161,38 +184,39 @@ void main(void)
 			//==================================================== Sample Terrain Diffuse Maps
 			if(TerrainShader)
 			{
-				vec4 G0Diffuse  = texture(terrain.G0Diffuse,  textureOut.st * 8.0) * (1.0 - TerrainIntensity);
-				vec4 G1Diffuse  = texture(terrain.G1Diffuse,  textureOut.st * 8.0) * TerrainIntensity;
+				float Tiling = 24.0;
+
+				vec4 G0Diffuse  = texture(terrain.G0Diffuse,  textureOut.st * Tiling) * (1.0 - TerrainIntensity);
+				vec4 G1Diffuse  = texture(terrain.G1Diffuse,  textureOut.st * Tiling) * TerrainIntensity;
 				vec4 TerrainDiffuse = mix(G0Diffuse, G1Diffuse, 0.5);
 
-				pixelColor = 	vec4(AmbientColor + DiffuseColor,  1.0) * TerrainDiffuse;
+				pixelColor = vec4(AmbientColor + DiffuseColor,  1.0) * TerrainDiffuse;
 				//==================================================== Sample Terrain Specular Maps
 				if(SpecularMap)
 				{
-					vec4 G0Specular = texture(terrain.G0Specular, textureOut.st * 8.0) * (1.0 - TerrainIntensity);
-					vec4 G1Specular = texture(terrain.G1Specular, textureOut.st * 8.0) * TerrainIntensity;
+					vec4 G0Specular = texture(terrain.G0Specular, textureOut.st * Tiling) * (1.0 - TerrainIntensity);
+					vec4 G1Specular = texture(terrain.G1Specular, textureOut.st * Tiling) * TerrainIntensity;
 					vec4 TerrainSpecular = mix(G0Specular, G1Specular, 0.5);
 
-					pixelColor +=	vec4(SpecularColor, 1.0) * TerrainSpecular;
+					pixelColor += vec4(SpecularColor, 1.0) * TerrainSpecular;
 				}
 				//==================================================== Use Diffuse As Specular
 				else
 				{
-					pixelColor +=	vec4(SpecularColor, 1.0) * TerrainDiffuse;
+					pixelColor += vec4(SpecularColor, 1.0) * TerrainDiffuse;
 				}
-				//pixelColor = vec4(pixelColor.rgb, 1.0);
 			}
 			if(!WaterShader && !TerrainShader)
 			{
-				pixelColor =	vec4(AmbientColor + DiffuseColor,  1.0) * texture(txtmap.Diffuse,  textureOut.st);
+				pixelColor = vec4(AmbientColor + DiffuseColor,  1.0) * texture(txtmap.Diffuse,  textureOut.st);
 
 				if(SpecularMap)
 				{
-					pixelColor +=	vec4(SpecularColor, 1.0) * texture(txtmap.Specular, textureOut.st);
+					pixelColor += vec4(SpecularColor, 1.0) * texture(txtmap.Specular, textureOut.st);
 				}
 				else
 				{
-					pixelColor +=	vec4(SpecularColor, 1.0) * texture(txtmap.Diffuse, textureOut.st);
+					pixelColor += vec4(SpecularColor, 1.0) * texture(txtmap.Diffuse, textureOut.st);
 				}
 			}
 		}

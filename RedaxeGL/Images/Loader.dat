@@ -6,6 +6,7 @@ Tag = Font;         Types = 1;		Extention = .png;	Path = Images\;
 Tag = Interface;	Types = 1;		Extention = .png;	Path = Images\;
 Tag = Terrain;	    Types = 7;		Extention = .bmp;	Path = Images\;
 Tag = Spaceship;	Types = 3;		Extention = .bmp;	Path = Images\;
+Tag = Water;		Types = 3;		Extention = .png;	Path = Images\;
 =============================================
 
 =============================================
