@@ -82,7 +82,7 @@ void CText::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLb
 			glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &models[Tag.first][Char][0][0]);
 
 			//==================================================== Bind Texture
-			for (GLint Map = 0; Map < texture.size(); Map++)
+			for (GLuint Map = 0; Map < texture.size(); Map++)
 			{
 				glActiveTexture(GL_TEXTURE0 + Map);
 				glBindTexture(GL_TEXTURE_2D, texture[Map]);
@@ -94,7 +94,7 @@ void CText::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLb
 			//==================================================== Unbind VAO
 			glBindVertexArray(0);
 			//==================================================== Unbind Texture
-			for (GLint Map = 0; Map < texture.size(); Map++)
+			for (GLuint Map = 0; Map < texture.size(); Map++)
 			{
 				glActiveTexture(GL_TEXTURE0 + Map);
 				glBindTexture(GL_TEXTURE_2D, 0);

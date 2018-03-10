@@ -34,22 +34,22 @@ void PlayState::OnEnter()
 	//============================================================= Initialize Light
 	Light->Initialize(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
-	Light->Enlighten(glm::vec3(0.5f), glm::vec3(0.4f), glm::vec3(0.3f), 150.0f);
+	Light->Enlighten(glm::vec3(0.45f, 0.45f, 0.4f), glm::vec3(0.8f,0.75f,0.5f), glm::vec3(0.3f), 150.0f);
 
 	//============================================================= Initialize Player
 	Player->Initialize(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Player
-	Player->Materialize(glm::vec3(0.6f), glm::vec3(0.6f), glm::vec3(0.6f), 1.0f);
+	Player->Materialize(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 1.0f);
 
 	//============================================================= Initialize Terrain
 	Terrain->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Terrain
-	Terrain->Materialize(glm::vec3(0.8f,0.7f,0.6f), glm::vec3(0.8f, 0.7f, 0.5f), glm::vec3(0.8f, 0.7f, 0.5f), 1.0f);
+	Terrain->Materialize(glm::vec3(1.0f, 0.8f, 0.6f), glm::vec3(0.7f), glm::vec3(0.5f), 1.0f);
 
 	//============================================================= Initialize Water
 	Water->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Water
-	Water->Materialize(glm::vec3(0.6f, 0.85f, 1.0f), glm::vec3(0.6f, 0.85f, 1.0f), glm::vec3(0.6f, 0.85f, 1.0f), 1.0f);
+	Water->Materialize(glm::vec3(0.6f, 0.8f, 1.0f), glm::vec3(0.3f), glm::vec3(0.5f), 1.0f);
 
 	//============================================================= Write GUI
 	GUI->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(250.0f, 100.0f, 1.0f));

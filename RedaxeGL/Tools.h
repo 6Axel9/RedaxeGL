@@ -44,7 +44,7 @@ static void ImportDecript(std::string& String, std::vector<std::string>& Contain
 		String.erase(Tabs,1);
 		Tabs = String.find("\t");
 	}
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		int Last  = String.find(";");
 		if (Last != std::string::npos)

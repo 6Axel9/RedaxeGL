@@ -65,7 +65,7 @@ void CInterface::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals
 	glUniform1f(locations["material.Shininess"], shininess);
 	
 	//==================================================== Bind Texture
-	for (GLint Map = 0; Map < texture.size(); Map++)
+	for (GLuint Map = 0; Map < texture.size(); Map++)
 	{
 		glActiveTexture(GL_TEXTURE0 + Map);
 		glBindTexture(GL_TEXTURE_2D, texture[Map]);
@@ -77,7 +77,7 @@ void CInterface::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals
 	//==================================================== Unbind VAO
 	glBindVertexArray(0);
 	//==================================================== Unbind Texture
-	for (GLint Map = 0; Map < texture.size(); Map++)
+	for (GLuint Map = 0; Map < texture.size(); Map++)
 	{
 		glActiveTexture(GL_TEXTURE0 + Map);
 		glBindTexture(GL_TEXTURE_2D, 0);

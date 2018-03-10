@@ -744,6 +744,11 @@ void GLLoader::generateTextureMap(std::vector<std::string>& Parts)
 
 	for (GLint Frame = 0; Frame < typesNum[Parts[0]]; Frame++)
 	{
+		if (Parts[4] == "N")
+		{
+			Frame = typesNum[Parts[0]] - 1;
+		}
+
 		GLint Width, Height, Channels;
 		std::string Path = Parts[3] + Parts[0] + NumberToString(Frame) + Parts[2];
 
@@ -796,7 +801,7 @@ void GLLoader::generateWaterReflection()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	//==================================================== Store Image Data
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Engine::Screen()->Size().x, Engine::Screen()->Size().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)Engine::Screen()->Size().x, (GLsizei)Engine::Screen()->Size().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	//==================================================== Unbind Texture
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -806,7 +811,7 @@ void GLLoader::generateWaterReflection()
 	//==================================================== Bind Render Buffer
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffers["Water"][0]);
 	//==================================================== Define Storage Type
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, Engine::Screen()->Size().x, Engine::Screen()->Size().y);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (GLsizei)Engine::Screen()->Size().x, (GLsizei)Engine::Screen()->Size().y);
 	//==================================================== Unbind Render Buffer
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 

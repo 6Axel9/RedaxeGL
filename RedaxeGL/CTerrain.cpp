@@ -77,7 +77,7 @@ void CTerrain::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, 
 	//==================================================== WireFrame On
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//==================================================== Bind Texture
-	for (GLint Map = 0; Map < texture.size(); Map++)
+	for (GLuint Map = 0; Map < texture.size(); Map++)
 	{
 		glActiveTexture(GL_TEXTURE3 + Map);
 		glBindTexture(GL_TEXTURE_2D, texture[Map]);
@@ -89,7 +89,7 @@ void CTerrain::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, 
 	//==================================================== Unbind VAO
 	glBindVertexArray(0);
 	//==================================================== Unbind Texture
-	for (GLint Map = 0; Map < texture.size(); Map++)
+	for (GLuint Map = 0; Map < texture.size(); Map++)
 	{
 		glActiveTexture(GL_TEXTURE3 + Map);
 		glBindTexture(GL_TEXTURE_2D, 0);
