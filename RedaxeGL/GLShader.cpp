@@ -140,6 +140,7 @@ void GLShader::linkUniforms()
 	uniformsId["water.Refraction"] = glGetUniformLocation(programId, "water.Refraction");
 	uniformsId["water.Distortion"] = glGetUniformLocation(programId, "water.Distortion");
 	uniformsId["water.Normals"]	   = glGetUniformLocation(programId, "water.Normals");
+	uniformsId["water.Depth"]	   = glGetUniformLocation(programId, "water.Depth");
 	//==================================================== Camera
 	uniformsId["camera.Position"] = glGetUniformLocation(programId, "camera.Position");
 }

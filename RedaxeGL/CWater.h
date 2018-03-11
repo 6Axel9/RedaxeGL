@@ -32,6 +32,7 @@ private:
 	//==================================================== Buffer Data
 	std::map<GLint, GLuint> mesh;
 	std::map<GLint, GLuint> frame;
+	std::map<GLint, GLuint> depth;
 	std::map<GLint, GLuint> texture;
 	std::map<GLint, GLuint> effect;
 	std::map<GLint, GLuint> vnum;

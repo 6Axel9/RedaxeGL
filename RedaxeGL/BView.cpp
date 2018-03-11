@@ -50,7 +50,7 @@ void BView::perspective()
 	glEnable(GL_DEPTH_TEST);
 	//==================================================== Perspective View
 	proj = glm::perspective(glm::radians(60.0f), Engine::Screen()->Size().x / 
-												 Engine::Screen()->Size().y, 0.1f, 100.0f);
+												 Engine::Screen()->Size().y, 0.1f, 1000.0f);
 }
 
 void BView::orthographic()
@@ -59,7 +59,7 @@ void BView::orthographic()
 	//==================================================== Orthographic View
 	proj = glm::ortho( Engine::Screen()->Size().x / 2,
 					  -Engine::Screen()->Size().x / 2, -Engine::Screen()->Size().y / 2,
-													    Engine::Screen()->Size().y / 2, 0.1f, 100.0f);
+													    Engine::Screen()->Size().y / 2, 0.1f, 1000.0f);
 	//==================================================== Orthographic Camera
 	view = glm::lookAt(glm::vec3(0), glm::vec3(0, 0, 1), glm::vec3(0, 1, 0));
 }

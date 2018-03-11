@@ -10,6 +10,7 @@ CWater::CWater(std::string MeshTag, std::string TextureTag, std::string EffectTa
 	//==================================================== Link Tag Data
 	mesh = Engine::Loader()->Models(MeshTag);
 	frame = Engine::Loader()->FrameBuffers(TextureTag);
+	depth = Engine::Loader()->DepthBuffers(TextureTag);
 	texture = Engine::Loader()->Images(TextureTag);
 	effect = Engine::Loader()->Sounds(EffectTag);
 	vnum = Engine::Loader()->VNum(MeshTag);
@@ -64,9 +65,10 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 	glUniform1i(locations["water.Refraction"], 11);
 	glUniform1i(locations["water.Distortion"], 12);
 	glUniform1i(locations["water.Normals"],	   13);
+	glUniform1i(locations["water.Depth"],	   14);
 	//==================================================== Send Material
-	glUniform3fv(locations["material.Ambient"], 1, &ambient.r);
-	glUniform3fv(locations["material.Diffuse"], 1, &diffuse.r);
+	glUniform3fv(locations["material.Ambient"],  1, &ambient.r);
+	glUniform3fv(locations["material.Diffuse"],  1, &diffuse.r);
 	glUniform3fv(locations["material.Specular"], 1, &specular.r);
 	glUniform1f(locations["material.Shininess"], shininess);
 
@@ -75,7 +77,9 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 	{
 		glActiveTexture(GL_TEXTURE10 + Map);
 		glBindTexture(GL_TEXTURE_2D, texture[Map]);
-	}
+	}	
+	glActiveTexture(GL_TEXTURE14);
+	glBindTexture(GL_TEXTURE_2D, depth[1]);
 	//==================================================== Bind VAO
 	glBindVertexArray(mesh[0]);
 	//==================================================== Render
@@ -88,6 +92,8 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 		glActiveTexture(GL_TEXTURE10 + Map);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+	glActiveTexture(GL_TEXTURE14);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void CWater::Terminate()
@@ -101,8 +107,9 @@ CWater::~CWater()
 
 GLuint CWater::Reflection()
 {
+	GLfloat Offset = 0.001f;
 	//==================================================== Set Clip Plane
-	clip = glm::vec4(0.0f, 1.0f, 0.0f, -position.y);
+	clip = glm::vec4(0.0f, 1.0f, 0.0f, -position.y + Offset);
 	//==================================================== Send Plane
 	glUniform4fv(locations["clipPlane"], 1, &clip.x);
 	//==================================================== Return Frame Buffer

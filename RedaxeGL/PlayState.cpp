@@ -7,6 +7,8 @@ PlayState::PlayState()
 	Engine::Screen()->EnableBlending();
 	//==================================================== Disable Clip Distance
 	Engine::Screen()->DisableClipping();
+	//==================================================== Disable FaceCulling
+	Engine::Screen()->DisableFaceCulling();
 	//============================================================= Active Time
 	activeTime = 0;
 
