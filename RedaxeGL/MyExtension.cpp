@@ -21,14 +21,14 @@ MyExtension::MyExtension(const std::string& path):_path(path)
 
 	baud = 9600;
 
-	scale = 1000.f;
+	scale = 1575.f;
 
 	connected = false;
 
 	yaw = 0, pitch = 0, roll = 0, analog_r_pin0 = 0;
 
-	Connecting_thread = new std::thread(&MyExtension::Connect, this);
-	Connecting_thread->detach();
+	Connecting_thread.push_back(new std::thread(&MyExtension::Connect, this));
+	Connecting_thread.front()->detach();
 }
 
 void MyExtension::SetBaud(long _baud)
@@ -39,30 +39,33 @@ void MyExtension::SetBaud(long _baud)
 
 void MyExtension::Connect()
 {
-	// Get the choosen method from the dictionary.
-	pFunc = PyDict_GetItemString(pDict, "Serial_connect");
-
-	// Create a Python tuple to hold the arguments to the method.
-	pArgs = PyTuple_New(1);
-
-	// Convert to a Python integer.
-	pValue = PyInt_FromLong(baud);
-
-	// Set the Python int as the first and second arguments to the method.
-	PyTuple_SetItem(pArgs, 0, pValue);
-
-	PyObject* pResult = PyObject_CallObject(pFunc, pArgs);
-
-	pResult == NULL ? connected = false: connected = true;
-
-	if (connected && Connecting_thread->joinable())
+	while (!connected)
 	{
-		std::cout << "Connected \n";
-		Connecting_thread->join();
-		delete Connecting_thread;
-		//delete Connecting_thread;
-	}
 
+		// Get the choosen method from the dictionary.
+		pFunc = PyDict_GetItemString(pDict, "Serial_connect");
+
+		// Create a Python tuple to hold the arguments to the method.
+		pArgs = PyTuple_New(1);
+
+		// Convert to a Python integer.
+		pValue = PyInt_FromLong(baud);
+
+		// Set the Python int as the first and second arguments to the method.
+		PyTuple_SetItem(pArgs, 0, pValue);
+
+		PyObject* pResult = PyObject_CallObject(pFunc, pArgs);
+
+		pResult == NULL ? connected = false: connected = true;
+
+		if (connected)
+		{
+			std::cout << "Connected \n";
+			delete Connecting_thread.front();
+			Connecting_thread.pop_front();
+		}
+
+	}
 }
 
 
@@ -86,10 +89,8 @@ void MyExtension::IntialiseVarTuple()
 
 		connected = false;
 
-		Connecting_thread = new std::thread(&MyExtension::Connect, this);
-		Connecting_thread->detach();
-		//Connecting_thread = new std::thread(&MyExtension::Connect, this);
-		//Connecting_thread->detach();
+		Connecting_thread.push_back(new std::thread(&MyExtension::Connect, this));
+		Connecting_thread.front()->detach();
 
 		yaw = 0, pitch = 0, roll = 0, analog_r_pin0 = 0;
 		
@@ -137,20 +138,23 @@ float MyExtension::StringToNumber(std::string s)
 
 void MyExtension::Reset()
 {
+
 }
 
 MyExtension::~MyExtension()
 {
 	if (connected)
 	{
-		SerialClose();
-		delete Connecting_thread;
+		if (!Connecting_thread.empty())
+		{
+			for (auto i = 0; i < Connecting_thread.size(); i++)
+			{
+				delete Connecting_thread[i];
+			}
+		}
 	}
 
 	SerialClose();
-	delete Connecting_thread;
-
-
 
 	// Destroy the Python interpreter.
 	Py_Finalize();

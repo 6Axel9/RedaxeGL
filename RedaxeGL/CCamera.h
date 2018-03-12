@@ -1,6 +1,6 @@
 #pragma once
 #include "BView.h"
-//#include "MyExtension.h"
+#include "MyExtension.h"
 
 class CCamera : public BView
 {
@@ -20,7 +20,7 @@ public:
 	virtual~CCamera();
 
 	//==================================================== Controller Input
-	//MyExtension* microbit;
+	MyExtension* microbit;
 
 private:
 

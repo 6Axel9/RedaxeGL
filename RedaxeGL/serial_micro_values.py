@@ -65,7 +65,7 @@ def Serial_connect(_br):
                 ser.open()
                 return
             except (OSError, serial.SerialException):
-                print("Listening for connection.")
+                #print("Listening for connection.")
                 pass
 
     for port in checkSystemPorts():

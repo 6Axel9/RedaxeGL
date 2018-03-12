@@ -13,7 +13,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <deque>
 #include <thread>
 #include <future>
 
@@ -40,7 +40,7 @@ private:
 	bool connected;
 	long baud;
 
-	std::thread * Connecting_thread;
+	std::deque <std::thread *> Connecting_thread;
 
 
 	void SerialClose();
