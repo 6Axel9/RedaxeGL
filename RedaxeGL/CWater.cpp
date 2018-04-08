@@ -25,26 +25,43 @@ void CWater::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specula
 	shininess = Shininess;
 }
 
-void CWater::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed)
-{
+void CWater::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Size)
+{ 
 	//==================================================== Flip X
 	Position.x = -Position.x;
-	//==================================================== Initialize Position
-	move = Position;
-	//==================================================== Initialize Rotation
-	angle = -Rotation;
-	//==================================================== Initialize Scale
-	size = Scale;
+	Position.x -= (Size - 1) * 128 / 2;
+	Position.z += (Size - 1) * 128 / 2;
+	//==================================================== Initialize Text
+	for (GLuint Slot = 0; Slot < Size * Size; Slot++)
+	{
+		models.push_back(glm::mat4(1));
+		offsets.push_back(Position);
+		angles.push_back(Rotation);
+		sizes.push_back(Scale);
+		if (Slot % (GLint)Size == Size-1)
+		{
+			Position.z -= 128;
+			Position.x = offsets[0].x;
+		}
+		else
+		{
+			//==================================================== Next Space
+			Position.x += 128;
+		}
+	}
 }
 
 void CWater::Update(GLfloat DeltaTime)
 {
-	//==================================================== Update Tranformations
-	translate(move);
-	rotate(angle);
-	scale(size);
-	//==================================================== Update Transformations
-	transform();
+	for (GLuint Slot = 0; Slot < models.size(); Slot++)
+	{
+		//==================================================== Update Tranformations
+		translate(offsets[Slot]);
+		rotate(angles[Slot]);
+		scale(sizes[Slot]);
+		//==================================================== Update Transformations
+		transform(models[Slot]);
+	}
 }
 
 void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded)
@@ -58,8 +75,6 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 	glUniform1i(locations["TerrainShader"], false);
 	glUniform1i(locations["WaterShader"], true);
 	glUniform1i(locations["SkyboxShader"], false);
-	//==================================================== Send Model Matrix
-	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Texture
 	glUniform1i(locations["water.Reflection"], 10);
 	glUniform1i(locations["water.Refraction"], 11);
@@ -72,28 +87,34 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 	glUniform3fv(locations["material.Specular"], 1, &specular.r);
 	glUniform1f(locations["material.Shininess"], shininess);
 
-	//==================================================== Bind Texture
-	for (GLuint Map = 0; Map < texture.size(); Map++)
+	for (GLuint Slot = 0; Slot < models.size(); Slot++)
 	{
-		glActiveTexture(GL_TEXTURE10 + Map);
-		glBindTexture(GL_TEXTURE_2D, texture[Map]);
-	}	
-	glActiveTexture(GL_TEXTURE14);
-	glBindTexture(GL_TEXTURE_2D, depth[1]);
-	//==================================================== Bind VAO
-	glBindVertexArray(mesh[0]);
-	//==================================================== Render
-	glDrawElements(GL_TRIANGLES, vnum[0], GL_UNSIGNED_INT, 0);
-	//==================================================== Unbind VAO
-	glBindVertexArray(0);
-	//==================================================== Unbind Texture
-	for (GLuint Map = 0; Map < texture.size(); Map++)
-	{
-		glActiveTexture(GL_TEXTURE10 + Map);
+		//==================================================== Send Model Matrix
+		glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &models[Slot][0][0]);
+
+		//==================================================== Bind Texture
+		for (GLuint Map = 0; Map < texture.size(); Map++)
+		{
+			glActiveTexture(GL_TEXTURE10 + Map);
+			glBindTexture(GL_TEXTURE_2D, texture[Map]);
+		}
+		glActiveTexture(GL_TEXTURE14);
+		glBindTexture(GL_TEXTURE_2D, depth[1]);
+		//==================================================== Bind VAO
+		glBindVertexArray(mesh[0]);
+		//==================================================== Render
+		glDrawElements(GL_TRIANGLES, vnum[0], GL_UNSIGNED_INT, 0);
+		//==================================================== Unbind VAO
+		glBindVertexArray(0);
+		//==================================================== Unbind Texture
+		for (GLuint Map = 0; Map < texture.size(); Map++)
+		{
+			glActiveTexture(GL_TEXTURE10 + Map);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+		glActiveTexture(GL_TEXTURE14);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-	glActiveTexture(GL_TEXTURE14);
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void CWater::Terminate()

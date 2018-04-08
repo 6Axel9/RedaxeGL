@@ -54,7 +54,7 @@ void PlayState::OnEnter()
 	Terrain->Materialize(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.6f,0.6f,0.3f), glm::vec3(0.2f), 1.0f);
 
 	//============================================================= Initialize Water
-	Water->Initialize(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
+	Water->Initialize(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 6.0f);
 	//============================================================= Materialize Water
 	Water->Materialize(glm::vec3(0.6f, 0.8f, 1.0f), glm::vec3(0.3f), glm::vec3(0.5f), 1.0f);
 

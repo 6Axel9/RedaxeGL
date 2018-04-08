@@ -1,7 +1,6 @@
 //fragment shader code 
 #version 330 core
 
-
 in vec3 positionOut;
 in vec3 colorOut;
 in vec2 textureOut;
@@ -95,17 +94,20 @@ void main(void)
 	//==================================================== Shading Process
 	if(Shaded)
 	{
-		vec3 LightDirection;
 		vec3 NormalPosition;
 		vec4 DiffuseTexture;
 		vec4 SpecularTexture;
-		float Transparency;
+		float Transparency = 1.0;
+		float MinDimming = 1.0;
+		float MaxDimming = 1.0;
 		//==================================================== Convert To Device Space
 		vec2 DeviceSpace = (clipSpace.xy / clipSpace.w) / 2 + 0.5;
 		//==================================================== Convert To Model Space
 		vec3 FragmentPosition  = (modelIn * vec4(positionOut, 1.0)).xyz;
 		//==================================================== Camera View Direction
 		vec3 CameraDirection = normalize(camera.Position - FragmentPosition);
+		//==================================================== Directional Light
+		vec3 LightDirection = normalize(light.Direction); 
 		//==================================================== Water Maps Blending & Distortion
 		if(WaterShader)
 		{
@@ -152,7 +154,6 @@ void main(void)
 		{
 			float TerrainTiling = 24.0;
 			float NormalTiling = 8.0;
-			Transparency = 1.0;
 			//==================================================== Sample Noise Blend Texture
 			vec4 MapBlender = normalize(texture(terrain.GNoise, textureOut.st));
 			float TerrainIntensity = 1.0 - (MapBlender.r + MapBlender.g + MapBlender.b);
@@ -181,7 +182,6 @@ void main(void)
 		//==================================================== Sample 3D Object Maps Blending
 		if(!WaterShader && !TerrainShader)
 		{
-			Transparency = 1.0;
 			//==================================================== Sample Normal Map
 			NormalPosition = normalize(normalize(texture(txtmap.Normals, textureOut.st).rgb * 2.0 - 1.0) * tangentSpace);
 			//==================================================== Sample Diffuse Map
@@ -207,12 +207,9 @@ void main(void)
 		//==================================================== Point Light Direction
 		if(light.Attenuation != 0)	
 		{ 
-			LightDirection = normalize(light.Position - FragmentPosition); 
-		}
-		//==================================================== Directional Light
-		else
-		{ 
-			LightDirection = normalize(light.Direction); 
+			LightDirection = normalize(light.Position - FragmentPosition);
+			MinDimming = 1.5;
+			MaxDimming = 3.0;
 		}
 		//==================================================== Light Intensity
 		float LightIntensity = max(dot(LightDirection, NormalPosition), 0.0);
@@ -223,8 +220,7 @@ void main(void)
 		//==================================================== Light Attenuation
 		float AttenuationTerm = 1 / pow((distance(light.Position, FragmentPosition) / light.Attenuation), 2);
 		//==================================================== Limit Attenuation
-		AttenuationTerm	= clamp(AttenuationTerm, 0.2, 3.0);
-		if(light.Attenuation == 0){ AttenuationTerm = 1.0f; }
+		AttenuationTerm	= clamp(AttenuationTerm * 2, MinDimming, MaxDimming);
 
 		//==================================================== Ambient Lighting
 		vec3 AmbientColor	 = light.Ambient * material.Ambient;

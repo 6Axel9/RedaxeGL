@@ -29,6 +29,10 @@ public:
 	
 private:
 
+	std::vector<glm::mat4> models;
+	std::vector<glm::vec3> offsets;
+	std::vector<glm::vec3> angles;
+	std::vector<glm::vec3> sizes;
 	//==================================================== Buffer Data
 	std::map<GLint, GLuint> mesh;
 	std::map<GLint, GLuint> frame;
