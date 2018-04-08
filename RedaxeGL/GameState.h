@@ -4,6 +4,7 @@
 #include "CWater.h"
 #include "CTerrain.h"
 #include "CInterface.h"
+#include "CSkyBox.h"
 #include "CObject.h"
 #include "CText.h"
 

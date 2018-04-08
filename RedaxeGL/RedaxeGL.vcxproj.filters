@@ -111,6 +111,9 @@
     <ClCompile Include="CInterface.cpp">
       <Filter>Source Files\Components\Object</Filter>
     </ClCompile>
+    <ClCompile Include="CSkyBox.cpp">
+      <Filter>Source Files\Components\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -162,6 +165,9 @@
       <Filter>Header Files\Components\Object</Filter>
     </ClInclude>
     <ClInclude Include="CInterface.h">
+      <Filter>Header Files\Components\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CSkyBox.h">
       <Filter>Header Files\Components\Object</Filter>
     </ClInclude>
   </ItemGroup>

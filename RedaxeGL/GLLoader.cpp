@@ -112,6 +112,8 @@ void GLLoader::loadModels(std::string ModPath)
 	generateWaterGeometry();
 	//==================================================== Load Point
 	generatePointGeometry();
+	//==================================================== Load Cube
+	generateCubeGeometry();
 	//==================================================== Load Font
 	generateFontGeometry();
 	//==================================================== Load Box
@@ -138,7 +140,14 @@ void GLLoader::loadImages(std::string ImgPath)
 			//==================================================== Load Database Entry
 			if (!parts.empty())
 			{
-				generateTextureMap(parts);
+				if (parts[4] != "C")
+				{
+					generateTextureMap(parts);
+				}
+				else
+				{
+					generateCubeMap(parts);
+				}
 			}
 		}
 		file.close();
@@ -151,9 +160,9 @@ void GLLoader::loadSounds(std::string SndPath)
 
 void GLLoader::generate3DGeometry(std::vector<std::string>& Parts)
 {
-	framesNum[Parts[0]] = StringToInteger(Parts[1]);
+	GLint frames = StringToInteger(Parts[1]);
 
-	for (GLint Frame = 0; Frame < framesNum[Parts[0]]; Frame++)
+	for (GLint Frame = 0; Frame < frames; Frame++)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<GLuint> indices;
@@ -600,13 +609,108 @@ void GLLoader::generatePointGeometry()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void GLLoader::generateCubeGeometry()
+{
+	GLint frames = 1;
+	GLfloat offset = 0.5f;
+
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+
+	//====================================== Vertices ================= Colors ============== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(-offset, +offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, -offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, -offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, +offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	//====================================== Vertices ================= Colors ============== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(-offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, -offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, +offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	//====================================== Vertices ================= Colors ============== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(+offset, -offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, +offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	//====================================== Vertices ================= Colors ============== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(-offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	//====================================== Vertices ================= Colors ============== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(-offset, +offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, +offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, +offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	//====================================== Vertices ================= Colors ============== TextureC ========================================================================
+	vertices.push_back({ { glm::vec3(+offset, -offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, -offset, -offset) },{ glm::vec3(1.0f) },{ glm::vec2(0.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(-offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	vertices.push_back({ { glm::vec3(+offset, -offset, +offset) },{ glm::vec3(1.0f) },{ glm::vec2(1.0f, 1.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) },{ glm::vec3(0.0f) } });
+	
+	for (GLint Face = 0; Face < 6; Face++)
+	{
+		//====================================== Indices
+		indices.push_back(0 + 4 * Face);
+		indices.push_back(1 + 4 * Face);
+		indices.push_back(2 + 4 * Face);
+		indices.push_back(2 + 4 * Face);
+		indices.push_back(3 + 4 * Face);
+		indices.push_back(0 + 4 * Face);
+	}
+	//==================================================== Vertices Count
+	vnum["Cube"][0] = indices.size();
+
+	//==================================================== Generate VAO
+	glGenVertexArrays(1, &models["Cube"][0]);
+	//==================================================== Generate VBO
+	glGenBuffers(1, &vbo["Cube"][0]);
+	//==================================================== Generate EBO
+	glGenBuffers(1, &ebo["Cube"][0]);
+
+	//==================================================== Bind VAO
+	glBindVertexArray(models["Cube"][0]);
+	//==================================================== Bind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, vbo["Cube"][0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), GL_STATIC_DRAW);
+	//==================================================== Bind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo["Cube"][0]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), indices.data(), GL_STATIC_DRAW);
+
+	//==================================================== Attribute Location 0
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+	//==================================================== Attribute Location 1
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	//==================================================== Attribute Location 2
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+	//==================================================== Attribute Location 3
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(8 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(3);
+	//==================================================== Attribute Location 4
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(11 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(4);
+	//==================================================== Attribute Location 5
+	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, 17 * sizeof(GLfloat), (void*)(14 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(5);
+
+	//==================================================== Unbind VAO
+	glBindVertexArray(0);
+	//==================================================== Unbind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//==================================================== Unbind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void GLLoader::generateFontGeometry()
 {
-	framesNum["Font"] = 16 * 16;
+	GLint frames = 16 * 16;
 	GLfloat csize = 1.0f / 16.0f;
 	GLfloat offset = 0.5f;
 	
-	for (GLint Frame = 0; Frame < framesNum["Font"]; Frame++)
+	for (GLint Frame = 0; Frame < frames; Frame++)
 	{
 		std::vector<Vertex> vertices;
 		std::vector<GLuint> indices;
@@ -674,7 +778,7 @@ void GLLoader::generateFontGeometry()
 
 void GLLoader::generate2DGeometry()
 {
-	framesNum["Box"] = 1;
+	GLint frames = 1;
 	GLfloat offset = 0.5f;
 	
 	std::vector<Vertex> vertices;
@@ -740,22 +844,22 @@ void GLLoader::generate2DGeometry()
 
 void GLLoader::generateTextureMap(std::vector<std::string>& Parts)
 {
-	typesNum[Parts[0]] = StringToInteger(Parts[1]);
+	GLint types = StringToInteger(Parts[1]);
 
-	for (GLint Frame = 0; Frame < typesNum[Parts[0]]; Frame++)
+	for (GLint Frame = 0; Frame < types; Frame++)
 	{
 		if (Parts[4] == "N")
 		{
-			Frame = typesNum[Parts[0]] - 1;
+			Frame = types - 1;
 		}
 
 		GLint Width, Height, Channels;
 		std::string Path = Parts[3] + Parts[0] + NumberToString(Frame) + Parts[2];
 
 		//==================================================== Load Image File
-		txt[Parts[0]][Frame] = stbi_load(Path.c_str(), &Width, &Height, &Channels, 4);
+		textureData = stbi_load(Path.c_str(), &Width, &Height, &Channels, 4);
 
-		if (!txt[Parts[0]][Frame])
+		if (!textureData)
 		{
 			std::cout << "Failed to load " << Path << std::endl;
 		}
@@ -773,15 +877,57 @@ void GLLoader::generateTextureMap(std::vector<std::string>& Parts)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			//==================================================== Store Image Data
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, txt[Parts[0]][Frame]);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
 			//==================================================== Unbind Texture
 			glBindTexture(GL_TEXTURE_2D, 0);
 			//==================================================== Free Image Data
-			stbi_image_free(txt[Parts[0]][Frame]);
+			stbi_image_free(textureData);
 		}
 	}
+}
+
+void GLLoader::generateCubeMap(std::vector<std::string>& Parts)
+{
+	GLint type = StringToInteger(Parts[1]) - 1;
+
+	//==================================================== Generate Texture		
+	glGenTextures(1, &images[Parts[0]][type]);
+	//==================================================== Bind Texture
+	glBindTexture(GL_TEXTURE_CUBE_MAP, images[Parts[0]][type]);
+
+	//==================================================== Sampler Wrapping
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	//==================================================== Sampler Filter
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	for (GLint Face = 0; Face < 6; Face++)
+	{
+		GLint Width, Height, Channels;
+		std::string Path = Parts[3] + Parts[0] + NumberToString(Face) + Parts[2];
+
+		//==================================================== Load Image File
+		textureData = stbi_load(Path.c_str(), &Width, &Height, &Channels, 4);
+
+		if (!textureData)
+		{
+			std::cout << "Failed to load " << Path << std::endl;
+		}
+		else
+		{
+			//==================================================== Store Image Data
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + Face, 0, GL_RGBA, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
+
+			//==================================================== Free Image Data
+			stbi_image_free(textureData);
+		}
+	}
+	//==================================================== Unbind Texture
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void GLLoader::generateWaterReflection()

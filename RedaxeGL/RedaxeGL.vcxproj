@@ -162,6 +162,7 @@
     <ClCompile Include="CInterface.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CObject.cpp" />
+    <ClCompile Include="CSkyBox.cpp" />
     <ClCompile Include="CTerrain.cpp" />
     <ClCompile Include="CText.cpp" />
     <ClCompile Include="CWater.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="CInterface.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="CObject.h" />
+    <ClInclude Include="CSkyBox.h" />
     <ClInclude Include="CTerrain.h" />
     <ClInclude Include="CText.h" />
     <ClInclude Include="CWater.h" />

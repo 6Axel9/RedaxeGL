@@ -49,10 +49,12 @@ private:
 	void generateTerrainGeometry();
 	void generateWaterGeometry();
 	void generatePointGeometry();
+	void generateCubeGeometry();
 	void generateFontGeometry();
 	void generate2DGeometry();
 	//==================================================== Fill Texture Buffers
 	void generateTextureMap(std::vector<std::string>& Parts);
+	void generateCubeMap(std::vector<std::string>& Parts);
 	//==================================================== Fill Frame Buffers
 	void generateWaterReflection();
 	void generateWaterRefraction();
@@ -64,12 +66,10 @@ private:
 	std::map<std::string, std::map<GLint, GLuint>> images;
 	std::map<std::string, std::map<GLint, GLuint>> sounds;
 	//==================================================== Sub-Buffers
-	std::map<std::string, std::map<GLint, GLubyte*>> txt;
 	std::map<std::string, std::map<GLint, GLuint>> vbo;
 	std::map<std::string, std::map<GLint, GLuint>> ebo;
 	//==================================================== Other Info
 	std::map<std::string, std::map<GLint, GLuint>> vnum;
-	std::map<std::string, GLint> framesNum;
-	std::map<std::string, GLint> typesNum;
 	glm::vec3 terrainData;
+	GLubyte* textureData;
 };

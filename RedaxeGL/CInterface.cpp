@@ -51,7 +51,7 @@ void CInterface::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals
 	//==================================================== Send Type
 	glUniform1i(locations["TerrainShader"], false);
 	glUniform1i(locations["WaterShader"], false);
-	glUniform1i(locations["ShadowShader"], false);
+	glUniform1i(locations["SkyboxShader"], false);
 	//==================================================== Send Model Matrix
 	glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &model[0][0]);
 	//==================================================== Send Texture

@@ -61,7 +61,7 @@ void CText::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLb
 	//==================================================== Send Type
 	glUniform1i(locations["TerrainShader"], false);
 	glUniform1i(locations["WaterShader"], false);
-	glUniform1i(locations["ShadowShader"], false);
+	glUniform1i(locations["SkyboxShader"], false);
 	//==================================================== Send Texture
 	glUniform1i(locations["txtmap.Diffuse"], 0);
 	glUniform1i(locations["txtmap.Specular"], 1);

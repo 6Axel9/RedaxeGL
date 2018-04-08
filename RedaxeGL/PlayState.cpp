@@ -16,6 +16,8 @@ PlayState::PlayState()
 	Camera = new CCamera;
 	//============================================================= Create Light
 	Light = new CLight("Point");
+	//============================================================= Create Skybox
+	Skybox = new CSkyBox("Cube", "Skybox", "None");
 	//============================================================= Create Player
 	Player = new CObject("Spaceship", "Spaceship", "None");
 	//============================================================= Create Terrain
@@ -37,6 +39,11 @@ void PlayState::OnEnter()
 	Light->Initialize(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
 	Light->Enlighten(glm::vec3(0.45f, 0.45f, 0.4f), glm::vec3(0.8f,0.75f,0.5f), glm::vec3(0.3f), 150.0f);
+	
+	//============================================================= Initialize Skybox
+	Skybox->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
+	//============================================================= Materialize Skybox
+	Skybox->Materialize(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 1.0f);
 
 	//============================================================= Initialize Player
 	Player->Initialize(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
@@ -83,6 +90,8 @@ void PlayState::Update(GLfloat DeltaTime)
 	Camera->Update(DeltaTime);
 	//============================================================= Update Light
 	Light->Update(DeltaTime);
+	//============================================================= Update Skybox
+	Skybox->Update(DeltaTime);
 	//============================================================= Update Player
 	Player->Update(DeltaTime);
 	//============================================================= Update Terrain
@@ -119,13 +128,15 @@ void PlayState::Render(GLboolean Shaded)
 	Camera->Render(true, false);
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
+	//============================================================= Render Skybox
+	Skybox->Render(true, true, true, Shaded);
 	//============================================================= Render Player
 	Player->Render(true, true, true, Shaded);
 	//============================================================= Render Terrain
 	Terrain->Render(true, true, true, Shaded);
 	//============================================================= Render Water
 	Water->Render(true, true, true, Shaded);
-	
+
 	//============================================================= Render Camera 2D
 	Camera->Render(false, false);
 	//============================================================= Render GUI
@@ -152,6 +163,8 @@ void PlayState::RenderReflection(GLboolean Shaded)
 	Camera->Render(true, true);
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
+	//============================================================= Render Skybox
+	Skybox->Render(true, true, true, Shaded);
 	//============================================================= Render Player
 	Player->Render(true, true, true, Shaded);
 	//============================================================= Render Terrain
@@ -173,6 +186,8 @@ void PlayState::RenderRefraction(GLboolean Shaded)
 	Camera->Render(true, false);
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
+	//============================================================= Render Skybox
+	Skybox->Render(true, true, true, Shaded);
 	//============================================================= Render Player
 	Player->Render(true, true, true, Shaded);
 	//============================================================= Render Terrain
@@ -189,6 +204,8 @@ void PlayState::OnExit()
 	Camera->Terminate();
 	//============================================================= Terminate Light
 	Light->Terminate();
+	//============================================================= Terminate Skybox
+	Skybox->Terminate();
 	//============================================================= Terminate Player
 	Player->Terminate();
 	//============================================================= Terminate Terrain
@@ -207,6 +224,8 @@ PlayState::~PlayState()
 	delete Camera;
 	//============================================================= Destroy Light
 	delete Light;
+	//============================================================= Destroy Skybox
+	delete Skybox;
 	//============================================================= Destroy Player
 	delete Player;
 	//============================================================= Destroy Terrain

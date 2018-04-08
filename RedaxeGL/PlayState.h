@@ -30,6 +30,7 @@ private:
 	CLight* Light;
 	CCamera* Camera;
 	CObject* Player;
+	CSkyBox* Skybox;
 	CInterface* GUI;
 	CTerrain* Terrain;
 	CWater* Water;

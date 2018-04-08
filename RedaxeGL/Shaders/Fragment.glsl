@@ -1,13 +1,14 @@
 //fragment shader code 
 #version 330 core
 
-in vec4 clipSpace;
+
 in vec3 positionOut;
 in vec3 colorOut;
 in vec2 textureOut;
 in vec3 normalOut;
 
-in mat3 TBN;
+in mat3 tangentSpace;
+in vec4 clipSpace;
 
 out vec4 pixelColor;
 
@@ -20,6 +21,7 @@ uniform bool Shaded;
 
 uniform bool TerrainShader;
 uniform bool WaterShader;
+uniform bool SkyboxShader;
 uniform bool ShadowShader;
 
 uniform float ElapsedTime;
@@ -70,6 +72,11 @@ struct WaterMap
 	sampler2D Depth;
 };
 
+struct CubeMap
+{
+	samplerCube Skybox;
+};
+
 struct Camera
 {
 	vec3 Position;
@@ -80,6 +87,7 @@ uniform Material material;
 uniform TextureMap txtmap;
 uniform TerrainMap terrain;
 uniform WaterMap water;
+uniform CubeMap cubemap;
 uniform Camera camera;
 
 void main(void)
@@ -98,6 +106,17 @@ void main(void)
 		vec3 FragmentPosition  = (modelIn * vec4(positionOut, 1.0)).xyz;
 		//==================================================== Camera View Direction
 		vec3 CameraDirection = normalize(camera.Position - FragmentPosition);
+		//==================================================== Cube Maps Blending
+		if(SkyboxShader)
+		{
+			Transparency = 1.0;
+			//==================================================== Sample Normal Map
+			NormalPosition = normalize((mat4(transpose(inverse(modelIn))) * vec4(normalOut, 1.0)).xyz); 
+			//==================================================== Sample Diffuse Map
+			DiffuseTexture = texture(cubemap.Skybox, positionOut);
+			//==================================================== Sample Specular Map
+			SpecularTexture = texture(cubemap.Skybox, positionOut);
+		}
 		//==================================================== Water Maps Blending & Distortion
 		if(WaterShader)
 		{
@@ -122,7 +141,7 @@ void main(void)
 
 			vec2 DistortionFactor = (texture(water.Distortion, DistortionBlend).rg * 2.0 - 1.0) * WaveIntensity * Transparency;
 			//==================================================== Sample Normal Map
-			NormalPosition = normalize(normalize(texture(water.Normals, DistortionBlend).rgb * 2.0 - 1.0) * TBN);
+			NormalPosition = normalize(normalize(texture(water.Normals, DistortionBlend).rgb * 2.0 - 1.0) * tangentSpace);
 			NormalPosition = normalize(vec3(NormalPosition.x, NormalPosition.y * 1.5, NormalPosition.z));
 			//==================================================== Sample Reflection/Refraction Maps
 			vec2 ReflectionCoords = vec2(DeviceSpace.x, -DeviceSpace.y) + DistortionFactor;
@@ -158,7 +177,7 @@ void main(void)
 			vec3 TerrainNormals = vec3(TerrainNormalsG0.xy * TerrainNormalsG1.z + 
 									   TerrainNormalsG1.xy * TerrainNormalsG0.z, TerrainNormalsG0.z * TerrainNormalsG1.z); 
 
-			NormalPosition = normalize(normalize(TerrainNormals) * TBN);
+			NormalPosition = normalize(normalize(TerrainNormals) * tangentSpace);
 			//==================================================== Sample Diffuse Maps
 			vec4 G0Diffuse  = texture(terrain.G0Diffuse,  textureOut.st * TerrainTiling) * (1.0 - TerrainIntensity);
 			vec4 G1Diffuse  = texture(terrain.G1Diffuse,  textureOut.st * TerrainTiling) * TerrainIntensity;
@@ -171,15 +190,15 @@ void main(void)
 			SpecularTexture = mix(G0Specular, G1Specular, 0.5);
 		}
 		//==================================================== Sample 3D Object Maps Blending
-		if(!WaterShader && !TerrainShader)
+		if(!WaterShader && !TerrainShader && !SkyboxShader)
 		{
 			Transparency = 1.0;
 			//==================================================== Sample Normal Map
-			NormalPosition = normalize(normalize(texture(txtmap.Normals, textureOut.st).rgb * 2.0 - 1.0) * TBN);
+			NormalPosition = normalize(normalize(texture(txtmap.Normals, textureOut.st).rgb * 2.0 - 1.0) * tangentSpace);
 			//==================================================== Sample Diffuse Map
-			DiffuseTexture = texture(txtmap.Diffuse,  textureOut.st);
+			DiffuseTexture = texture(txtmap.Diffuse, textureOut.st);
 			//==================================================== Sample Specular Map
-			SpecularTexture = texture(txtmap.Specular,  textureOut.st);
+			SpecularTexture = texture(txtmap.Specular, textureOut.st);
 		}
 		//==================================================== Standard Vertices Normals
 		if(!NormalMap)

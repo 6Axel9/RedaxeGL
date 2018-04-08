@@ -107,6 +107,7 @@ void GLShader::linkUniforms()
 	//==================================================== Types
 	uniformsId["TerrainShader"] = glGetUniformLocation(programId, "TerrainShader");
 	uniformsId["WaterShader"]   = glGetUniformLocation(programId, "WaterShader");
+	uniformsId["SkyboxShader"]  = glGetUniformLocation(programId, "SkyboxShader");
 	uniformsId["ShadowShader"]  = glGetUniformLocation(programId, "ShadowShader");
 	//==================================================== Tools
 	uniformsId["ElapsedTime"] = glGetUniformLocation(programId, "ElapsedTime");
@@ -141,6 +142,8 @@ void GLShader::linkUniforms()
 	uniformsId["water.Distortion"] = glGetUniformLocation(programId, "water.Distortion");
 	uniformsId["water.Normals"]	   = glGetUniformLocation(programId, "water.Normals");
 	uniformsId["water.Depth"]	   = glGetUniformLocation(programId, "water.Depth");
+	//==================================================== Skybox Textures
+	uniformsId["cubemap.Skybox"] = glGetUniformLocation(programId, "cubemap.Skybox");
 	//==================================================== Camera
 	uniformsId["camera.Position"] = glGetUniformLocation(programId, "camera.Position");
 }
