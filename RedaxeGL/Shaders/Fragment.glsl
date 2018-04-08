@@ -106,17 +106,6 @@ void main(void)
 		vec3 FragmentPosition  = (modelIn * vec4(positionOut, 1.0)).xyz;
 		//==================================================== Camera View Direction
 		vec3 CameraDirection = normalize(camera.Position - FragmentPosition);
-		//==================================================== Cube Maps Blending
-		if(SkyboxShader)
-		{
-			Transparency = 1.0;
-			//==================================================== Sample Normal Map
-			NormalPosition = normalize((mat4(transpose(inverse(modelIn))) * vec4(normalOut, 1.0)).xyz); 
-			//==================================================== Sample Diffuse Map
-			DiffuseTexture = texture(cubemap.Skybox, positionOut);
-			//==================================================== Sample Specular Map
-			SpecularTexture = texture(cubemap.Skybox, positionOut);
-		}
 		//==================================================== Water Maps Blending & Distortion
 		if(WaterShader)
 		{
@@ -190,7 +179,7 @@ void main(void)
 			SpecularTexture = mix(G0Specular, G1Specular, 0.5);
 		}
 		//==================================================== Sample 3D Object Maps Blending
-		if(!WaterShader && !TerrainShader && !SkyboxShader)
+		if(!WaterShader && !TerrainShader)
 		{
 			Transparency = 1.0;
 			//==================================================== Sample Normal Map
@@ -231,24 +220,45 @@ void main(void)
 		vec3 LightReflection = reflect(-LightDirection, NormalPosition);
 		//==================================================== Light Specularity
 		float SpecularTerm	 = pow(max(dot(CameraDirection, LightReflection), 0.0), material.Shininess);
+		//==================================================== Light Attenuation
+		float AttenuationTerm = 1 / pow((distance(light.Position, FragmentPosition) / light.Attenuation), 2);
+		//==================================================== Limit Attenuation
+		AttenuationTerm	= clamp(AttenuationTerm, 0.2, 3.0);
+		if(light.Attenuation == 0){ AttenuationTerm = 1.0f; }
+
 		//==================================================== Ambient Lighting
 		vec3 AmbientColor	 = light.Ambient * material.Ambient;
 		//==================================================== Diffuse Lighting
 		vec3 DiffuseColor	 = light.Diffuse * material.Diffuse * LightIntensity;
 		//==================================================== Specular Lighting
 		vec3 SpecularColor	 = light.Specular * material.Specular * SpecularTerm * Transparency;
-
+		
+		//==================================================== Light Final Color
 		pixelColor = vec4(AmbientColor,  1.0) * DiffuseTexture +
 					 vec4(DiffuseColor,  1.0) * DiffuseTexture +
 					 vec4(SpecularColor, 1.0) * SpecularTexture;
-
-		if(light.Attenuation != 0)
-		{
-			pixelColor = vec4(pixelColor.xyz / pow((distance(light.Position, FragmentPosition) / light.Attenuation), 2), Transparency);
-		}
+		//==================================================== Attenuated Color
+		pixelColor = vec4(pixelColor.xyz * AttenuationTerm, Transparency);
 	}
 	else
 	{
-		pixelColor = vec4(colorOut, 1.0) * texture(txtmap.Diffuse, textureOut.st);
+		vec4 DiffuseTexture;
+		//==================================================== Sample Cube Maps Blending
+		if(SkyboxShader)
+		{
+			DiffuseTexture = texture(cubemap.Skybox, positionOut);
+		}
+		//==================================================== Sample 2D Object Maps Blending
+		else
+		{
+			DiffuseTexture = texture(txtmap.Diffuse, textureOut.st);
+		}
+		//==================================================== Standard Diffuse Color
+		if(!DiffuseMap)
+		{ 	
+			DiffuseTexture = vec4(material.Ambient + material.Diffuse + material.Specular, 1.0); 
+		}
+		//==================================================== Light Final Color
+		pixelColor = vec4(colorOut, 1.0) * DiffuseTexture;
 	}
 }

@@ -36,14 +36,12 @@ void PlayState::OnEnter()
 	Camera->Initialize(glm::vec3(0.0f, 5.0f, -1.0f), glm::vec3(0.0f), 100.0f);
 
 	//============================================================= Initialize Light
-	Light->Initialize(glm::vec3(0.0f, 100.0f, 0.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
+	Light->Initialize(glm::vec3(25.0f, 50.0f, 50.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
 	Light->Enlighten(glm::vec3(0.45f, 0.45f, 0.4f), glm::vec3(0.8f,0.75f,0.5f), glm::vec3(0.3f), 150.0f);
 	
 	//============================================================= Initialize Skybox
 	Skybox->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
-	//============================================================= Materialize Skybox
-	Skybox->Materialize(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 1.0f);
 
 	//============================================================= Initialize Player
 	Player->Initialize(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
@@ -53,10 +51,10 @@ void PlayState::OnEnter()
 	//============================================================= Initialize Terrain
 	Terrain->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Terrain
-	Terrain->Materialize(glm::vec3(1.0f, 0.8f, 0.6f), glm::vec3(0.7f), glm::vec3(0.5f), 1.0f);
+	Terrain->Materialize(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.6f,0.6f,0.3f), glm::vec3(0.2f), 1.0f);
 
 	//============================================================= Initialize Water
-	Water->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
+	Water->Initialize(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 	//============================================================= Materialize Water
 	Water->Materialize(glm::vec3(0.6f, 0.8f, 1.0f), glm::vec3(0.3f), glm::vec3(0.5f), 1.0f);
 
@@ -126,10 +124,10 @@ void PlayState::Render(GLboolean Shaded)
 
 	//============================================================= Render Camera 3D
 	Camera->Render(true, false);
+	//============================================================= Render Skybox
+	Skybox->Render(Shaded, false, false, false);
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
-	//============================================================= Render Skybox
-	Skybox->Render(true, true, true, Shaded);
 	//============================================================= Render Player
 	Player->Render(true, true, true, Shaded);
 	//============================================================= Render Terrain
@@ -161,10 +159,10 @@ void PlayState::RenderReflection(GLboolean Shaded)
 
 	//============================================================= Render Camera 3D
 	Camera->Render(true, true);
+	//============================================================= Render Skybox
+	Skybox->Render(Shaded, false, false, false);
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
-	//============================================================= Render Skybox
-	Skybox->Render(true, true, true, Shaded);
 	//============================================================= Render Player
 	Player->Render(true, true, true, Shaded);
 	//============================================================= Render Terrain
@@ -184,10 +182,10 @@ void PlayState::RenderRefraction(GLboolean Shaded)
 
 	//============================================================= Render Camera 3D
 	Camera->Render(true, false);
+	//============================================================= Render Skybox
+	Skybox->Render(Shaded, false, false, false);
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
-	//============================================================= Render Skybox
-	Skybox->Render(true, true, true, Shaded);
 	//============================================================= Render Player
 	Player->Render(true, true, true, Shaded);
 	//============================================================= Render Terrain

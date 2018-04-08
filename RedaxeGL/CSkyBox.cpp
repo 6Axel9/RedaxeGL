@@ -73,7 +73,7 @@ void CSkyBox::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, G
 		glBindTexture(GL_TEXTURE_CUBE_MAP, texture[Map]);
 	}
 	//==================================================== Disable Depth Mask
-	//glDepthMask(GL_FALSE);
+	glDepthMask(GL_FALSE);
 	//==================================================== Bind VAO
 	glBindVertexArray(mesh[0]);
 	//==================================================== Render
@@ -81,7 +81,7 @@ void CSkyBox::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, G
 	//==================================================== Unbind VAO
 	glBindVertexArray(0);
 	//==================================================== Enable Depth Mask
-	//glDepthMask(GL_TRUE);
+	glDepthMask(GL_TRUE);
 	//==================================================== Unbind Texture
 	for (GLuint Map = 0; Map < texture.size(); Map++)
 	{
