@@ -63,8 +63,9 @@ void CLight::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 	glUniform3fv(locations["light.Ambient"], 1, &ambient.r);
 	glUniform3fv(locations["light.Diffuse"], 1, &diffuse.r);
 	glUniform3fv(locations["light.Specular"], 1, &specular.r);
+	//==================================================== Send Light Status
+	glUniform3fv(locations["light.Direction"], 1, &directionFront.x);
 	glUniform3fv(locations["light.Position"], 1, &position.x);
-	glUniform3fv(locations["light.Direction"], 1, &direction.x);
 	glUniform1f(locations["light.Attenuation"], attenuation);
 	//==================================================== Send Object Material
 	glUniform3fv(locations["material.Ambient"], 1, &material.r);

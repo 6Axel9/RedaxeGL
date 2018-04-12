@@ -33,18 +33,18 @@ PlayState::PlayState()
 void PlayState::OnEnter()
 {
 	//============================================================= Initialize Camera
-	Camera->Initialize(glm::vec3(0.0f, 5.0f, -1.0f), glm::vec3(0.0f), 100.0f);
+	Camera->Initialize(glm::vec3(0.0f, 5.0f, -1.0f), glm::vec3(0.0f), 4.0f);
 
 	//============================================================= Initialize Light
-	Light->Initialize(glm::vec3(25.0f, 50.0f, 50.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
+	Light->Initialize(glm::vec3(30.0f, 600.0f, 600.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
 	//============================================================= Enlighten Light
-	Light->Enlighten(glm::vec3(0.45f, 0.45f, 0.4f), glm::vec3(0.8f,0.75f,0.5f), glm::vec3(0.3f), 150.0f);
+	Light->Enlighten(glm::vec3(0.45f, 0.45f, 0.4f), glm::vec3(0.8f,0.75f,0.5f), glm::vec3(0.3f), 1000.0f);
 	
 	//============================================================= Initialize Skybox
 	Skybox->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
 
 	//============================================================= Initialize Player
-	Player->Initialize(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 100.0f);
+	Player->Initialize(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 10.0f);
 	//============================================================= Materialize Player
 	Player->Materialize(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 1.0f);
 
@@ -54,7 +54,7 @@ void PlayState::OnEnter()
 	Terrain->Materialize(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.6f,0.6f,0.3f), glm::vec3(0.2f), 1.0f);
 
 	//============================================================= Initialize Water
-	Water->Initialize(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 6.0f);
+	Water->Initialize(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 7.0f);
 	//============================================================= Materialize Water
 	Water->Materialize(glm::vec3(0.6f, 0.8f, 1.0f), glm::vec3(0.3f), glm::vec3(0.5f), 1.0f);
 

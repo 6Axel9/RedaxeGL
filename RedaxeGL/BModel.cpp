@@ -16,10 +16,11 @@ BModel::~BModel()
 
 void BModel::translate(glm::vec3 Target)
 {
+	glm::vec3 newPosition = Target;
 	//==================================================== Translate Matrix
-	translation = glm::translate(glm::mat4(1), glm::vec3(Target));
-	//==================================================== Store Position
-	position = Target;
+	translation = glm::translate(glm::mat4(1), newPosition);
+	//==================================================== Store New Position
+	position = newPosition;
 }
 
 void BModel::rotate(glm::vec3 Target)
@@ -28,12 +29,15 @@ void BModel::rotate(glm::vec3 Target)
 	GLfloat pitch   = glm::radians(Target.x);
 	GLfloat yaw     = glm::radians(Target.y);
 	GLfloat roll    = glm::radians(Target.z);
+	GLfloat rad90   = glm::radians(90.0f);
 	//==================================================== Rotate Matrix
-	rotationX = glm::rotate(glm::mat4(1), glm::radians(Target.x), glm::vec3(1, 0, 0));
-	rotationY = glm::rotate(glm::mat4(1), glm::radians(Target.y), glm::vec3(0, 1, 0));
-	rotationZ = glm::rotate(glm::mat4(1), glm::radians(Target.z), glm::vec3(0, 0, 1));
+	rotationX = glm::rotate(glm::mat4(1), pitch, glm::vec3(1, 0, 0));
+	rotationY = glm::rotate(glm::mat4(1), yaw,	 glm::vec3(0, 1, 0));
+	rotationZ = glm::rotate(glm::mat4(1), roll,  glm::vec3(0, 0, 1));
 	//==================================================== Store Direction
-	direction = glm::vec3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw));
+	directionFront = glm::vec3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw));
+	directionRight = glm::vec3(sin(yaw - rad90), 0, cos(yaw - rad90));
+	directionUp	   = glm::cross(directionRight, directionFront);
 }
 
 void BModel::scale(glm::vec3 Target)

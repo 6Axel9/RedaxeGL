@@ -273,11 +273,11 @@ void GLLoader::generateTerrainGeometry()
 	GLfloat lowest = 0.0f;
 	GLfloat highest = 0.0f;
 	GLfloat average = 0.0f;
-	GLfloat amplitude = 64.0f;
-	GLfloat roughness = 0.3f;
+	GLfloat amplitude = 128.0f;
+	GLfloat roughness = 0.6f;
 	GLint octaves = 4;
-	GLint vcount = 128;
-	GLint tsize = 128;
+	GLint vcount = 256;
+	GLint tsize = 1024;
 
 	GLuint seed = (unsigned int) time(NULL);	
 
@@ -987,7 +987,9 @@ void GLLoader::generateWaterRefraction()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	//==================================================== Store Image Data
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Engine::Screen()->Size().x, Engine::Screen()->Size().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)Engine::Screen()->Size().x, 
+										   (GLsizei)Engine::Screen()->Size().y, 
+								0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	//==================================================== Unbind Texture
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -1000,7 +1002,9 @@ void GLLoader::generateWaterRefraction()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	//==================================================== Store Image Data
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, Engine::Screen()->Size().x, Engine::Screen()->Size().y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, (GLsizei)Engine::Screen()->Size().x, 
+														 (GLsizei)Engine::Screen()->Size().y, 
+								0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	//==================================================== Unbind Texture
 	glBindTexture(GL_TEXTURE_2D, 0);

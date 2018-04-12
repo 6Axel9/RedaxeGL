@@ -208,7 +208,7 @@ void main(void)
 		if(light.Attenuation != 0)	
 		{ 
 			LightDirection = normalize(light.Position - FragmentPosition);
-			MinDimming = 1.5;
+			MinDimming = 2.0;
 			MaxDimming = 3.0;
 		}
 		//==================================================== Light Intensity

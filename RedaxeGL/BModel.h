@@ -29,12 +29,14 @@ protected:
 	//==================================================== Properties
 	static std::map<std::string, std::string> setup;
 	static std::map<std::string, GLuint> locations;
+	glm::vec3 directionFront;
+	glm::vec3 directionRight;
+	glm::vec3 directionUp;
 	glm::mat4 translation;
 	glm::vec3 position;
 	glm::mat4 rotationZ;
 	glm::mat4 rotationY;
 	glm::mat4 rotationX;
-	glm::vec3 direction;
 	glm::mat4 scaling;
 	glm::mat4 model;
 };
