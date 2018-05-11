@@ -23,7 +23,7 @@ void CObject::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specul
 	shininess = Shininess;
 }
 
-void CObject::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed)
+void CObject::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale)
 {
 	//==================================================== Flip X
 	Position.x = -Position.x;

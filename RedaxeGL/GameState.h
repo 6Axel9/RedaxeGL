@@ -36,6 +36,8 @@ public:
 
 protected:
 
+	enum Preset { Light, Terrain, Water, Textures };
+
 	//==================================================== Properties
 	GLfloat activeTime;
 	GLboolean status;

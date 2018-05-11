@@ -12,7 +12,7 @@ public:
 	//==================================================== Initialize Object Materials
 	void Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess);
 	//==================================================== Initialize Object Transformations
-	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed);
+	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Size);
 	//==================================================== Update Object
 	void Update(GLfloat DeltaTime);
 	//==================================================== Render Object

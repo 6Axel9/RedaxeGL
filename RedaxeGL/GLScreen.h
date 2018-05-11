@@ -32,6 +32,7 @@ public:
 	
 	//==================================================== Handlers
 	static GLint Exit() { return glfwWindowShouldClose(window); }
+	static GLboolean& Kill(GLint KeyCode) { return kill[KeyCode]; }
 	static GLint Key(GLint KeyCode) { return key[KeyCode]; }
 	static glm::vec4& Mouse() { return mouse; }
 	static glm::vec2& Size() { return size; }
@@ -54,7 +55,8 @@ private:
 	static void onKeyboard(GLFWwindow* Window, GLint Key, GLint ScanCode, GLint Action, GLint Special);
 
 	//==================================================== Properties
-	static std::map<GLint,GLint> key;
+	static std::map<GLint, GLboolean> kill;
+	static std::map<GLint, GLint> key;
 	static GLFWwindow* window;
 	static glm::vec4 mouse;
 	static glm::vec2 size;

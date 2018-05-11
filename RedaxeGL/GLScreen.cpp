@@ -51,7 +51,7 @@ void GLScreen::DisableFaceCulling()
 void GLScreen::ClearScreen()
 {
 	//==================================================== Clear Screen
-	glClearColor(0.6f, 0.85f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -141,6 +141,8 @@ void GLScreen::onKeyboard(GLFWwindow* Window, GLint KeyCode, GLint ScanCode, GLi
 {
 	//==================================================== Store Key Data
 	key[KeyCode] = Action;
+	//==================================================== Key Repeat Kill
+	if (Action == 0) { kill[KeyCode] = false; }
 	//==================================================== Query ESC
 	if (key[GLFW_KEY_ESCAPE])
 	{
@@ -161,6 +163,7 @@ void GLScreen::onMouseMove(GLFWwindow* Window, GLdouble MouseX, GLdouble MouseY)
 	mouse = glm::vec4(mouse.x + offset.x, mouse.y + offset.y, offset.x, offset.y);
 }
 
+std::map<GLint, GLboolean> GLScreen::kill;
 std::map<GLint, GLint> GLScreen::key;
 GLFWwindow* GLScreen::window;
 glm::vec4 GLScreen::mouse;

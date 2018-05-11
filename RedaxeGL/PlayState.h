@@ -27,12 +27,14 @@ public:
 private:
 
 	//============================================================= Properties
-	CLight* Light;
-	CCamera* Camera;
-	CObject* Player;
-	CSkyBox* Skybox;
-	CInterface* GUI;
-	CTerrain* Terrain;
-	CWater* Water;
-	CText* Text;
+	CCamera*	Camera;
+	CSkyBox*	Skybox;
+	CLight*		Light;
+	CTerrain*	Terrain;
+	CWater*		Water;
+	CInterface* Player;
+	CInterface* Interface;
+	CText*		Text;
+	//============================================================= Modifiers
+	int CurrentPreset;
 };

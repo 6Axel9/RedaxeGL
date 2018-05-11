@@ -23,7 +23,7 @@ void CTerrain::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specu
 	shininess = Shininess;
 }
 
-void CTerrain::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed)
+void CTerrain::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale)
 {
 	//==================================================== Flip X
 	Position.x = -Position.x;

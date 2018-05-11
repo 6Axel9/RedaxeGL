@@ -111,12 +111,17 @@ void main(void)
 		//==================================================== Water Maps Blending & Distortion
 		if(WaterShader)
 		{
+			//==================================================== Distortion Constants
 			float OffSet = ElapsedTime / 500.0;
 			float DistortionIntensity = 0.1;
 			float DistortionTiling = 24.0;
 			float WaveIntensity = 0.025;
+			//==================================================== Prospective Clipping
 			float FarPlane = 1000.0;
 			float NearPlane = 0.1;
+			//==================================================== Attenuation Constrain
+			MinDimming = 1.0;
+			MaxDimming = 2.0;
 			//==================================================== Sample Depth Map
 			float FragmentCoord = gl_FragCoord.z;
 			float DepthCoord    = texture(water.Depth, vec2(DeviceSpace.x, DeviceSpace.y)).r;
@@ -152,8 +157,12 @@ void main(void)
 		//==================================================== Terrain Multiple Maps Blending
 		if(TerrainShader)
 		{
+			//==================================================== Texture Tiling
 			float TerrainTiling = 24.0;
 			float NormalTiling = 8.0;
+			//==================================================== Attenuation Constrain
+			MinDimming = 2.0;
+			MaxDimming = 4.0;
 			//==================================================== Sample Noise Blend Texture
 			vec4 MapBlender = normalize(texture(terrain.GNoise, textureOut.st));
 			float TerrainIntensity = 1.0 - (MapBlender.r + MapBlender.g + MapBlender.b);
@@ -182,6 +191,9 @@ void main(void)
 		//==================================================== Sample 3D Object Maps Blending
 		if(!WaterShader && !TerrainShader)
 		{
+			//==================================================== Attenuation Constrain
+			MinDimming = 2.0;
+			MaxDimming = 3.0;
 			//==================================================== Sample Normal Map
 			NormalPosition = normalize(normalize(texture(txtmap.Normals, textureOut.st).rgb * 2.0 - 1.0) * tangentSpace);
 			//==================================================== Sample Diffuse Map
@@ -208,8 +220,6 @@ void main(void)
 		if(light.Attenuation != 0)	
 		{ 
 			LightDirection = normalize(light.Position - FragmentPosition);
-			MinDimming = 2.0;
-			MaxDimming = 3.0;
 		}
 		//==================================================== Light Intensity
 		float LightIntensity = max(dot(LightDirection, NormalPosition), 0.0);

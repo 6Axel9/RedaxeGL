@@ -31,7 +31,7 @@ void CWater::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale,
 	Position.x = -Position.x;
 	Position.x -= (Size - 1) * 128 / 2;
 	Position.z += (Size - 1) * 128 / 2;
-	//==================================================== Initialize Text
+	//==================================================== Initialize Water
 	for (GLuint Slot = 0; Slot < Size * Size; Slot++)
 	{
 		models.push_back(glm::mat4(1));
@@ -92,6 +92,8 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 		//==================================================== Send Model Matrix
 		glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &models[Slot][0][0]);
 
+		//==================================================== WireFrame On
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		//==================================================== Bind Texture
 		for (GLuint Map = 0; Map < texture.size(); Map++)
 		{
@@ -114,6 +116,8 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 		}
 		glActiveTexture(GL_TEXTURE14);
 		glBindTexture(GL_TEXTURE_2D, 0);
+		//==================================================== WireFrame Off
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
 
@@ -129,7 +133,7 @@ CWater::~CWater()
 GLuint CWater::Reflection()
 {
 	GLfloat Offset = 0.001f;
-	//==================================================== Set Clip Plane
+	//==================================================== Set Clip Plane Above Water Height
 	clip = glm::vec4(0.0f, 1.0f, 0.0f, -position.y + Offset);
 	//==================================================== Send Plane
 	glUniform4fv(locations["clipPlane"], 1, &clip.x);
@@ -139,7 +143,7 @@ GLuint CWater::Reflection()
 
 GLuint CWater::Refraction()
 {
-	//==================================================== Set Clip Plane
+	//==================================================== Set Clip Plane Below Water Height
 	clip = glm::vec4(0.0f, -1.0f, 0.0f, -position.y);
 	//==================================================== Send Plane
 	glUniform4fv(locations["clipPlane"], 1, &clip.x);
