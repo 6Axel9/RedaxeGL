@@ -51,7 +51,7 @@ void GLScreen::DisableFaceCulling()
 void GLScreen::ClearScreen()
 {
 	//==================================================== Clear Screen
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.6f, 0.85f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

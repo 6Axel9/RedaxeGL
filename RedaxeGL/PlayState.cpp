@@ -138,9 +138,6 @@ void PlayState::Render(GLboolean Shaded)
 
 void PlayState::UpdateInputs(GLfloat DeltaTime)
 {
-	glm::vec3 newAmbient;
-	glm::vec3 newDiffuse;
-	glm::vec3 newSpecular;
 	//============================================================= State Change
 	if (Engine::Screen()->Key(GLFW_KEY_KP_ADD))
 	{
@@ -167,99 +164,102 @@ void PlayState::UpdateInputs(GLfloat DeltaTime)
 	{
 		Link(Water);
 	}
-	//============================================================= Modifiers Increment
-	if (Engine::Screen()->Key(GLFW_KEY_Q))
-	{
-		if (Engine::Screen()->Key(GLFW_KEY_KP_7))
-		{
-			newAmbient.r += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_8))
-		{
-			newAmbient.g += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_9))
-		{
-			newAmbient.b += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_4))
-		{
-			newDiffuse.r += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_5))
-		{
-			newDiffuse.g += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_6))
-		{
-			newDiffuse.b += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_1))
-		{
-			newSpecular.r += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_2))
-		{
-			newSpecular.g += DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_3))
-		{
-			newSpecular.b += DeltaTime;
-		}
-	}
-	//============================================================= Modifiers Decrement
-	if (Engine::Screen()->Key(GLFW_KEY_E))
-	{
-		if (Engine::Screen()->Key(GLFW_KEY_KP_7))
-		{
-			newAmbient.r -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_8))
-		{
-			newAmbient.g -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_9))
-		{
-			newAmbient.b -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_4))
-		{
-			newDiffuse.r -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_5))
-		{
-			newDiffuse.g -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_6))
-		{
-			newDiffuse.b -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_1))
-		{
-			newSpecular.r -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_2))
-		{
-			newSpecular.g -= DeltaTime;
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_KP_3))
-		{
-			newSpecular.b -= DeltaTime;
-		}
-	}
 	if (DemoTarget)
 	{
+		glm::vec3 newAmbient = DemoTarget->Ambient();
+		glm::vec3 newDiffuse = DemoTarget->Diffuse();
+		glm::vec3 newSpecular = DemoTarget->Specular();
+		//============================================================= Modifiers Increment
+		if (Engine::Screen()->Key(GLFW_KEY_Q))
+		{
+			if (Engine::Screen()->Key(GLFW_KEY_KP_7))
+			{
+				newAmbient.r += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_8))
+			{
+				newAmbient.g += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_9))
+			{
+				newAmbient.b += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_4))
+			{
+				newDiffuse.r += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_5))
+			{
+				newDiffuse.g += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_6))
+			{
+				newDiffuse.b += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_1))
+			{
+				newSpecular.r += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_2))
+			{
+				newSpecular.g += DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_3))
+			{
+				newSpecular.b += DeltaTime;
+			}
+		}
+		//============================================================= Modifiers Decrement
+		if (Engine::Screen()->Key(GLFW_KEY_E))
+		{
+			if (Engine::Screen()->Key(GLFW_KEY_KP_7))
+			{
+				newAmbient.r -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_8))
+			{
+				newAmbient.g -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_9))
+			{
+				newAmbient.b -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_4))
+			{
+				newDiffuse.r -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_5))
+			{
+				newDiffuse.g -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_6))
+			{
+				newDiffuse.b -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_1))
+			{
+				newSpecular.r -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_2))
+			{
+				newSpecular.g -= DeltaTime;
+			}
+			if (Engine::Screen()->Key(GLFW_KEY_KP_3))
+			{
+				newSpecular.b -= DeltaTime;
+			}
+		}
 		if (Engine::Screen()->Key(GLFW_KEY_N) && !Engine::Screen()->Kill(GLFW_KEY_N))
 		{
 			Engine::Screen()->Kill(GLFW_KEY_N) = true;
 
-			DemoTarget->Ambient() = glm::vec3(1.0f) - DemoTarget->Ambient();
-			DemoTarget->Diffuse() = glm::vec3(1.0f) - DemoTarget->Diffuse();
-			//DemoTarget->Specular() = glm::vec3(1.0f) - DemoTarget->Specular();
+			newAmbient = glm::vec3(1.0f) - DemoTarget->Ambient();
+			newDiffuse = glm::vec3(1.0f) - DemoTarget->Diffuse();
+			newSpecular = glm::vec3(1.0f) - DemoTarget->Specular();
 		}
-		DemoTarget->Ambient() += newAmbient;
-		DemoTarget->Diffuse() += newDiffuse;
-		DemoTarget->Specular() += newSpecular;
+		DemoTarget->Ambient() = newAmbient;
+		DemoTarget->Diffuse() = newDiffuse;
+		DemoTarget->Specular() = newSpecular;
 	}
 }
 
