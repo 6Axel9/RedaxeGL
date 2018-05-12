@@ -20,6 +20,8 @@ public:
 	virtual void Update(GLfloat DeltaTime) = 0;
 	//============================================================= Render Stage
 	virtual void Render(GLboolean Shader) = 0;
+	//============================================================= Inputs
+	virtual void UpdateInputs(GLfloat DeltaTime) = 0;
 	//============================================================= Reflection
 	virtual void RenderReflection(GLboolean Shaded) = 0;
 	//============================================================= Refraction
@@ -29,14 +31,12 @@ public:
 	//============================================================= On Exit Stage
 	virtual void OnExit() = 0;
 	//==================================================== Terminate Game State
-	virtual~GameState();
+	virtual ~GameState();
 
 	//==================================================== Handlers
 	GLboolean& Status() { return status; }
 
 protected:
-
-	enum Preset { Light, Terrain, Water, Textures };
 
 	//==================================================== Properties
 	GLfloat activeTime;

@@ -5,22 +5,26 @@ class CSkyBox : public BModel
 {
 public:
 
-	//==================================================== Create Default
-	CSkyBox();
-	//==================================================== Create 3D Object
+	//==================================================== Create 2D Skybox
 	CSkyBox(std::string MeshTag, std::string TextureTag, std::string EffectTag);
-	//==================================================== Initialize Object Materials
-	void Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess);
-	//==================================================== Initialize Object Transformations
+	//==================================================== Initialize Skybox Transform
 	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
-	//==================================================== Update Object
+	//==================================================== Initialize Skybox Materials
+	void Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess);
+	//==================================================== Update Skybox
 	void Update(GLfloat DeltaTime);
-	//==================================================== Render Object
+	//==================================================== Render Skybox
 	void Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded);
-	//==================================================== Terminate Object
+	//==================================================== Terminate Skybox
 	void Terminate();
-	//==================================================== Destroy 3D Object
-	virtual~CSkyBox();
+	//==================================================== Destroy 2D Skybox
+	virtual ~CSkyBox();
+
+	//==================================================== Handlers
+	glm::vec3& Ambient() { return ambient; }
+	glm::vec3& Diffuse() { return diffuse; }
+	glm::vec3& Specular() { return specular; }
+	GLfloat& Constant() { return shininess; }
 
 private:
 

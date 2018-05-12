@@ -39,7 +39,7 @@ void PlayState::OnEnter()
 	Skybox->Initialize(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 
 	//============================================================= Initialize Light
-	Light->Initialize(glm::vec3(25.0f, 1000.0f, 1000.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f), 100.0f);
+	Light->Initialize(glm::vec3(25.0f, 1000.0f, 1000.0f), glm::vec3(-90.0f,0.0f,0.0f), glm::vec3(0.0f));
 	//============================================================= Enlighten Light
 	Light->Enlighten(glm::vec3(0.45f, 0.45f, 0.4f), glm::vec3(0.8f,0.75f,0.5f), glm::vec3(0.3f), 10000.0f);
 	
@@ -63,45 +63,17 @@ void PlayState::OnEnter()
 	Text->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Credits to ME :P");
 }
 
+
+
 void PlayState::Update(GLfloat DeltaTime)
 {
 	activeTime += DeltaTime;
 	//============================================================= Send Delta Time 
 	glUniform1f(Engine::Shader()->UniformsID()["DeltaTime"], DeltaTime);
 	glUniform1f(Engine::Shader()->UniformsID()["ElapsedTime"], activeTime);
-	//============================================================= State Inputs
-	if (Engine::Screen()->Key(GLFW_KEY_N))
-	{
-		Engine::SwitchGamestate(new PlayState,true);
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_V))
-	{
-		Engine::SwitchGamestate(new PlayState, false);
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_B))
-	{
-		Engine::ReturnGamestate();
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_1) && !Engine::Screen()->Kill(GLFW_KEY_1))
-	{
-		Engine::Screen()->Kill(GLFW_KEY_1) = true;
-		CurrentPreset = Preset::Light;
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_2) && !Engine::Screen()->Kill(GLFW_KEY_2))
-	{
-		Engine::Screen()->Kill(GLFW_KEY_2) = true;
-		CurrentPreset = Preset::Terrain;
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_3) && !Engine::Screen()->Kill(GLFW_KEY_3))
-	{
-		Engine::Screen()->Kill(GLFW_KEY_3) = true;
-		CurrentPreset = Preset::Water;
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_4) && !Engine::Screen()->Kill(GLFW_KEY_4))
-	{
-		Engine::Screen()->Kill(GLFW_KEY_4) = true;
-		CurrentPreset = Preset::Textures;
-	}
+	
+	//============================================================= Inputs
+	UpdateInputs(DeltaTime);
 	//============================================================= Update Camera
 	Camera->Update(DeltaTime);
 	//============================================================= Update Skybox
@@ -162,6 +134,133 @@ void PlayState::Render(GLboolean Shaded)
 
 	//==================================================== Swap Front/Back Buffer
 	Engine::Screen()->SwapBuffers();
+}
+
+void PlayState::UpdateInputs(GLfloat DeltaTime)
+{
+	glm::vec3 newAmbient;
+	glm::vec3 newDiffuse;
+	glm::vec3 newSpecular;
+	//============================================================= State Change
+	if (Engine::Screen()->Key(GLFW_KEY_KP_ADD))
+	{
+		Engine::SwitchGamestate(new PlayState, true);
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_KP_SUBTRACT))
+	{
+		Engine::SwitchGamestate(new PlayState, false);
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_KP_ENTER))
+	{
+		Engine::ReturnGamestate();
+	}
+	//============================================================= Target Change
+	if (Engine::Screen()->Key(GLFW_KEY_1))
+	{
+		Link(Light);
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_2))
+	{
+		Link(Terrain);
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_3))
+	{
+		Link(Water);
+	}
+	//============================================================= Modifiers Increment
+	if (Engine::Screen()->Key(GLFW_KEY_Q))
+	{
+		if (Engine::Screen()->Key(GLFW_KEY_KP_7))
+		{
+			newAmbient.r += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_8))
+		{
+			newAmbient.g += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_9))
+		{
+			newAmbient.b += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_4))
+		{
+			newDiffuse.r += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_5))
+		{
+			newDiffuse.g += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_6))
+		{
+			newDiffuse.b += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_1))
+		{
+			newSpecular.r += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_2))
+		{
+			newSpecular.g += DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_3))
+		{
+			newSpecular.b += DeltaTime;
+		}
+	}
+	//============================================================= Modifiers Decrement
+	if (Engine::Screen()->Key(GLFW_KEY_E))
+	{
+		if (Engine::Screen()->Key(GLFW_KEY_KP_7))
+		{
+			newAmbient.r -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_8))
+		{
+			newAmbient.g -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_9))
+		{
+			newAmbient.b -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_4))
+		{
+			newDiffuse.r -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_5))
+		{
+			newDiffuse.g -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_6))
+		{
+			newDiffuse.b -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_1))
+		{
+			newSpecular.r -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_2))
+		{
+			newSpecular.g -= DeltaTime;
+		}
+		if (Engine::Screen()->Key(GLFW_KEY_KP_3))
+		{
+			newSpecular.b -= DeltaTime;
+		}
+	}
+	if (DemoTarget)
+	{
+		if (Engine::Screen()->Key(GLFW_KEY_N) && !Engine::Screen()->Kill(GLFW_KEY_N))
+		{
+			Engine::Screen()->Kill(GLFW_KEY_N) = true;
+
+			DemoTarget->Ambient() = glm::vec3(1.0f) - DemoTarget->Ambient();
+			DemoTarget->Diffuse() = glm::vec3(1.0f) - DemoTarget->Diffuse();
+			//DemoTarget->Specular() = glm::vec3(1.0f) - DemoTarget->Specular();
+		}
+		DemoTarget->Ambient() += newAmbient;
+		DemoTarget->Diffuse() += newDiffuse;
+		DemoTarget->Specular() += newSpecular;
+	}
 }
 
 void PlayState::RenderReflection(GLboolean Shaded)
@@ -234,16 +333,16 @@ PlayState::~PlayState()
 {
 	//============================================================= Destroy Camera
 	delete Camera;
-	//============================================================= Destroy Light
-	delete Light;
 	//============================================================= Destroy Skybox
 	delete Skybox;
-	//============================================================= Destroy Player
-	delete Player;
+	//============================================================= Destroy Light
+	delete Light;
 	//============================================================= Destroy Terrain
 	delete Terrain;
 	//============================================================= Destroy Water
 	delete Water;
+	//============================================================= Destroy Player
+	delete Player;
 	//============================================================= Destroy Interface
 	delete Interface;
 	//============================================================= Destroy Text

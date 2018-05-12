@@ -1,10 +1,6 @@
 #include "CLight.h"
 #include "Engine.h"
 
-CLight::CLight()
-{
-}
-
 CLight::CLight(std::string MeshTag)
 {
 	//==================================================== Link Tag Data
@@ -12,19 +8,7 @@ CLight::CLight(std::string MeshTag)
 	vnum = Engine::Loader()->VNum(MeshTag);
 }
 
-void CLight::Enlighten(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Attenuation)
-{
-	//==================================================== Set Debug Material
-	shininess = 1.0f;
-	material = (Ambient + Diffuse + Specular) * 10.0f;
-	//==================================================== Set Light Data
-	ambient = Ambient;
-	diffuse = Diffuse;
-	specular = Specular;
-	attenuation = Attenuation;
-}
-
-void CLight::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Speed)
+void CLight::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale)
 {
 	//==================================================== Flip X
 	Position.x = -Position.x;
@@ -34,6 +18,17 @@ void CLight::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale,
 	angle = -Rotation;
 	//==================================================== Initialize Scale
 	size = Scale;
+}
+
+void CLight::Enlighten(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Attenuation)
+{
+	//==================================================== Set Debug Material
+	material = (Ambient + Diffuse + Specular) * 10.0f;
+	//==================================================== Set Light Data
+	ambient = Ambient;
+	diffuse = Diffuse;
+	specular = Specular;
+	attenuation = Attenuation;
 }
 
 void CLight::Update(GLfloat DeltaTime)

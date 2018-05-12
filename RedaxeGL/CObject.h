@@ -5,22 +5,26 @@ class CObject : public BModel
 {
 public:
 
-	//==================================================== Create Default
-	CObject();
 	//==================================================== Create 3D Object
 	CObject(std::string MeshTag, std::string TextureTag, std::string EffectTag);
+	//==================================================== Initialize Object Transform
+	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
 	//==================================================== Initialize Object Materials
 	void Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess);
-	//==================================================== Initialize Object Transformations
-	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
 	//==================================================== Update Object
-	virtual void Update(GLfloat DeltaTime);
+	void Update(GLfloat DeltaTime);
 	//==================================================== Render Object
-	virtual void Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded);
+	void Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded);
 	//==================================================== Terminate Object
 	void Terminate();
 	//==================================================== Destroy 3D Object
-	virtual~CObject();
+	virtual ~CObject();
+
+	//==================================================== Handlers
+	glm::vec3& Ambient()  { return ambient; }
+	glm::vec3& Diffuse()  { return diffuse; }
+	glm::vec3& Specular() { return specular; }
+	GLfloat& Constant()   { return shininess; }
 
 private:
 

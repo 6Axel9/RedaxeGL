@@ -8,24 +8,29 @@ public:
 	//============================================================= Initialize PlayState
 	PlayState();
 	//============================================================= On Enter Stage
-	virtual void OnEnter();
+	void OnEnter();
 	//============================================================= Update Stage
-	virtual void Update(GLfloat DeltaTime);
+	void Update(GLfloat DeltaTime);
 	//============================================================= Render Stage
-	virtual void Render(GLboolean Shaded);
+	void Render(GLboolean Shaded);
+	//============================================================= Inputs
+	void UpdateInputs(GLfloat DeltaTime);
 	//============================================================= Reflection
-	virtual void RenderReflection(GLboolean Shaded);
+	void RenderReflection(GLboolean Shaded);
 	//============================================================= Refraction
-	virtual void RenderRefraction(GLboolean Shaded);
+	void RenderRefraction(GLboolean Shaded);
 	//============================================================= Shadows
-	virtual void RenderShadows(GLboolean Shaded);
+	void RenderShadows(GLboolean Shaded);
 	//============================================================= On Exit Stage
-	virtual void OnExit();
+	void OnExit();
 	//============================================================= Terminate PlayState
-	~PlayState();
+	virtual ~PlayState();
 
 private:
 
+	
+	//============================================================= Target
+	void Link(BModel* Component) { DemoTarget = Component; }
 	//============================================================= Properties
 	CCamera*	Camera;
 	CSkyBox*	Skybox;
@@ -36,5 +41,8 @@ private:
 	CInterface* Interface;
 	CText*		Text;
 	//============================================================= Modifiers
-	int CurrentPreset;
+	BModel*	  DemoTarget;
+	GLboolean DiffuseMAP;
+	GLboolean SpecularMAP;
+	GLboolean NormalMAP;
 };

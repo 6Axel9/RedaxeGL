@@ -1,10 +1,6 @@
 #include "CWater.h"
 #include "Engine.h"
 
-CWater::CWater()
-{
-}
-
 CWater::CWater(std::string MeshTag, std::string TextureTag, std::string EffectTag)
 {
 	//==================================================== Link Tag Data
@@ -14,15 +10,6 @@ CWater::CWater(std::string MeshTag, std::string TextureTag, std::string EffectTa
 	texture = Engine::Loader()->Images(TextureTag);
 	effect = Engine::Loader()->Sounds(EffectTag);
 	vnum = Engine::Loader()->VNum(MeshTag);
-}
-
-void CWater::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess)
-{
-	//==================================================== Set Object Material Data
-	ambient = Ambient;
-	diffuse = Diffuse;
-	specular = Specular;
-	shininess = Shininess;
 }
 
 void CWater::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Size)
@@ -49,6 +36,15 @@ void CWater::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale,
 			Position.x += 128;
 		}
 	}
+}
+
+void CWater::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess)
+{
+	//==================================================== Set Object Material Data
+	ambient = Ambient;
+	diffuse = Diffuse;
+	specular = Specular;
+	shininess = Shininess;
 }
 
 void CWater::Update(GLfloat DeltaTime)

@@ -5,23 +5,26 @@ class CWater : public BModel
 {
 public:
 
-	//==================================================== Create Default
-	CWater();
-	//==================================================== Create 3D Object
+	//==================================================== Create 3D Water
 	CWater(std::string MeshTag, std::string TextureTag, std::string EffectTag);
-	//==================================================== Initialize Object Materials
-	void Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess);
-	//==================================================== Initialize Object Transformations
+	//==================================================== Initialize Water Transform
 	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, GLfloat Size);
-	//==================================================== Update Object
+	//==================================================== Initialize Water Materials
+	void Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess);
+	//==================================================== Update Water
 	void Update(GLfloat DeltaTime);
-	//==================================================== Render Object
+	//==================================================== Render Water
 	void Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded);
-	//==================================================== Terminate Object
+	//==================================================== Terminate Water
 	void Terminate();
-	//==================================================== Destroy 3D Object
-	virtual~CWater();
+	//==================================================== Destroy 3D Water
+	virtual ~CWater();
 
+	//==================================================== Handlers
+	glm::vec3& Ambient() { return ambient; }
+	glm::vec3& Diffuse() { return diffuse; }
+	glm::vec3& Specular() { return specular; }
+	GLfloat& Constant() { return shininess; }
 	//==================================================== Reflection
 	GLuint Reflection();
 	//==================================================== Refraction

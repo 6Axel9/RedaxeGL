@@ -1,10 +1,6 @@
 #include "CTerrain.h"
 #include "Engine.h"
 
-CTerrain::CTerrain()
-{
-}
-
 CTerrain::CTerrain(std::string MeshTag, std::string TextureTag, std::string EffectTag)
 {
 	//==================================================== Link Tag Data
@@ -12,15 +8,6 @@ CTerrain::CTerrain(std::string MeshTag, std::string TextureTag, std::string Effe
 	texture = Engine::Loader()->Images(TextureTag);
 	effect = Engine::Loader()->Sounds(EffectTag);
 	vnum = Engine::Loader()->VNum(MeshTag);
-}
-
-void CTerrain::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess)
-{
-	//==================================================== Set Object Material Data
-	ambient = Ambient;
-	diffuse = Diffuse;
-	specular = Specular;
-	shininess = Shininess;
 }
 
 void CTerrain::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale)
@@ -35,6 +22,15 @@ void CTerrain::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scal
 	angle = -Rotation;
 	//==================================================== Initialize Scale
 	size = Scale;
+}
+
+void CTerrain::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess)
+{
+	//==================================================== Set Object Material Data
+	ambient = Ambient;
+	diffuse = Diffuse;
+	specular = Specular;
+	shininess = Shininess;
 }
 
 void CTerrain::Update(GLfloat DeltaTime)

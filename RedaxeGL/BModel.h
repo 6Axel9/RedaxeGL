@@ -14,6 +14,12 @@ public:
 	//==================================================== Destroy Base Class
 	virtual~BModel();
 
+	//==================================================== Handlers
+	virtual glm::vec3& Ambient() = 0;
+	virtual glm::vec3& Diffuse() = 0;
+	virtual glm::vec3& Specular() = 0;
+	virtual GLfloat& Constant() = 0;
+
 protected:
 
 	//==================================================== Translate

@@ -5,9 +5,9 @@ class CInterface : public BModel
 {
 public:
 
-	//==================================================== Create Text Editor
+	//==================================================== Create 2D Text
 	CInterface(std::string MeshTag, std::string TextureTag, std::string EffectTag);
-	//==================================================== Initialize Text
+	//==================================================== Initialize Text Transform
 	void Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
 	//==================================================== Initialize Text Materials
 	void Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess);
@@ -17,8 +17,14 @@ public:
 	void Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded);
 	//==================================================== Terminate Text
 	void Terminate();
-	//==================================================== Destroy Text Editor
-	~CInterface();
+	//==================================================== Destroy 2D Text
+	virtual ~CInterface();
+
+	//==================================================== Handlers
+	glm::vec3& Ambient()  { return ambient; }
+	glm::vec3& Diffuse()  { return diffuse; }
+	glm::vec3& Specular() { return specular; }
+	GLfloat& Constant()   { return shininess; }
 
 private:
 

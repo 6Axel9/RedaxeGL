@@ -1,10 +1,6 @@
 #include "CSkyBox.h"
 #include "Engine.h"
 
-CSkyBox::CSkyBox()
-{
-}
-
 CSkyBox::CSkyBox(std::string MeshTag, std::string TextureTag, std::string EffectTag)
 {
 	//==================================================== Link Tag Data
@@ -12,15 +8,6 @@ CSkyBox::CSkyBox(std::string MeshTag, std::string TextureTag, std::string Effect
 	texture = Engine::Loader()->Images(TextureTag);
 	effect = Engine::Loader()->Sounds(EffectTag);
 	vnum = Engine::Loader()->VNum(MeshTag);
-}
-
-void CSkyBox::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess)
-{
-	//==================================================== Set Object Material Data
-	ambient = Ambient;
-	diffuse = Diffuse;
-	specular = Specular;
-	shininess = Shininess;
 }
 
 void CSkyBox::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale)
@@ -33,6 +20,15 @@ void CSkyBox::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale
 	angle = -Rotation;
 	//==================================================== Initialize Scale
 	size = Scale;
+}
+
+void CSkyBox::Materialize(glm::vec3 Ambient, glm::vec3 Diffuse, glm::vec3 Specular, GLfloat Shininess)
+{
+	//==================================================== Set Object Material Data
+	ambient = Ambient;
+	diffuse = Diffuse;
+	specular = Specular;
+	shininess = Shininess;
 }
 
 void CSkyBox::Update(GLfloat DeltaTime)
