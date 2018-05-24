@@ -25,6 +25,7 @@ public:
 	glm::vec3& Diffuse() { return diffuse; }
 	glm::vec3& Specular() { return specular; }
 	GLfloat& Constant() { return shininess; }
+	std::string Tag() { return tag; }
 
 private:
 
@@ -42,4 +43,5 @@ private:
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
+	std::string tag;
 };

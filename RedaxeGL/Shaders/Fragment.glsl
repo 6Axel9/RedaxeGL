@@ -262,7 +262,7 @@ void main(void)
 		//==================================================== Standard Diffuse Color
 		if(!DiffuseMap)
 		{ 	
-			DiffuseTexture = vec4(material.Ambient + material.Diffuse + material.Specular, 1.0); 
+			DiffuseTexture = vec4(material.Ambient + material.Diffuse + material.Specular, 0.0); 
 		}
 		//==================================================== Light Final Color
 		pixelColor = vec4(colorOut, 1.0) * DiffuseTexture;

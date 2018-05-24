@@ -12,7 +12,7 @@ CText::CText(std::string MeshTag, std::string TextureTag, std::string EffectTag)
 
 void CText::Initialize(glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale, std::string Text)
 {
-	Position.x -= (Text.size() - 1) * Scale.x / 4.0f;
+	Position.x -= (Text.size() - 1) * Scale.x / 4.0f; tag = Text;
 	//==================================================== Initialize Text
 	for (GLuint Space = 0; Space < Text.size(); Space++)
 	{

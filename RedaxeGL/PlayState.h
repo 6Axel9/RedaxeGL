@@ -28,9 +28,6 @@ public:
 
 private:
 
-	
-	//============================================================= Target
-	void Link(BModel* Component) { DemoTarget = Component; }
 	//============================================================= Properties
 	CCamera*	Camera;
 	CSkyBox*	Skybox;
@@ -38,11 +35,16 @@ private:
 	CTerrain*	Terrain;
 	CWater*		Water;
 	CInterface* Player;
-	CInterface* Interface;
-	CText*		Text;
-	//============================================================= Modifiers
-	BModel*	  DemoTarget;
-	GLboolean DiffuseMAP;
-	GLboolean SpecularMAP;
-	GLboolean NormalMAP;
+
+	std::deque<BModel*> TargetObjects;
+	std::deque<std::pair<CInterface*, CText*>> TargetProperties;
+	std::deque<std::pair<CInterface*, CText*>> TargetButtons;
+
+	std::pair<CInterface*, CText*> Ambient;
+	std::pair<CInterface*, CText*> Diffuse;
+	std::pair<CInterface*, CText*> Specular;
+
+	std::pair<CInterface*, CText*> Red;
+	std::pair<CInterface*, CText*> Green;
+	std::pair<CInterface*, CText*> Blue;
 };

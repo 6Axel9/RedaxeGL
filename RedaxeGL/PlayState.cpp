@@ -24,10 +24,33 @@ PlayState::PlayState()
 	Water = new CWater("Water", "Water", "None");
 	//============================================================= Create Player
 	Player = new CInterface("Box", "Cockpit", "None");
-	//============================================================= Create GUI
-	Interface = new CInterface("Box", "Interface", "None");
-	//============================================================= Create Text
-	Text = new CText("Font", "Font", "None");
+	//============================================================= Create Interface
+	Ambient.first = new CInterface("Box", "Interface", "None");
+	Ambient.second = new CText("Font", "Font", "None");
+	Diffuse.first = new CInterface("Box", "Interface", "None");
+	Diffuse.second = new CText("Font", "Font", "None");
+	Specular.first = new CInterface("Box", "Interface", "None");
+	Specular.second = new CText("Font", "Font", "None");
+	//============================================================= Create Buttons
+	Red.first = new CInterface("Box", "Interface", "None");
+	Red.second = new CText("Font", "Font", "None");
+	Green.first = new CInterface("Box", "Interface", "None");
+	Green.second = new CText("Font", "Font", "None");
+	Blue.first = new CInterface("Box", "Interface", "None");
+	Blue.second = new CText("Font", "Font", "None");
+
+	//============================================================= Link Target Objects
+	TargetObjects.push_back(Light);
+	TargetObjects.push_back(Terrain);
+	TargetObjects.push_back(Water);
+	//============================================================= Link Target Buttons
+	TargetButtons.push_back(Red);
+	TargetButtons.push_back(Green);
+	TargetButtons.push_back(Blue);
+	//============================================================= Link Target Properties
+	TargetProperties.push_back(Ambient);
+	TargetProperties.push_back(Diffuse);
+	TargetProperties.push_back(Specular);
 }
 
 void PlayState::OnEnter()
@@ -56,11 +79,20 @@ void PlayState::OnEnter()
 	//============================================================= Initialize Player
 	Player->Initialize(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(Engine::Screen()->Size(), 1.0f));
 
-	//============================================================= Initialize Interface
-	Interface->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(250.0f, 100.0f, 1.0f));
+	//============================================================= Initialize Buttons
+	Red.first->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(35.0f, 35.0f, 1.0f));
+	Red.second->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(25.0f), "R");
+	Green.first->Initialize(glm::vec3(300.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(35.0f, 35.0f, 1.0f));
+	Green.second->Initialize(glm::vec3(300.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(25.0f), "G");
+	Blue.first->Initialize(glm::vec3(325, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(35.0f, 35.0f, 1.0f));
+	Blue.second->Initialize(glm::vec3(325, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(25.0f), "B");
 
-	//============================================================= Write Text
-	Text->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Credits to ME :P");
+	Ambient.first->Initialize(glm::vec3(200.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(125.0f, 35.0f, 1.0f));
+	Ambient.second->Initialize(glm::vec3(200.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Ambient");
+	Diffuse.first->Initialize(glm::vec3(200.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(125.0f, 35.0f, 1.0f));
+	Diffuse.second->Initialize(glm::vec3(200.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Diffuse");
+	Specular.first->Initialize(glm::vec3(200.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(125.0f, 35.0f, 1.0f));
+	Specular.second->Initialize(glm::vec3(200.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(20.0f), "Specular");
 }
 
 
@@ -86,10 +118,12 @@ void PlayState::Update(GLfloat DeltaTime)
 	Water->Update(DeltaTime);
 	//============================================================= Update Player
 	Player->Update(DeltaTime);
-	//============================================================= Update Interface
-	Interface->Update(DeltaTime);
-	//============================================================= Update Text
-	Text->Update(DeltaTime);
+	//============================================================= Update Buttons
+	TargetButtons.front().first->Update(DeltaTime);
+	TargetButtons.front().second->Update(DeltaTime);
+
+	TargetProperties.front().first->Update(DeltaTime);
+	TargetProperties.front().second->Update(DeltaTime);
 }
 
 void PlayState::Render(GLboolean Shaded)
@@ -127,10 +161,12 @@ void PlayState::Render(GLboolean Shaded)
 	Camera->Render(false, false);
 	//============================================================= Render Player
 	Player->Render(Shaded, false, false, false);
-	//============================================================= Render Interface
-	Interface->Render(Shaded, false, false, false);
-	//============================================================= Render Text
-	Text->Render(Shaded, false, false, false);
+	//============================================================= Render Buttons
+	TargetButtons.front().first->Render(Shaded, false, false, false);
+	TargetButtons.front().second->Render(Shaded, false, false, false);
+
+	TargetProperties.front().first->Render(Shaded, false, false, false);
+	TargetProperties.front().second->Render(Shaded, false, false, false);
 
 	//==================================================== Swap Front/Back Buffer
 	Engine::Screen()->SwapBuffers();
@@ -151,115 +187,111 @@ void PlayState::UpdateInputs(GLfloat DeltaTime)
 	{
 		Engine::ReturnGamestate();
 	}
-	//============================================================= Target Change
-	if (Engine::Screen()->Key(GLFW_KEY_1))
+	//============================================================= Target Button Change
+	if (Engine::Screen()->Key(GLFW_KEY_LEFT) && !Engine::Screen()->Kill(GLFW_KEY_LEFT))
 	{
-		Link(Light);
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_2))
-	{
-		Link(Terrain);
-	}
-	if (Engine::Screen()->Key(GLFW_KEY_3))
-	{
-		Link(Water);
-	}
-	if (DemoTarget)
-	{
-		glm::vec3 newAmbient = DemoTarget->Ambient();
-		glm::vec3 newDiffuse = DemoTarget->Diffuse();
-		glm::vec3 newSpecular = DemoTarget->Specular();
-		//============================================================= Modifiers Increment
-		if (Engine::Screen()->Key(GLFW_KEY_Q))
-		{
-			if (Engine::Screen()->Key(GLFW_KEY_KP_7))
-			{
-				newAmbient.r += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_8))
-			{
-				newAmbient.g += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_9))
-			{
-				newAmbient.b += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_4))
-			{
-				newDiffuse.r += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_5))
-			{
-				newDiffuse.g += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_6))
-			{
-				newDiffuse.b += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_1))
-			{
-				newSpecular.r += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_2))
-			{
-				newSpecular.g += DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_3))
-			{
-				newSpecular.b += DeltaTime;
-			}
-		}
-		//============================================================= Modifiers Decrement
-		if (Engine::Screen()->Key(GLFW_KEY_E))
-		{
-			if (Engine::Screen()->Key(GLFW_KEY_KP_7))
-			{
-				newAmbient.r -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_8))
-			{
-				newAmbient.g -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_9))
-			{
-				newAmbient.b -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_4))
-			{
-				newDiffuse.r -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_5))
-			{
-				newDiffuse.g -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_6))
-			{
-				newDiffuse.b -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_1))
-			{
-				newSpecular.r -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_2))
-			{
-				newSpecular.g -= DeltaTime;
-			}
-			if (Engine::Screen()->Key(GLFW_KEY_KP_3))
-			{
-				newSpecular.b -= DeltaTime;
-			}
-		}
-		if (Engine::Screen()->Key(GLFW_KEY_N) && !Engine::Screen()->Kill(GLFW_KEY_N))
-		{
-			Engine::Screen()->Kill(GLFW_KEY_N) = true;
+		Engine::Screen()->Kill(GLFW_KEY_LEFT) = true;
 
-			newAmbient = glm::vec3(1.0f) - DemoTarget->Ambient();
-			newDiffuse = glm::vec3(1.0f) - DemoTarget->Diffuse();
-			newSpecular = glm::vec3(1.0f) - DemoTarget->Specular();
+		TargetButtons.push_front(TargetButtons.back());
+		TargetButtons.pop_back();
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_RIGHT) && !Engine::Screen()->Kill(GLFW_KEY_RIGHT))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_RIGHT) = true;
+
+		TargetButtons.push_back(TargetButtons.front());
+		TargetButtons.pop_front();
+	}
+	//============================================================= Target Propert Change
+	if (Engine::Screen()->Key(GLFW_KEY_DOWN) && !Engine::Screen()->Kill(GLFW_KEY_DOWN))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_DOWN) = true;
+
+		TargetProperties.push_front(TargetProperties.back());
+		TargetProperties.pop_back();
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_UP) && !Engine::Screen()->Kill(GLFW_KEY_UP))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_UP) = true;
+
+		TargetProperties.push_back(TargetProperties.front());
+		TargetProperties.pop_front();
+	}
+	//============================================================= Target Object Change
+	if (Engine::Screen()->Key(GLFW_KEY_TAB) && !Engine::Screen()->Kill(GLFW_KEY_TAB))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_TAB) = true;
+
+		TargetObjects.push_back(TargetObjects.front());
+		TargetObjects.pop_front();
+	}
+
+	glm::vec3 newAmbient = TargetObjects.front()->Ambient();
+	glm::vec3 newDiffuse = TargetObjects.front()->Diffuse();
+	glm::vec3 newSpecular = TargetObjects.front()->Specular();
+	//============================================================= Modifiers Increment
+	if (Engine::Screen()->Key(GLFW_KEY_Q))
+	{
+		if (TargetButtons.front().second->Tag() == "R")
+		{
+			newAmbient.r += DeltaTime;
+			newDiffuse.r += DeltaTime;
+			newSpecular.r += DeltaTime;
 		}
-		DemoTarget->Ambient() = newAmbient;
-		DemoTarget->Diffuse() = newDiffuse;
-		DemoTarget->Specular() = newSpecular;
+		if (TargetButtons.front().second->Tag() == "G")
+		{
+			newAmbient.g += DeltaTime;
+			newDiffuse.g += DeltaTime;
+			newSpecular.g += DeltaTime;
+		}
+		if (TargetButtons.front().second->Tag() == "B")
+		{
+			newAmbient.b += DeltaTime;
+			newDiffuse.b += DeltaTime;
+			newSpecular.b += DeltaTime;
+		}
+	}
+	//============================================================= Modifiers Decrement
+	if (Engine::Screen()->Key(GLFW_KEY_E))
+	{
+		if (TargetButtons.front().second->Tag() == "R")
+		{
+			newAmbient.r -= DeltaTime;
+			newDiffuse.r -= DeltaTime;
+			newSpecular.r -= DeltaTime;
+		}
+		if (TargetButtons.front().second->Tag() == "G")
+		{
+			newAmbient.g -= DeltaTime;
+			newDiffuse.g -= DeltaTime;
+			newSpecular.g -= DeltaTime;
+		}
+		if (TargetButtons.front().second->Tag() == "B")
+		{
+			newAmbient.b -= DeltaTime;
+			newDiffuse.b -= DeltaTime;
+			newSpecular.b -= DeltaTime;
+		}
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_N) && !Engine::Screen()->Kill(GLFW_KEY_N))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_N) = true;
+
+		newAmbient = glm::vec3(1.0f) - TargetObjects.front()->Ambient();
+		newDiffuse = glm::vec3(1.0f) - TargetObjects.front()->Diffuse();
+		newSpecular = glm::vec3(1.0f) - TargetObjects.front()->Specular();
+	}
+	if (TargetProperties.front().second->Tag() == "Ambient")
+	{
+		TargetObjects.front()->Ambient() = newAmbient;
+	}
+	if (TargetProperties.front().second->Tag() == "Diffuse")
+	{
+		TargetObjects.front()->Diffuse() = newDiffuse;
+	}
+	if (TargetProperties.front().second->Tag() == "Specular")
+	{
+		TargetObjects.front()->Specular() = newSpecular;
 	}
 }
 
@@ -323,10 +355,20 @@ void PlayState::OnExit()
 	Water->Terminate();
 	//============================================================= Terminate Player
 	Player->Terminate();
-	//============================================================= Terminate Interface
-	Interface->Terminate();
-	//============================================================= Terminate Text
-	Text->Terminate();
+	//============================================================= Terminate Buttons
+	Ambient.first->Terminate();
+	Ambient.second->Terminate();
+	Diffuse.first->Terminate();
+	Diffuse.second->Terminate();
+	Specular.first->Terminate();
+	Specular.second->Terminate();
+	//============================================================= Create Buttons
+	Red.first->Terminate();
+	Red.second->Terminate();
+	Green.first->Terminate();
+	Green.second->Terminate();
+	Blue.first->Terminate();
+	Blue.second->Terminate();
 }
 
 PlayState::~PlayState()
@@ -343,8 +385,18 @@ PlayState::~PlayState()
 	delete Water;
 	//============================================================= Destroy Player
 	delete Player;
-	//============================================================= Destroy Interface
-	delete Interface;
-	//============================================================= Destroy Text
-	delete Text;
+	//============================================================= Destroy Buttons
+	delete Ambient.first;
+	delete Ambient.second;
+	delete Diffuse.first;
+	delete Diffuse.second;
+	delete Specular.first;
+	delete Specular.second;
+	//============================================================= Create Buttons
+	delete Red.first;
+	delete Red.second;
+	delete Green.first;
+	delete Green.second;
+	delete Blue.first;
+	delete Blue.second;
 }

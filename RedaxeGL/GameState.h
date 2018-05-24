@@ -1,4 +1,6 @@
 #pragma once
+#include <Deque>
+#include <Map>
 #include "CLight.h"
 #include "CCamera.h"
 #include "CWater.h"
