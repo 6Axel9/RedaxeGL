@@ -171,7 +171,6 @@
     <ClCompile Include="GLLoader.cpp" />
     <ClCompile Include="GLScreen.cpp" />
     <ClCompile Include="GLShader.cpp" />
-    <ClCompile Include="MyExtension.cpp" />
     <ClCompile Include="OpenGL.c" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="GLLoader.h" />
     <ClInclude Include="GLScreen.h" />
     <ClInclude Include="GLShader.h" />
-    <ClInclude Include="MyExtension.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="Tools.h" />
   </ItemGroup>

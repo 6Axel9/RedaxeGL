@@ -86,7 +86,7 @@ void GLScreen::createWindow(std::string Title, GLint Width, GLint Height, GLint 
 	//==================================================== Set OpenGL SubVersion
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, VersionXX);
 	//==================================================== Create GLFW Window
-	window = glfwCreateWindow(Width, Height, Title.c_str(), NULL, NULL);
+	window = glfwCreateWindow(Width, Height, Title.c_str(), glfwGetPrimaryMonitor(), NULL);
 
 	//==================================================== Validate
 	if (window == NULL)
