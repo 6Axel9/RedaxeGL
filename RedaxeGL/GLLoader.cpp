@@ -273,11 +273,11 @@ void GLLoader::generateTerrainGeometry()
 	GLfloat lowest = 0.0f;
 	GLfloat highest = 0.0f;
 	GLfloat average = 0.0f;
-	GLfloat amplitude = 128.0f;
-	GLfloat roughness = 0.6f;
-	GLint octaves = 4;
-	GLint vcount = 256;
-	GLint tsize = 1024;
+	GLfloat amplitude = StringToFloat(Engine::Settings()["Terrain.amplitude"]);
+	GLfloat roughness = StringToFloat(Engine::Settings()["Terrain.roughness"]);
+	GLint octaves = StringToInteger(Engine::Settings()["Terrain.octaves"]);
+	GLint vcount = StringToInteger(Engine::Settings()["Terrain.vertices"]);;
+	GLint tsize = StringToInteger(Engine::Settings()["Terrain.size"]);;
 
 	GLuint seed = (unsigned int) time(NULL);	
 

@@ -35,6 +35,9 @@ private:
 	CTerrain*	Terrain;
 	CWater*		Water;
 	CInterface* Player;
+	//============================================================= Shading
+	GLboolean Wireframed;
+	GLboolean Normalized;
 
 	std::deque<BModel*> TargetObjects;
 	std::deque<std::pair<CInterface*, CText*>> TargetProperties;

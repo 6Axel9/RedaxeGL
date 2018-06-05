@@ -33,23 +33,23 @@ void CCamera::Update(GLfloat DeltaTime)
 	//==================================================== Move Camera
 	if (Engine::Screen()->Key(GLFW_KEY_W))
 	{
-		move += directionFront * DeltaTime * speed;
+		move += directionFront * DeltaTime * speed /2.f;
 	}
 	if (Engine::Screen()->Key(GLFW_KEY_A))
 	{
-		move -= directionRight * DeltaTime * speed;
+		move -= directionRight * DeltaTime * speed /2.f;
 	}
 	if (Engine::Screen()->Key(GLFW_KEY_S))
 	{
-		move -= directionFront * DeltaTime * speed;
+		move -= directionFront * DeltaTime * speed /2.f;
 	}
 	if (Engine::Screen()->Key(GLFW_KEY_D))
 	{
-		move += directionRight * DeltaTime * speed;
+		move += directionRight * DeltaTime * speed /2.f;
 	}
 	//==================================================== Rotate Camera
 	angle += glm::vec3(-Engine::Screen()->Mouse().w /*- microbit->GetPitch()*/,
-					   -Engine::Screen()->Mouse().z /*+ microbit->GetRoll()*/, 0.0f) * DeltaTime * speed;
+					   -Engine::Screen()->Mouse().z /*+ microbit->GetRoll()*/, 0.0f) * DeltaTime * speed/10.f;
 	//==================================================== Limit Movements
 	if (angle.x >  70) { angle.x =  70; }
 	if (angle.x < -70) { angle.x = -70; }

@@ -22,8 +22,6 @@ PlayState::PlayState()
 	Terrain = new CTerrain("Terrain", "Terrain", "None");
 	//============================================================= Create Water
 	Water = new CWater("Water", "Water", "None");
-	//============================================================= Create Player
-	Player = new CInterface("Box", "Cockpit", "None");
 	//============================================================= Create Interface
 	Ambient.first = new CInterface("Box", "Interface", "None");
 	Ambient.second = new CText("Font", "Font", "None");
@@ -76,9 +74,6 @@ void PlayState::OnEnter()
 	//============================================================= Materialize Water
 	Water->Materialize(glm::vec3(0.6f, 0.8f, 1.0f), glm::vec3(0.3f), glm::vec3(0.5f), 1.0f);
 
-	//============================================================= Initialize Player
-	Player->Initialize(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(Engine::Screen()->Size(), 1.0f));
-
 	//============================================================= Initialize Buttons
 	Red.first->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(35.0f, 35.0f, 1.0f));
 	Red.second->Initialize(glm::vec3(275.0f, 250.0f, 0.0f), glm::vec3(0.0f), glm::vec3(25.0f), "R");
@@ -116,8 +111,6 @@ void PlayState::Update(GLfloat DeltaTime)
 	Terrain->Update(DeltaTime);
 	//============================================================= Update Water
 	Water->Update(DeltaTime);
-	//============================================================= Update Player
-	Player->Update(DeltaTime);
 	//============================================================= Update Buttons
 	TargetButtons.front().first->Update(DeltaTime);
 	TargetButtons.front().second->Update(DeltaTime);
@@ -153,14 +146,12 @@ void PlayState::Render(GLboolean Shaded)
 	//============================================================= Render Light
 	Light->Render(false, false, false, Shaded);
 	//============================================================= Render Terrain
-	Terrain->Render(true, true, true, Shaded);
+	Terrain->Render(true, Wireframed, Normalized, Shaded);
 	//============================================================= Render Water
-	Water->Render(true, true, true, Shaded);
+	Water->Render(true, Wireframed, Normalized, Shaded);
 
 	//============================================================= Render Camera 2D
 	Camera->Render(false, false);
-	//============================================================= Render Player
-	Player->Render(Shaded, false, false, false);
 	//============================================================= Render Buttons
 	TargetButtons.front().first->Render(Shaded, false, false, false);
 	TargetButtons.front().second->Render(Shaded, false, false, false);
@@ -281,6 +272,26 @@ void PlayState::UpdateInputs(GLfloat DeltaTime)
 		newDiffuse = glm::vec3(1.0f) - TargetObjects.front()->Diffuse();
 		newSpecular = glm::vec3(1.0f) - TargetObjects.front()->Specular();
 	}
+	if (Engine::Screen()->Key(GLFW_KEY_9) && !Engine::Screen()->Kill(GLFW_KEY_9))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_9) = true;
+
+		Normalized = !Normalized;
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_8) && !Engine::Screen()->Kill(GLFW_KEY_8))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_8) = true;
+
+		Wireframed = !Wireframed;
+	}
+	if (Engine::Screen()->Key(GLFW_KEY_7) && !Engine::Screen()->Kill(GLFW_KEY_7))
+	{
+		Engine::Screen()->Kill(GLFW_KEY_7) = true;
+
+		Normalized = true;
+		Wireframed = false;
+	}
+
 	if (TargetProperties.front().second->Tag() == "Ambient")
 	{
 		TargetObjects.front()->Ambient() = newAmbient;
@@ -313,7 +324,7 @@ void PlayState::RenderReflection(GLboolean Shaded)
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
 	//============================================================= Render Terrain
-	Terrain->Render(true, true, true, Shaded);
+	Terrain->Render(true, Wireframed, Normalized, Shaded);
 }
 
 void PlayState::RenderRefraction(GLboolean Shaded)
@@ -334,7 +345,7 @@ void PlayState::RenderRefraction(GLboolean Shaded)
 	//============================================================= Update Light
 	Light->Render(false, false, false, Shaded);
 	//============================================================= Render Terrain
-	Terrain->Render(true, true, true, Shaded);
+	Terrain->Render(true, Wireframed, Normalized, Shaded);
 }
 
 void PlayState::RenderShadows(GLboolean Shaded)
@@ -353,8 +364,6 @@ void PlayState::OnExit()
 	Terrain->Terminate();
 	//============================================================= Terminate Water
 	Water->Terminate();
-	//============================================================= Terminate Player
-	Player->Terminate();
 	//============================================================= Terminate Buttons
 	Ambient.first->Terminate();
 	Ambient.second->Terminate();
@@ -383,8 +392,6 @@ PlayState::~PlayState()
 	delete Terrain;
 	//============================================================= Destroy Water
 	delete Water;
-	//============================================================= Destroy Player
-	delete Player;
 	//============================================================= Destroy Buttons
 	delete Ambient.first;
 	delete Ambient.second;

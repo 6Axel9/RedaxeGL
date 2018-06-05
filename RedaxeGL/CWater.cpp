@@ -60,11 +60,11 @@ void CWater::Update(GLfloat DeltaTime)
 	}
 }
 
-void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GLboolean Shaded)
+void CWater::Render(GLboolean Diffuse, GLboolean Wireframed, GLboolean Normals, GLboolean Shaded)
 {
 	//==================================================== Send Booleans
 	glUniform1i(locations["DiffuseMap"], Diffuse);
-	glUniform1i(locations["SpecularMap"], Specular);
+	glUniform1i(locations["SpecularMap"], Diffuse);
 	glUniform1i(locations["NormalMap"], Normals);
 	glUniform1i(locations["Shaded"], Shaded);
 	//==================================================== Send Type
@@ -88,8 +88,11 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 		//==================================================== Send Model Matrix
 		glUniformMatrix4fv(locations["modelIn"], 1, GL_FALSE, &models[Slot][0][0]);
 
-		//==================================================== WireFrame On
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		if (Wireframed)
+		{
+			//==================================================== WireFrame On
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
 		//==================================================== Bind Texture
 		for (GLuint Map = 0; Map < texture.size(); Map++)
 		{
@@ -112,8 +115,11 @@ void CWater::Render(GLboolean Diffuse, GLboolean Specular, GLboolean Normals, GL
 		}
 		glActiveTexture(GL_TEXTURE14);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		//==================================================== WireFrame Off
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (Wireframed)
+		{
+			//==================================================== WireFrame Off
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
 	}
 }
 
